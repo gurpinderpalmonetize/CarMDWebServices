@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="innovadev01Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AdminUser">
+    <Key>
+      <PropertyRef Name="AdminUserId" />
+    </Key>
+    <Property Name="AdminUserId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="FirstName" Type="text" />
+    <Property Name="LastName" Type="text" />
+    <Property Name="EmailAddress" Type="text" />
+    <Property Name="PhoneNumber" Type="bigint" />
+    <Property Name="Password" Type="text" />
+    <Property Name="Address1" Type="text" />
+    <Property Name="Address2" Type="text" />
+    <Property Name="City" Type="text" />
+    <Property Name="State" Type="text" />
+    <Property Name="PostalCode" Type="text" />
+    <Property Name="ShippingAddress1" Type="text" />
+    <Property Name="ShippingAddress2" Type="text" />
+    <Property Name="ShippingCity" Type="text" />
+    <Property Name="ShippingState" Type="text" />
+    <Property Name="ShippingPostalCode" Type="text" />
+    <Property Name="AreasOfExpertise" Type="text" />
+    <Property Name="AdminUserType" Type="int" />
+    <Property Name="IsSystemAdministrator" Type="int" />
+    <Property Name="IsReceivesPastDueNoFixNotifications" Type="int" />
+    <Property Name="Market" Type="int" />
+    <Property Name="Permissions" Type="text" />
+    <Property Name="ValidationPayRateDollarsPerHour" Type="double" />
+    <Property Name="IsActive" Type="int" />
+    <Property Name="IsDeleted" Type="int" />
+    <Property Name="UpdatedDateTimeUTC" Type="text" />
+    <Property Name="CreatedDateTimeUTC" Type="text" />
+    <Property Name="LastLoginDateTimeUTC" Type="text" />
+    <Property Name="PropertyDefinitionDataSetId" Type="text" />
+    <Property Name="EnablePropertyDefinitionEditingOnForms" Type="int" />
+  </EntityType>
+  <EntityType Name="DiagnosticReport">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DiagnosticReportId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="DiagnosticReportResultId" Type="varchar" MaxLength="36" />
+    <Property Name="UserId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="HasMasterTechsAssigned" Type="bool" Nullable="false" />
+    <Property Name="MasterTechsAssignedIdList" Type="text" Nullable="false" />
+    <Property Name="MasterTechProvideFixFeedbackByOverrideDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="AdminUserId_PwrWorkingOnFix" Type="varchar" MaxLength="36" />
+    <Property Name="PwrAdminUserWorkingOnFixAssignedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="AdminUserId_AbsWorkingOnFix" Type="varchar" MaxLength="36" />
+    <Property Name="AbsAdminUserWorkingOnFixAssignedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="AdminUserId_SrsWorkingOnFix" Type="varchar" MaxLength="36" />
+    <Property Name="SrsAdminUserWorkingOnFixAssignedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="VehicleId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="DeviceId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="CarScanSessionId" Type="varchar" MaxLength="36" />
+    <Property Name="DiagnosticUploadId" Type="varchar" MaxLength="36" />
+    <Property Name="OrderLineItemId" Type="varchar" MaxLength="36" />
+    <Property Name="DiagnosticReportPreliminaryDiagnosisId" Type="varchar" MaxLength="36" />
+    <Property Name="RepairOrderNumber" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="VehicleMileage" Type="int" Nullable="false" />
+    <Property Name="Market" Type="int" Nullable="false" />
+    <Property Name="Language" Type="int" Nullable="false" />
+    <Property Name="Currency" Type="int" Nullable="false" />
+    <Property Name="CurrencyExchangeRate" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixStatusWhenCreated" Type="int" Nullable="false" />
+    <Property Name="Obd1DiagnosticReportFixStatusWhenCreated" Type="int" Nullable="false" />
+    <Property Name="AbsDiagnosticReportFixStatusWhenCreated" Type="int" Nullable="false" />
+    <Property Name="SrsDiagnosticReportFixStatusWhenCreated" Type="int" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixStatus" Type="int" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixCancelReason" Type="text" Nullable="false" />
+    <Property Name="Obd1DiagnosticReportFixStatus" Type="int" Nullable="false" />
+    <Property Name="Obd1DiagnosticReportFixCancelReason" Type="text" Nullable="false" />
+    <Property Name="AbsDiagnosticReportFixStatus" Type="int" Nullable="false" />
+    <Property Name="AbsDiagnosticReportFixCancelReason" Type="text" Nullable="false" />
+    <Property Name="SrsDiagnosticReportFixStatus" Type="int" Nullable="false" />
+    <Property Name="SrsDiagnosticReportFixCancelReason" Type="text" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixStatusClosedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="Obd1DiagnosticReportFixStatusClosedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="AbsDiagnosticReportFixStatusClosedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="SrsDiagnosticReportFixStatusClosedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="PwrFixNotFoundFixPromisedByDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="Obd1FixNotFoundFixPromisedByDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="AbsFixNotFoundFixPromisedByDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="SrsFixNotFoundFixPromisedByDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="NoFixProcessCompletedAndSentDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="RawUploadString" Type="text" Nullable="false" />
+    <Property Name="RawFreezeFrameDataString" Type="text" Nullable="false" />
+    <Property Name="RawMonitorsDataString" Type="text" Nullable="false" />
+    <Property Name="ToolTypeFormat" Type="int" Nullable="false" />
+    <Property Name="SoftwareVersion" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FirmwareVersion" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="VIN" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="PwrMilCode" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="PwrStoredCodesString" Type="text" Nullable="false" />
+    <Property Name="PwrPendingCodesString" Type="text" Nullable="false" />
+    <Property Name="Obd1StoredCodesString" Type="text" Nullable="false" />
+    <Property Name="Obd1PendingCodesString" Type="text" Nullable="false" />
+    <Property Name="AbsStoredCodesString" Type="text" Nullable="false" />
+    <Property Name="AbsPendingCodesString" Type="text" Nullable="false" />
+    <Property Name="SrsStoredCodesString" Type="text" Nullable="false" />
+    <Property Name="SrsPendingCodesString" Type="text" Nullable="false" />
+    <Property Name="EnhancedDtcsString" Type="text" Nullable="false" />
+    <Property Name="ToolLEDStatus" Type="int" />
+    <Property Name="ToolMilStatus" Type="int" />
+    <Property Name="UpdatedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="CreatedDateTimeUTC" Type="datetime" Precision="3" Nullable="false" />
+    <Property Name="RequestedTechnicianContactDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="RequestedTechnicianContactComments" Type="text" Nullable="false" />
+    <Property Name="IsManualReport" Type="bool" Nullable="false" />
+    <Property Name="ManualDiagnosticReportType" Type="int" Nullable="false" />
+    <Property Name="IsPwrObd1FixFeedbackRequired" Type="bool" Nullable="false" />
+    <Property Name="IsPwrObd2FixFeedbackRequired" Type="bool" Nullable="false" />
+    <Property Name="IsAbsFixFeedbackRequired" Type="bool" Nullable="false" />
+    <Property Name="IsSrsFixFeedbackRequired" Type="bool" Nullable="false" />
+    <Property Name="MasterTechNotificationsSentDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="PwrIsFixNotificationRequested" Type="bool" />
+    <Property Name="AbsIsFixNotificationRequested" Type="bool" />
+    <Property Name="SrsIsFixNotificationRequested" Type="bool" />
+    <Property Name="PwrDiagnosticReportFixFeedbackStatus" Type="int" />
+    <Property Name="Obd1DiagnosticReportFixFeedbackStatus" Type="int" />
+    <Property Name="AbsDiagnosticReportFixFeedbackStatus" Type="int" />
+    <Property Name="SrsDiagnosticReportFixFeedbackStatus" Type="int" />
+    <Property Name="FixProvidedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="WhatFixedMyCarEmailSentDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="PastDueEmailSentDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="SymptomId" Type="varchar" MaxLength="36" />
+    <Property Name="PwrPermanentCodesString" Type="text" Nullable="false" />
+    <Property Name="SoftwareType" Type="int" Nullable="false" />
+    <Property Name="ParentDiagnosticReportId" Type="varchar" MaxLength="36" />
+    <Property Name="ManualRawFreezeFrameDataString" Type="text" Nullable="false" />
+    <Property Name="AdditionalHelpRequired" Type="bool" Nullable="false" />
+    <Property Name="IsNotifiedRequester" Type="bool" />
+    <Property Name="NotifiedRequesterDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="NotifiedRequesterVia" Type="varchar" MaxLength="100" />
+    <Property Name="Note" Type="varchar" MaxLength="1500" />
+  </EntityType>
+  <EntityType Name="ExternalSystem">
+    <Key>
+      <PropertyRef Name="ExternalSystemId" />
+    </Key>
+    <Property Name="ExternalSystemId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="KeyGuid" Type="text" />
+    <Property Name="Name" Type="text" />
+    <Property Name="PartnerID" Type="text" />
+    <Property Name="ImageNameSuffix" Type="text" />
+    <Property Name="IsActive" Type="int" />
+    <Property Name="FixPriority" Type="int" />
+    <Property Name="AdminUserCreatedId" Type="text" />
+    <Property Name="AdminUserUpdatedId" Type="text" />
+    <Property Name="CreatedDateTimeUTC" Type="text" />
+    <Property Name="UpdatedDateTimeUTC" Type="text" />
+  </EntityType>
+  <EntityType Name="PolkVehicleYMME">
+    <Key>
+      <PropertyRef Name="PolkVehicleYMMEId" />
+    </Key>
+    <Property Name="PolkVehicleYMMEId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="VinPatternMask" Type="varchar" MaxLength="50" />
+    <Property Name="DlcLocationId" Type="varchar" MaxLength="36" />
+    <Property Name="VehicleClass" Type="varchar" MaxLength="50" />
+    <Property Name="VehicleClass2" Type="varchar" MaxLength="50" />
+    <Property Name="VehicleClass3" Type="varchar" MaxLength="50" />
+    <Property Name="Manufacturer" Type="varchar" MaxLength="100" />
+    <Property Name="Make" Type="varchar" MaxLength="100" />
+    <Property Name="Model" Type="varchar" MaxLength="100" />
+    <Property Name="Year" Type="int" />
+    <Property Name="Trim" Type="varchar" MaxLength="100" />
+    <Property Name="EngineVinCode" Type="varchar" MaxLength="50" />
+    <Property Name="EngineType" Type="varchar" MaxLength="150" />
+    <Property Name="AAIA" Type="varchar" MaxLength="20" />
+    <Property Name="Transmission" Type="varchar" MaxLength="50" />
+    <Property Name="BaseMSRP" Type="int" />
+    <Property Name="ModelImageName" Type="varchar" MaxLength="50" />
+    <Property Name="TrimImageName" Type="varchar" MaxLength="50" />
+    <Property Name="CrashRating" Type="varchar" MaxLength="20" />
+    <Property Name="CurrentMarketValue" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Population" Type="int" />
+    <Property Name="FuelMPGCombined" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FuelMPGCity" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FuelMPGHighway" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="ACESBaseVehicleID" Type="int" />
+    <Property Name="ACESBodyStyleConfigID" Type="int" />
+    <Property Name="ACESBodyTypeID" Type="int" />
+    <Property Name="ACESBodyTypeName" Type="varchar" MaxLength="200" />
+    <Property Name="ACESEngineBaseID" Type="int" />
+    <Property Name="ACESEngineConfigID" Type="int" />
+    <Property Name="ACESEngineDestinationID" Type="int" />
+    <Property Name="ACESEngineVinID" Type="int" />
+    <Property Name="ACESMakeID" Type="int" />
+    <Property Name="ACESModelID" Type="int" />
+    <Property Name="ACESSubModelID" Type="int" />
+    <Property Name="ACESVehicleEngineConfigID" Type="int" />
+    <Property Name="ACESVehicleTypeName" Type="varchar" MaxLength="200" />
+    <Property Name="ACESVehicleTypeID" Type="int" />
+    <Property Name="ACESYearID" Type="int" />
+    <Property Name="PowertrainEcu" Type="varchar" MaxLength="50" />
+    <Property Name="IsPowertrainEcuId" Type="bool" />
+    <Property Name="UpdatedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="CreatedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="PrimaryEngineType" Type="varchar" MaxLength="150" />
+    <Property Name="BodyStyleDesc" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Vehicle">
+    <Key>
+      <PropertyRef Name="VehicleId" />
+    </Key>
+    <Property Name="VehicleId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="UserId" Type="varchar" MaxLength="36" />
+    <Property Name="VehicleTypeId" Type="varchar" MaxLength="36" />
+    <Property Name="ScheduleMaintenancePlanId" Type="varchar" MaxLength="36" />
+    <Property Name="Nickname" Type="varchar" MaxLength="50" />
+    <Property Name="Vin" Type="varchar" MaxLength="20" />
+    <Property Name="LicensePlateNumber" Type="varchar" MaxLength="50" />
+    <Property Name="ManufacturerName" Type="varchar" MaxLength="100" />
+    <Property Name="ManufacturerNameAlt" Type="text" />
+    <Property Name="Year" Type="int" />
+    <Property Name="Make" Type="varchar" MaxLength="100" />
+    <Property Name="Model" Type="varchar" MaxLength="100" />
+    <Property Name="AAIA" Type="varchar" MaxLength="100" />
+    <Property Name="TrimLevel" Type="varchar" MaxLength="30" />
+    <Property Name="EngineVINCode" Type="varchar" MaxLength="20" />
+    <Property Name="EngineType" Type="varchar" MaxLength="50" />
+    <Property Name="FuelType" Type="varchar" MaxLength="50" />
+    <Property Name="TransmissionControlType" Type="varchar" MaxLength="50" />
+    <Property Name="VPManufacturer" Type="varchar" MaxLength="100" />
+    <Property Name="VPYear" Type="int" />
+    <Property Name="VPMake" Type="varchar" MaxLength="100" />
+    <Property Name="VPModel" Type="varchar" MaxLength="100" />
+    <Property Name="VPAAIA" Type="varchar" MaxLength="100" />
+    <Property Name="VPTrimLevel" Type="varchar" MaxLength="30" />
+    <Property Name="VPEngineVINCode" Type="varchar" MaxLength="10" />
+    <Property Name="VPEngineType" Type="varchar" MaxLength="50" />
+    <Property Name="VPFuelType" Type="varchar" MaxLength="50" />
+    <Property Name="VinPowerDatabaseVersion" Type="varchar" MaxLength="150" />
+    <Property Name="VinStatus" Type="int" />
+    <Property Name="VinStatusDescription" Type="varchar" MaxLength="200" />
+    <Property Name="DetailedDecodingProcessDescription" Type="text" />
+    <Property Name="PolkVehicleYMMEId" Type="varchar" MaxLength="36" />
+    <Property Name="PurchasedTsbsString" Type="text" />
+    <Property Name="Mileage" Type="int" />
+    <Property Name="MileageLastRecordedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="SendScheduledMaintenanceAlerts" Type="bool" />
+    <Property Name="ScheduleMaintenanceMileageIntervalLastFound" Type="int" />
+    <Property Name="ScheduleMaintenanceAlertLastSentDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="SendNewRecallAlerts" Type="bool" />
+    <Property Name="NewRecallAlertLastSentDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="SendNewTSBAlerts" Type="bool" />
+    <Property Name="NewTSBAlertLastSentDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="IsActive" Type="bool" />
+    <Property Name="IsDeleted" Type="bool" />
+  </EntityType>
+  <EntityContainer Name="innovadev01ModelStoreContainer">
+    <EntitySet Name="AdminUser" EntityType="Self.AdminUser" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="DiagnosticReport" EntityType="Self.DiagnosticReport" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="ExternalSystem" EntityType="Self.ExternalSystem" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="PolkVehicleYMME" EntityType="Self.PolkVehicleYMME" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="innovadev01" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

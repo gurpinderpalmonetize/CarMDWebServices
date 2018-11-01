@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarMDWebServices", "CarMDWebServices\CarMDWebServices.csproj", "{92D50EE2-C502-4F61-B684-DC01A45D0D2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayers", "DataAccessLayers\DataAccessLayers.csproj", "{5DE0D09F-E8C7-4990-AC19-D28D6F37340A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92D50EE2-C502-4F61-B684-DC01A45D0D2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D50EE2-C502-4F61-B684-DC01A45D0D2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D50EE2-C502-4F61-B684-DC01A45D0D2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D50EE2-C502-4F61-B684-DC01A45D0D2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DE0D09F-E8C7-4990-AC19-D28D6F37340A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DE0D09F-E8C7-4990-AC19-D28D6F37340A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DE0D09F-E8C7-4990-AC19-D28D6F37340A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DE0D09F-E8C7-4990-AC19-D28D6F37340A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {30AAE85B-4351-4A30-B9EE-0895B1CC5783}
+	EndGlobalSection
+EndGlobal

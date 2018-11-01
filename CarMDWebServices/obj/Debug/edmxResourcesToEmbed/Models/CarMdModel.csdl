@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="innovadev01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AdminUser">
+    <Key>
+      <PropertyRef Name="AdminUserId" />
+    </Key>
+    <Property Name="AdminUserId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="Int64" />
+    <Property Name="Password" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="Address1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="Address2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="State" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="PostalCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ShippingAddress1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ShippingAddress2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ShippingCity" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ShippingState" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ShippingPostalCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="AreasOfExpertise" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="AdminUserType" Type="Int32" />
+    <Property Name="IsSystemAdministrator" Type="Int32" />
+    <Property Name="IsReceivesPastDueNoFixNotifications" Type="Int32" />
+    <Property Name="Market" Type="Int32" />
+    <Property Name="Permissions" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ValidationPayRateDollarsPerHour" Type="Double" />
+    <Property Name="IsActive" Type="Int32" />
+    <Property Name="IsDeleted" Type="Int32" />
+    <Property Name="UpdatedDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="LastLoginDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="PropertyDefinitionDataSetId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="EnablePropertyDefinitionEditingOnForms" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DiagnosticReport">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DiagnosticReportId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DiagnosticReportResultId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="UserId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="HasMasterTechsAssigned" Type="Boolean" Nullable="false" />
+    <Property Name="MasterTechsAssignedIdList" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="MasterTechProvideFixFeedbackByOverrideDateTimeUTC" Type="DateTime" />
+    <Property Name="AdminUserId_PwrWorkingOnFix" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="PwrAdminUserWorkingOnFixAssignedDateTimeUTC" Type="DateTime" />
+    <Property Name="AdminUserId_AbsWorkingOnFix" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="AbsAdminUserWorkingOnFixAssignedDateTimeUTC" Type="DateTime" />
+    <Property Name="AdminUserId_SrsWorkingOnFix" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="SrsAdminUserWorkingOnFixAssignedDateTimeUTC" Type="DateTime" />
+    <Property Name="VehicleId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DeviceId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CarScanSessionId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="DiagnosticUploadId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="OrderLineItemId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="DiagnosticReportPreliminaryDiagnosisId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="RepairOrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="VehicleMileage" Type="Int32" Nullable="false" />
+    <Property Name="Market" Type="Int32" Nullable="false" />
+    <Property Name="Language" Type="Int32" Nullable="false" />
+    <Property Name="Currency" Type="Int32" Nullable="false" />
+    <Property Name="CurrencyExchangeRate" Type="Decimal" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixStatusWhenCreated" Type="Int32" Nullable="false" />
+    <Property Name="Obd1DiagnosticReportFixStatusWhenCreated" Type="Int32" Nullable="false" />
+    <Property Name="AbsDiagnosticReportFixStatusWhenCreated" Type="Int32" Nullable="false" />
+    <Property Name="SrsDiagnosticReportFixStatusWhenCreated" Type="Int32" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixStatus" Type="Int32" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixCancelReason" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Obd1DiagnosticReportFixStatus" Type="Int32" Nullable="false" />
+    <Property Name="Obd1DiagnosticReportFixCancelReason" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AbsDiagnosticReportFixStatus" Type="Int32" Nullable="false" />
+    <Property Name="AbsDiagnosticReportFixCancelReason" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SrsDiagnosticReportFixStatus" Type="Int32" Nullable="false" />
+    <Property Name="SrsDiagnosticReportFixCancelReason" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PwrDiagnosticReportFixStatusClosedDateTimeUTC" Type="DateTime" />
+    <Property Name="Obd1DiagnosticReportFixStatusClosedDateTimeUTC" Type="DateTime" />
+    <Property Name="AbsDiagnosticReportFixStatusClosedDateTimeUTC" Type="DateTime" />
+    <Property Name="SrsDiagnosticReportFixStatusClosedDateTimeUTC" Type="DateTime" />
+    <Property Name="PwrFixNotFoundFixPromisedByDateTimeUTC" Type="DateTime" />
+    <Property Name="Obd1FixNotFoundFixPromisedByDateTimeUTC" Type="DateTime" />
+    <Property Name="AbsFixNotFoundFixPromisedByDateTimeUTC" Type="DateTime" />
+    <Property Name="SrsFixNotFoundFixPromisedByDateTimeUTC" Type="DateTime" />
+    <Property Name="NoFixProcessCompletedAndSentDateTimeUTC" Type="DateTime" />
+    <Property Name="RawUploadString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="RawFreezeFrameDataString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="RawMonitorsDataString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ToolTypeFormat" Type="Int32" Nullable="false" />
+    <Property Name="SoftwareVersion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FirmwareVersion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="VIN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PwrMilCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PwrStoredCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PwrPendingCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Obd1StoredCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Obd1PendingCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AbsStoredCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AbsPendingCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SrsStoredCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SrsPendingCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EnhancedDtcsString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ToolLEDStatus" Type="Int32" />
+    <Property Name="ToolMilStatus" Type="Int32" />
+    <Property Name="UpdatedDateTimeUTC" Type="DateTime" />
+    <Property Name="CreatedDateTimeUTC" Type="DateTime" Nullable="false" />
+    <Property Name="RequestedTechnicianContactDateTimeUTC" Type="DateTime" />
+    <Property Name="RequestedTechnicianContactComments" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsManualReport" Type="Boolean" Nullable="false" />
+    <Property Name="ManualDiagnosticReportType" Type="Int32" Nullable="false" />
+    <Property Name="IsPwrObd1FixFeedbackRequired" Type="Boolean" Nullable="false" />
+    <Property Name="IsPwrObd2FixFeedbackRequired" Type="Boolean" Nullable="false" />
+    <Property Name="IsAbsFixFeedbackRequired" Type="Boolean" Nullable="false" />
+    <Property Name="IsSrsFixFeedbackRequired" Type="Boolean" Nullable="false" />
+    <Property Name="MasterTechNotificationsSentDateTimeUTC" Type="DateTime" />
+    <Property Name="PwrIsFixNotificationRequested" Type="Boolean" />
+    <Property Name="AbsIsFixNotificationRequested" Type="Boolean" />
+    <Property Name="SrsIsFixNotificationRequested" Type="Boolean" />
+    <Property Name="PwrDiagnosticReportFixFeedbackStatus" Type="Int32" />
+    <Property Name="Obd1DiagnosticReportFixFeedbackStatus" Type="Int32" />
+    <Property Name="AbsDiagnosticReportFixFeedbackStatus" Type="Int32" />
+    <Property Name="SrsDiagnosticReportFixFeedbackStatus" Type="Int32" />
+    <Property Name="FixProvidedDateTimeUTC" Type="DateTime" />
+    <Property Name="WhatFixedMyCarEmailSentDateTimeUTC" Type="DateTime" />
+    <Property Name="PastDueEmailSentDateTimeUTC" Type="DateTime" />
+    <Property Name="SymptomId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="PwrPermanentCodesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SoftwareType" Type="Int32" Nullable="false" />
+    <Property Name="ParentDiagnosticReportId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="ManualRawFreezeFrameDataString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AdditionalHelpRequired" Type="Boolean" Nullable="false" />
+    <Property Name="IsNotifiedRequester" Type="Boolean" />
+    <Property Name="NotifiedRequesterDateTimeUTC" Type="DateTime" />
+    <Property Name="NotifiedRequesterVia" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Note" Type="String" MaxLength="1500" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ExternalSystem">
+    <Key>
+      <PropertyRef Name="ExternalSystemId" />
+    </Key>
+    <Property Name="ExternalSystemId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="KeyGuid" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="PartnerID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ImageNameSuffix" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="IsActive" Type="Int32" />
+    <Property Name="FixPriority" Type="Int32" />
+    <Property Name="AdminUserCreatedId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="AdminUserUpdatedId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="PolkVehicleYMME">
+    <Key>
+      <PropertyRef Name="PolkVehicleYMMEId" />
+    </Key>
+    <Property Name="PolkVehicleYMMEId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="VinPatternMask" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DlcLocationId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="VehicleClass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VehicleClass2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VehicleClass3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Manufacturer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Make" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Year" Type="Int32" />
+    <Property Name="Trim" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="EngineVinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="EngineType" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="AAIA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Transmission" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BaseMSRP" Type="Int32" />
+    <Property Name="ModelImageName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TrimImageName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CrashRating" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CurrentMarketValue" Type="Decimal" />
+    <Property Name="Population" Type="Int32" />
+    <Property Name="FuelMPGCombined" Type="Decimal" />
+    <Property Name="FuelMPGCity" Type="Decimal" />
+    <Property Name="FuelMPGHighway" Type="Decimal" />
+    <Property Name="ACESBaseVehicleID" Type="Int32" />
+    <Property Name="ACESBodyStyleConfigID" Type="Int32" />
+    <Property Name="ACESBodyTypeID" Type="Int32" />
+    <Property Name="ACESBodyTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ACESEngineBaseID" Type="Int32" />
+    <Property Name="ACESEngineConfigID" Type="Int32" />
+    <Property Name="ACESEngineDestinationID" Type="Int32" />
+    <Property Name="ACESEngineVinID" Type="Int32" />
+    <Property Name="ACESMakeID" Type="Int32" />
+    <Property Name="ACESModelID" Type="Int32" />
+    <Property Name="ACESSubModelID" Type="Int32" />
+    <Property Name="ACESVehicleEngineConfigID" Type="Int32" />
+    <Property Name="ACESVehicleTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ACESVehicleTypeID" Type="Int32" />
+    <Property Name="ACESYearID" Type="Int32" />
+    <Property Name="PowertrainEcu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsPowertrainEcuId" Type="Boolean" />
+    <Property Name="UpdatedDateTimeUTC" Type="DateTime" />
+    <Property Name="CreatedDateTimeUTC" Type="DateTime" />
+    <Property Name="PrimaryEngineType" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="BodyStyleDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Vehicle">
+    <Key>
+      <PropertyRef Name="VehicleId" />
+    </Key>
+    <Property Name="VehicleId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="VehicleTypeId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="ScheduleMaintenancePlanId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Vin" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="LicensePlateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ManufacturerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ManufacturerNameAlt" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="Year" Type="Int32" />
+    <Property Name="Make" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="AAIA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="TrimLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="EngineVINCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="EngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FuelType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TransmissionControlType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VPManufacturer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="VPYear" Type="Int32" />
+    <Property Name="VPMake" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="VPModel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="VPAAIA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="VPTrimLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="VPEngineVINCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="VPEngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VPFuelType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VinPowerDatabaseVersion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="VinStatus" Type="Int32" />
+    <Property Name="VinStatusDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="DetailedDecodingProcessDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="PolkVehicleYMMEId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="PurchasedTsbsString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="Mileage" Type="Int32" />
+    <Property Name="MileageLastRecordedDateTimeUTC" Type="DateTime" />
+    <Property Name="SendScheduledMaintenanceAlerts" Type="Boolean" />
+    <Property Name="ScheduleMaintenanceMileageIntervalLastFound" Type="Int32" />
+    <Property Name="ScheduleMaintenanceAlertLastSentDateTimeUTC" Type="DateTime" />
+    <Property Name="SendNewRecallAlerts" Type="Boolean" />
+    <Property Name="NewRecallAlertLastSentDateTimeUTC" Type="DateTime" />
+    <Property Name="SendNewTSBAlerts" Type="Boolean" />
+    <Property Name="NewTSBAlertLastSentDateTimeUTC" Type="DateTime" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="IsDeleted" Type="Boolean" />
+  </EntityType>
+  <EntityContainer Name="innovadev01Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
+    <EntitySet Name="DiagnosticReports" EntityType="Self.DiagnosticReport" />
+    <EntitySet Name="ExternalSystems" EntityType="Self.ExternalSystem" />
+    <EntitySet Name="PolkVehicleYMMEs" EntityType="Self.PolkVehicleYMME" />
+    <EntitySet Name="Vehicles" EntityType="Self.Vehicle" />
+  </EntityContainer>
+</Schema>

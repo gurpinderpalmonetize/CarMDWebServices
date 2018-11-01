@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="innovadev01ModelStoreContainer" CdmEntityContainer="innovadev01Entities">
+    <EntitySetMapping Name="AdminUsers">
+      <EntityTypeMapping TypeName="innovadev01Model.AdminUser">
+        <MappingFragment StoreEntitySet="AdminUser">
+          <ScalarProperty Name="AdminUserId" ColumnName="AdminUserId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+          <ScalarProperty Name="ShippingAddress1" ColumnName="ShippingAddress1" />
+          <ScalarProperty Name="ShippingAddress2" ColumnName="ShippingAddress2" />
+          <ScalarProperty Name="ShippingCity" ColumnName="ShippingCity" />
+          <ScalarProperty Name="ShippingState" ColumnName="ShippingState" />
+          <ScalarProperty Name="ShippingPostalCode" ColumnName="ShippingPostalCode" />
+          <ScalarProperty Name="AreasOfExpertise" ColumnName="AreasOfExpertise" />
+          <ScalarProperty Name="AdminUserType" ColumnName="AdminUserType" />
+          <ScalarProperty Name="IsSystemAdministrator" ColumnName="IsSystemAdministrator" />
+          <ScalarProperty Name="IsReceivesPastDueNoFixNotifications" ColumnName="IsReceivesPastDueNoFixNotifications" />
+          <ScalarProperty Name="Market" ColumnName="Market" />
+          <ScalarProperty Name="Permissions" ColumnName="Permissions" />
+          <ScalarProperty Name="ValidationPayRateDollarsPerHour" ColumnName="ValidationPayRateDollarsPerHour" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="UpdatedDateTimeUTC" ColumnName="UpdatedDateTimeUTC" />
+          <ScalarProperty Name="CreatedDateTimeUTC" ColumnName="CreatedDateTimeUTC" />
+          <ScalarProperty Name="LastLoginDateTimeUTC" ColumnName="LastLoginDateTimeUTC" />
+          <ScalarProperty Name="PropertyDefinitionDataSetId" ColumnName="PropertyDefinitionDataSetId" />
+          <ScalarProperty Name="EnablePropertyDefinitionEditingOnForms" ColumnName="EnablePropertyDefinitionEditingOnForms" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiagnosticReports">
+      <EntityTypeMapping TypeName="innovadev01Model.DiagnosticReport">
+        <MappingFragment StoreEntitySet="DiagnosticReport">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="DiagnosticReportId" ColumnName="DiagnosticReportId" />
+          <ScalarProperty Name="DiagnosticReportResultId" ColumnName="DiagnosticReportResultId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="HasMasterTechsAssigned" ColumnName="HasMasterTechsAssigned" />
+          <ScalarProperty Name="MasterTechsAssignedIdList" ColumnName="MasterTechsAssignedIdList" />
+          <ScalarProperty Name="MasterTechProvideFixFeedbackByOverrideDateTimeUTC" ColumnName="MasterTechProvideFixFeedbackByOverrideDateTimeUTC" />
+          <ScalarProperty Name="AdminUserId_PwrWorkingOnFix" ColumnName="AdminUserId_PwrWorkingOnFix" />
+          <ScalarProperty Name="PwrAdminUserWorkingOnFixAssignedDateTimeUTC" ColumnName="PwrAdminUserWorkingOnFixAssignedDateTimeUTC" />
+          <ScalarProperty Name="AdminUserId_AbsWorkingOnFix" ColumnName="AdminUserId_AbsWorkingOnFix" />
+          <ScalarProperty Name="AbsAdminUserWorkingOnFixAssignedDateTimeUTC" ColumnName="AbsAdminUserWorkingOnFixAssignedDateTimeUTC" />
+          <ScalarProperty Name="AdminUserId_SrsWorkingOnFix" ColumnName="AdminUserId_SrsWorkingOnFix" />
+          <ScalarProperty Name="SrsAdminUserWorkingOnFixAssignedDateTimeUTC" ColumnName="SrsAdminUserWorkingOnFixAssignedDateTimeUTC" />
+          <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+          <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+          <ScalarProperty Name="CarScanSessionId" ColumnName="CarScanSessionId" />
+          <ScalarProperty Name="DiagnosticUploadId" ColumnName="DiagnosticUploadId" />
+          <ScalarProperty Name="OrderLineItemId" ColumnName="OrderLineItemId" />
+          <ScalarProperty Name="DiagnosticReportPreliminaryDiagnosisId" ColumnName="DiagnosticReportPreliminaryDiagnosisId" />
+          <ScalarProperty Name="RepairOrderNumber" ColumnName="RepairOrderNumber" />
+          <ScalarProperty Name="VehicleMileage" ColumnName="VehicleMileage" />
+          <ScalarProperty Name="Market" ColumnName="Market" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+          <ScalarProperty Name="Currency" ColumnName="Currency" />
+          <ScalarProperty Name="CurrencyExchangeRate" ColumnName="CurrencyExchangeRate" />
+          <ScalarProperty Name="PwrDiagnosticReportFixStatusWhenCreated" ColumnName="PwrDiagnosticReportFixStatusWhenCreated" />
+          <ScalarProperty Name="Obd1DiagnosticReportFixStatusWhenCreated" ColumnName="Obd1DiagnosticReportFixStatusWhenCreated" />
+          <ScalarProperty Name="AbsDiagnosticReportFixStatusWhenCreated" ColumnName="AbsDiagnosticReportFixStatusWhenCreated" />
+          <ScalarProperty Name="SrsDiagnosticReportFixStatusWhenCreated" ColumnName="SrsDiagnosticReportFixStatusWhenCreated" />
+          <ScalarProperty Name="PwrDiagnosticReportFixStatus" ColumnName="PwrDiagnosticReportFixStatus" />
+          <ScalarProperty Name="PwrDiagnosticReportFixCancelReason" ColumnName="PwrDiagnosticReportFixCancelReason" />
+          <ScalarProperty Name="Obd1DiagnosticReportFixStatus" ColumnName="Obd1DiagnosticReportFixStatus" />
+          <ScalarProperty Name="Obd1DiagnosticReportFixCancelReason" ColumnName="Obd1DiagnosticReportFixCancelReason" />
+          <ScalarProperty Name="AbsDiagnosticReportFixStatus" ColumnName="AbsDiagnosticReportFixStatus" />
+          <ScalarProperty Name="AbsDiagnosticReportFixCancelReason" ColumnName="AbsDiagnosticReportFixCancelReason" />
+          <ScalarProperty Name="SrsDiagnosticReportFixStatus" ColumnName="SrsDiagnosticReportFixStatus" />
+          <ScalarProperty Name="SrsDiagnosticReportFixCancelReason" ColumnName="SrsDiagnosticReportFixCancelReason" />
+          <ScalarProperty Name="PwrDiagnosticReportFixStatusClosedDateTimeUTC" ColumnName="PwrDiagnosticReportFixStatusClosedDateTimeUTC" />
+          <ScalarProperty Name="Obd1DiagnosticReportFixStatusClosedDateTimeUTC" ColumnName="Obd1DiagnosticReportFixStatusClosedDateTimeUTC" />
+          <ScalarProperty Name="AbsDiagnosticReportFixStatusClosedDateTimeUTC" ColumnName="AbsDiagnosticReportFixStatusClosedDateTimeUTC" />
+          <ScalarProperty Name="SrsDiagnosticReportFixStatusClosedDateTimeUTC" ColumnName="SrsDiagnosticReportFixStatusClosedDateTimeUTC" />
+          <ScalarProperty Name="PwrFixNotFoundFixPromisedByDateTimeUTC" ColumnName="PwrFixNotFoundFixPromisedByDateTimeUTC" />
+          <ScalarProperty Name="Obd1FixNotFoundFixPromisedByDateTimeUTC" ColumnName="Obd1FixNotFoundFixPromisedByDateTimeUTC" />
+          <ScalarProperty Name="AbsFixNotFoundFixPromisedByDateTimeUTC" ColumnName="AbsFixNotFoundFixPromisedByDateTimeUTC" />
+          <ScalarProperty Name="SrsFixNotFoundFixPromisedByDateTimeUTC" ColumnName="SrsFixNotFoundFixPromisedByDateTimeUTC" />
+          <ScalarProperty Name="NoFixProcessCompletedAndSentDateTimeUTC" ColumnName="NoFixProcessCompletedAndSentDateTimeUTC" />
+          <ScalarProperty Name="RawUploadString" ColumnName="RawUploadString" />
+          <ScalarProperty Name="RawFreezeFrameDataString" ColumnName="RawFreezeFrameDataString" />
+          <ScalarProperty Name="RawMonitorsDataString" ColumnName="RawMonitorsDataString" />
+          <ScalarProperty Name="ToolTypeFormat" ColumnName="ToolTypeFormat" />
+          <ScalarProperty Name="SoftwareVersion" ColumnName="SoftwareVersion" />
+          <ScalarProperty Name="FirmwareVersion" ColumnName="FirmwareVersion" />
+          <ScalarProperty Name="VIN" ColumnName="VIN" />
+          <ScalarProperty Name="PwrMilCode" ColumnName="PwrMilCode" />
+          <ScalarProperty Name="PwrStoredCodesString" ColumnName="PwrStoredCodesString" />
+          <ScalarProperty Name="PwrPendingCodesString" ColumnName="PwrPendingCodesString" />
+          <ScalarProperty Name="Obd1StoredCodesString" ColumnName="Obd1StoredCodesString" />
+          <ScalarProperty Name="Obd1PendingCodesString" ColumnName="Obd1PendingCodesString" />
+          <ScalarProperty Name="AbsStoredCodesString" ColumnName="AbsStoredCodesString" />
+          <ScalarProperty Name="AbsPendingCodesString" ColumnName="AbsPendingCodesString" />
+          <ScalarProperty Name="SrsStoredCodesString" ColumnName="SrsStoredCodesString" />
+          <ScalarProperty Name="SrsPendingCodesString" ColumnName="SrsPendingCodesString" />
+          <ScalarProperty Name="EnhancedDtcsString" ColumnName="EnhancedDtcsString" />
+          <ScalarProperty Name="ToolLEDStatus" ColumnName="ToolLEDStatus" />
+          <ScalarProperty Name="ToolMilStatus" ColumnName="ToolMilStatus" />
+          <ScalarProperty Name="UpdatedDateTimeUTC" ColumnName="UpdatedDateTimeUTC" />
+          <ScalarProperty Name="CreatedDateTimeUTC" ColumnName="CreatedDateTimeUTC" />
+          <ScalarProperty Name="RequestedTechnicianContactDateTimeUTC" ColumnName="RequestedTechnicianContactDateTimeUTC" />
+          <ScalarProperty Name="RequestedTechnicianContactComments" ColumnName="RequestedTechnicianContactComments" />
+          <ScalarProperty Name="IsManualReport" ColumnName="IsManualReport" />
+          <ScalarProperty Name="ManualDiagnosticReportType" ColumnName="ManualDiagnosticReportType" />
+          <ScalarProperty Name="IsPwrObd1FixFeedbackRequired" ColumnName="IsPwrObd1FixFeedbackRequired" />
+          <ScalarProperty Name="IsPwrObd2FixFeedbackRequired" ColumnName="IsPwrObd2FixFeedbackRequired" />
+          <ScalarProperty Name="IsAbsFixFeedbackRequired" ColumnName="IsAbsFixFeedbackRequired" />
+          <ScalarProperty Name="IsSrsFixFeedbackRequired" ColumnName="IsSrsFixFeedbackRequired" />
+          <ScalarProperty Name="MasterTechNotificationsSentDateTimeUTC" ColumnName="MasterTechNotificationsSentDateTimeUTC" />
+          <ScalarProperty Name="PwrIsFixNotificationRequested" ColumnName="PwrIsFixNotificationRequested" />
+          <ScalarProperty Name="AbsIsFixNotificationRequested" ColumnName="AbsIsFixNotificationRequested" />
+          <ScalarProperty Name="SrsIsFixNotificationRequested" ColumnName="SrsIsFixNotificationRequested" />
+          <ScalarProperty Name="PwrDiagnosticReportFixFeedbackStatus" ColumnName="PwrDiagnosticReportFixFeedbackStatus" />
+          <ScalarProperty Name="Obd1DiagnosticReportFixFeedbackStatus" ColumnName="Obd1DiagnosticReportFixFeedbackStatus" />
+          <ScalarProperty Name="AbsDiagnosticReportFixFeedbackStatus" ColumnName="AbsDiagnosticReportFixFeedbackStatus" />
+          <ScalarProperty Name="SrsDiagnosticReportFixFeedbackStatus" ColumnName="SrsDiagnosticReportFixFeedbackStatus" />
+          <ScalarProperty Name="FixProvidedDateTimeUTC" ColumnName="FixProvidedDateTimeUTC" />
+          <ScalarProperty Name="WhatFixedMyCarEmailSentDateTimeUTC" ColumnName="WhatFixedMyCarEmailSentDateTimeUTC" />
+          <ScalarProperty Name="PastDueEmailSentDateTimeUTC" ColumnName="PastDueEmailSentDateTimeUTC" />
+          <ScalarProperty Name="SymptomId" ColumnName="SymptomId" />
+          <ScalarProperty Name="PwrPermanentCodesString" ColumnName="PwrPermanentCodesString" />
+          <ScalarProperty Name="SoftwareType" ColumnName="SoftwareType" />
+          <ScalarProperty Name="ParentDiagnosticReportId" ColumnName="ParentDiagnosticReportId" />
+          <ScalarProperty Name="ManualRawFreezeFrameDataString" ColumnName="ManualRawFreezeFrameDataString" />
+          <ScalarProperty Name="AdditionalHelpRequired" ColumnName="AdditionalHelpRequired" />
+          <ScalarProperty Name="IsNotifiedRequester" ColumnName="IsNotifiedRequester" />
+          <ScalarProperty Name="NotifiedRequesterDateTimeUTC" ColumnName="NotifiedRequesterDateTimeUTC" />
+          <ScalarProperty Name="NotifiedRequesterVia" ColumnName="NotifiedRequesterVia" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExternalSystems">
+      <EntityTypeMapping TypeName="innovadev01Model.ExternalSystem">
+        <MappingFragment StoreEntitySet="ExternalSystem">
+          <ScalarProperty Name="ExternalSystemId" ColumnName="ExternalSystemId" />
+          <ScalarProperty Name="KeyGuid" ColumnName="KeyGuid" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+          <ScalarProperty Name="ImageNameSuffix" ColumnName="ImageNameSuffix" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="FixPriority" ColumnName="FixPriority" />
+          <ScalarProperty Name="AdminUserCreatedId" ColumnName="AdminUserCreatedId" />
+          <ScalarProperty Name="AdminUserUpdatedId" ColumnName="AdminUserUpdatedId" />
+          <ScalarProperty Name="CreatedDateTimeUTC" ColumnName="CreatedDateTimeUTC" />
+          <ScalarProperty Name="UpdatedDateTimeUTC" ColumnName="UpdatedDateTimeUTC" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PolkVehicleYMMEs">
+      <EntityTypeMapping TypeName="innovadev01Model.PolkVehicleYMME">
+        <MappingFragment StoreEntitySet="PolkVehicleYMME">
+          <ScalarProperty Name="PolkVehicleYMMEId" ColumnName="PolkVehicleYMMEId" />
+          <ScalarProperty Name="VinPatternMask" ColumnName="VinPatternMask" />
+          <ScalarProperty Name="DlcLocationId" ColumnName="DlcLocationId" />
+          <ScalarProperty Name="VehicleClass" ColumnName="VehicleClass" />
+          <ScalarProperty Name="VehicleClass2" ColumnName="VehicleClass2" />
+          <ScalarProperty Name="VehicleClass3" ColumnName="VehicleClass3" />
+          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+          <ScalarProperty Name="Make" ColumnName="Make" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Trim" ColumnName="Trim" />
+          <ScalarProperty Name="EngineVinCode" ColumnName="EngineVinCode" />
+          <ScalarProperty Name="EngineType" ColumnName="EngineType" />
+          <ScalarProperty Name="AAIA" ColumnName="AAIA" />
+          <ScalarProperty Name="Transmission" ColumnName="Transmission" />
+          <ScalarProperty Name="BaseMSRP" ColumnName="BaseMSRP" />
+          <ScalarProperty Name="ModelImageName" ColumnName="ModelImageName" />
+          <ScalarProperty Name="TrimImageName" ColumnName="TrimImageName" />
+          <ScalarProperty Name="CrashRating" ColumnName="CrashRating" />
+          <ScalarProperty Name="CurrentMarketValue" ColumnName="CurrentMarketValue" />
+          <ScalarProperty Name="Population" ColumnName="Population" />
+          <ScalarProperty Name="FuelMPGCombined" ColumnName="FuelMPGCombined" />
+          <ScalarProperty Name="FuelMPGCity" ColumnName="FuelMPGCity" />
+          <ScalarProperty Name="FuelMPGHighway" ColumnName="FuelMPGHighway" />
+          <ScalarProperty Name="ACESBaseVehicleID" ColumnName="ACESBaseVehicleID" />
+          <ScalarProperty Name="ACESBodyStyleConfigID" ColumnName="ACESBodyStyleConfigID" />
+          <ScalarProperty Name="ACESBodyTypeID" ColumnName="ACESBodyTypeID" />
+          <ScalarProperty Name="ACESBodyTypeName" ColumnName="ACESBodyTypeName" />
+          <ScalarProperty Name="ACESEngineBaseID" ColumnName="ACESEngineBaseID" />
+          <ScalarProperty Name="ACESEngineConfigID" ColumnName="ACESEngineConfigID" />
+          <ScalarProperty Name="ACESEngineDestinationID" ColumnName="ACESEngineDestinationID" />
+          <ScalarProperty Name="ACESEngineVinID" ColumnName="ACESEngineVinID" />
+          <ScalarProperty Name="ACESMakeID" ColumnName="ACESMakeID" />
+          <ScalarProperty Name="ACESModelID" ColumnName="ACESModelID" />
+          <ScalarProperty Name="ACESSubModelID" ColumnName="ACESSubModelID" />
+          <ScalarProperty Name="ACESVehicleEngineConfigID" ColumnName="ACESVehicleEngineConfigID" />
+          <ScalarProperty Name="ACESVehicleTypeName" ColumnName="ACESVehicleTypeName" />
+          <ScalarProperty Name="ACESVehicleTypeID" ColumnName="ACESVehicleTypeID" />
+          <ScalarProperty Name="ACESYearID" ColumnName="ACESYearID" />
+          <ScalarProperty Name="PowertrainEcu" ColumnName="PowertrainEcu" />
+          <ScalarProperty Name="IsPowertrainEcuId" ColumnName="IsPowertrainEcuId" />
+          <ScalarProperty Name="UpdatedDateTimeUTC" ColumnName="UpdatedDateTimeUTC" />
+          <ScalarProperty Name="CreatedDateTimeUTC" ColumnName="CreatedDateTimeUTC" />
+          <ScalarProperty Name="PrimaryEngineType" ColumnName="PrimaryEngineType" />
+          <ScalarProperty Name="BodyStyleDesc" ColumnName="BodyStyleDesc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vehicles">
+      <EntityTypeMapping TypeName="innovadev01Model.Vehicle">
+        <MappingFragment StoreEntitySet="Vehicle">
+          <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="VehicleTypeId" ColumnName="VehicleTypeId" />
+          <ScalarProperty Name="ScheduleMaintenancePlanId" ColumnName="ScheduleMaintenancePlanId" />
+          <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+          <ScalarProperty Name="Vin" ColumnName="Vin" />
+          <ScalarProperty Name="LicensePlateNumber" ColumnName="LicensePlateNumber" />
+          <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+          <ScalarProperty Name="ManufacturerNameAlt" ColumnName="ManufacturerNameAlt" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Make" ColumnName="Make" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="AAIA" ColumnName="AAIA" />
+          <ScalarProperty Name="TrimLevel" ColumnName="TrimLevel" />
+          <ScalarProperty Name="EngineVINCode" ColumnName="EngineVINCode" />
+          <ScalarProperty Name="EngineType" ColumnName="EngineType" />
+          <ScalarProperty Name="FuelType" ColumnName="FuelType" />
+          <ScalarProperty Name="TransmissionControlType" ColumnName="TransmissionControlType" />
+          <ScalarProperty Name="VPManufacturer" ColumnName="VPManufacturer" />
+          <ScalarProperty Name="VPYear" ColumnName="VPYear" />
+          <ScalarProperty Name="VPMake" ColumnName="VPMake" />
+          <ScalarProperty Name="VPModel" ColumnName="VPModel" />
+          <ScalarProperty Name="VPAAIA" ColumnName="VPAAIA" />
+          <ScalarProperty Name="VPTrimLevel" ColumnName="VPTrimLevel" />
+          <ScalarProperty Name="VPEngineVINCode" ColumnName="VPEngineVINCode" />
+          <ScalarProperty Name="VPEngineType" ColumnName="VPEngineType" />
+          <ScalarProperty Name="VPFuelType" ColumnName="VPFuelType" />
+          <ScalarProperty Name="VinPowerDatabaseVersion" ColumnName="VinPowerDatabaseVersion" />
+          <ScalarProperty Name="VinStatus" ColumnName="VinStatus" />
+          <ScalarProperty Name="VinStatusDescription" ColumnName="VinStatusDescription" />
+          <ScalarProperty Name="DetailedDecodingProcessDescription" ColumnName="DetailedDecodingProcessDescription" />
+          <ScalarProperty Name="PolkVehicleYMMEId" ColumnName="PolkVehicleYMMEId" />
+          <ScalarProperty Name="PurchasedTsbsString" ColumnName="PurchasedTsbsString" />
+          <ScalarProperty Name="Mileage" ColumnName="Mileage" />
+          <ScalarProperty Name="MileageLastRecordedDateTimeUTC" ColumnName="MileageLastRecordedDateTimeUTC" />
+          <ScalarProperty Name="SendScheduledMaintenanceAlerts" ColumnName="SendScheduledMaintenanceAlerts" />
+          <ScalarProperty Name="ScheduleMaintenanceMileageIntervalLastFound" ColumnName="ScheduleMaintenanceMileageIntervalLastFound" />
+          <ScalarProperty Name="ScheduleMaintenanceAlertLastSentDateTimeUTC" ColumnName="ScheduleMaintenanceAlertLastSentDateTimeUTC" />
+          <ScalarProperty Name="SendNewRecallAlerts" ColumnName="SendNewRecallAlerts" />
+          <ScalarProperty Name="NewRecallAlertLastSentDateTimeUTC" ColumnName="NewRecallAlertLastSentDateTimeUTC" />
+          <ScalarProperty Name="SendNewTSBAlerts" ColumnName="SendNewTSBAlerts" />
+          <ScalarProperty Name="NewTSBAlertLastSentDateTimeUTC" ColumnName="NewTSBAlertLastSentDateTimeUTC" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TSBs">
+      <EntityTypeMapping TypeName="innovadev01Model.TSB">
+        <MappingFragment StoreEntitySet="TSB">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="UpdatedDateTime" ColumnName="UpdatedDateTime" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="TSBText" ColumnName="TSBText" />
+          <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+          <ScalarProperty Name="ManufacturerNumber" ColumnName="ManufacturerNumber" />
+          <ScalarProperty Name="FileNamePDF" ColumnName="FileNamePDF" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="TSBID" ColumnName="TSBID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TSBAAIAToLegacyVehicleIDs">
+      <EntityTypeMapping TypeName="innovadev01Model.TSBAAIAToLegacyVehicleID">
+        <MappingFragment StoreEntitySet="TSBAAIAToLegacyVehicleID">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="LegacyVehicleID" ColumnName="LegacyVehicleID" />
+          <ScalarProperty Name="AAIAVehicleID" ColumnName="AAIAVehicleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TSBToVehicles">
+      <EntityTypeMapping TypeName="innovadev01Model.TSBToVehicle">
+        <MappingFragment StoreEntitySet="TSBToVehicle">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="CreatedDateTimeUTC" ColumnName="CreatedDateTimeUTC" />
+          <ScalarProperty Name="BaseVehicleID" ColumnName="BaseVehicleID" />
+          <ScalarProperty Name="TSBID" ColumnName="TSBID" />
+          <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recalls">
+      <EntityTypeMapping TypeName="innovadev01Model.Recall">
+        <MappingFragment StoreEntitySet="Recall">
+          <ScalarProperty Name="DefectCorrectiveAction_zh" ColumnName="DefectCorrectiveAction_zh" />
+          <ScalarProperty Name="DefectCorrectiveAction_fr" ColumnName="DefectCorrectiveAction_fr" />
+          <ScalarProperty Name="DefectCorrectiveAction_es" ColumnName="DefectCorrectiveAction_es" />
+          <ScalarProperty Name="DefectCorrectiveAction" ColumnName="DefectCorrectiveAction" />
+          <ScalarProperty Name="DefectConsequence_zh" ColumnName="DefectConsequence_zh" />
+          <ScalarProperty Name="DefectConsequence_fr" ColumnName="DefectConsequence_fr" />
+          <ScalarProperty Name="DefectConsequence_es" ColumnName="DefectConsequence_es" />
+          <ScalarProperty Name="DefectConsequence" ColumnName="DefectConsequence" />
+          <ScalarProperty Name="DefectDescription_zh" ColumnName="DefectDescription_zh" />
+          <ScalarProperty Name="DefectDescription_fr" ColumnName="DefectDescription_fr" />
+          <ScalarProperty Name="DefectDescription_es" ColumnName="DefectDescription_es" />
+          <ScalarProperty Name="DefectDescription" ColumnName="DefectDescription" />
+          <ScalarProperty Name="FMVSS" ColumnName="FMVSS" />
+          <ScalarProperty Name="RPNO" ColumnName="RPNO" />
+          <ScalarProperty Name="DateA" ColumnName="DateA" />
+          <ScalarProperty Name="RecallDate" ColumnName="RecallDate" />
+          <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+          <ScalarProperty Name="InfluencedBy" ColumnName="InfluencedBy" />
+          <ScalarProperty Name="ODate" ColumnName="ODate" />
+          <ScalarProperty Name="PotAff" ColumnName="PotAff" />
+          <ScalarProperty Name="RecallTypeCode" ColumnName="RecallTypeCode" />
+          <ScalarProperty Name="EndManufacturing" ColumnName="EndManufacturing" />
+          <ScalarProperty Name="BeginManufactering" ColumnName="BeginManufactering" />
+          <ScalarProperty Name="ManufacturerText" ColumnName="ManufacturerText" />
+          <ScalarProperty Name="ComponentName_zh" ColumnName="ComponentName_zh" />
+          <ScalarProperty Name="ComponentName_fr" ColumnName="ComponentName_fr" />
+          <ScalarProperty Name="ComponentName_es" ColumnName="ComponentName_es" />
+          <ScalarProperty Name="ComponentName" ColumnName="ComponentName" />
+          <ScalarProperty Name="ManufacturerCampaignNumber" ColumnName="ManufacturerCampaignNumber" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="Make" ColumnName="Make" />
+          <ScalarProperty Name="CampaignNumber" ColumnName="CampaignNumber" />
+          <ScalarProperty Name="RecordNumber" ColumnName="RecordNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recall_ByCleanModel">
+      <EntityTypeMapping TypeName="innovadev01Model.Recall_ByCleanModel">
+        <MappingFragment StoreEntitySet="Recall_ByCleanModel">
+          <ScalarProperty Name="CleanModel" ColumnName="CleanModel" />
+          <ScalarProperty Name="RecordNumber" ColumnName="RecordNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
