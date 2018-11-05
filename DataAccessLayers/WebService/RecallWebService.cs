@@ -11,12 +11,12 @@ namespace DataAccessLayers.WebService
 {
     public class RecallWebService
     {
-        public static RecallCollection Search(int year, string make, string model, string trimLevel)
+        public static int Search(int year, string make, string model, string trimLevel)
         {
-            var recallCollection = new RecallCollection();
+            var recallCollection = new List<RecallCollection>();
             using (innovadev01Entities dbContext = new innovadev01Entities())
             {
-                recallCollection = (from recalls in dbContext.Recalls
+               var recall = (from recalls in dbContext.Recalls
                                     join recall_ByCleanModel in dbContext.Recall_ByCleanModel
                                     on recalls.RecordNumber equals recall_ByCleanModel.RecordNumber
                                     where
@@ -27,7 +27,7 @@ namespace DataAccessLayers.WebService
                                     {
                                         RecordNumber = recalls.RecordNumber,
                                         CampaignNumber = recalls.CampaignNumber,
-                                        RecallDate = recalls.RecallDate,
+                                        RecallDate = recalls.RecallDate, //DateTime.ParseExact(recallCollection.RecallDate, "yyyymmdd", (IFormatProvider)CultureInfo.CurrentCulture.DateTimeFormat);
                                         DefectDescription_es = recalls.DefectDescription_es,
                                         DefectDescription_fr = recalls.DefectDescription_fr,
                                         DefectDescription_zh = recalls.DefectDescription_zh,
@@ -40,15 +40,18 @@ namespace DataAccessLayers.WebService
                                         DefectCorrectiveAction_fr = recalls.DefectConsequence_fr,
                                         DefectCorrectiveAction_zh = recalls.DefectConsequence_zh,
                                     }).Distinct().OrderByDescending(x => x.RecallDate).FirstOrDefault();
-                if (!string.IsNullOrEmpty(recallCollection.RecallDate))
-                {
-                    DateTime recallDate = DateTime.MinValue;
-                    recallDate = DateTime.ParseExact(recallCollection.RecallDate, "yyyymmdd", (IFormatProvider)CultureInfo.CurrentCulture.DateTimeFormat);
-                    recallCollection.RecallDate = recallDate.ToLongDateString();
 
-                }
+                //if (!string.IsNullOrEmpty(recallCollection.RecallDate))
+                //{
+                //    DateTime recallDate = DateTime.MinValue;
+                //    recallDate = DateTime.ParseExact(recallCollection.RecallDate, "yyyymmdd", (IFormatProvider)CultureInfo.CurrentCulture.DateTimeFormat);
+                //    recallCollection.RecallDate = recallDate.ToLongDateString();
+                //}
 
-                return recallCollection;
+
+                recallCollection.Add(recall);
+
+                return recallCollection.Count();
             }
         }
 
@@ -64,6 +67,10 @@ namespace DataAccessLayers.WebService
                                      recalls.Make != string.Empty && recalls.Make == make
                                      && recalls.Model != string.Empty && recalls.Model == model
                                      && recalls.Year != null && recalls.Year == year
+                                     && recalls.RecallDate != null && recalls.RecallDate == startDate
+                                     && recalls.RecallDate != null && recalls.RecallDate == endDate
+                                    //(Recall.RecallDate >= @StartDateString 
+                                    //(Recall.RecallDate <= @EndDateString 
 
                                     select new RecallCollection
                                     {

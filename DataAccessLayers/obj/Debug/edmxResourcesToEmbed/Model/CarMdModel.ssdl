@@ -1,40 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="innovadev01Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="AdminUser">
-    <Key>
-      <PropertyRef Name="AdminUserId" />
-    </Key>
-    <Property Name="AdminUserId" Type="varchar" MaxLength="36" Nullable="false" />
-    <Property Name="FirstName" Type="text" />
-    <Property Name="LastName" Type="text" />
-    <Property Name="EmailAddress" Type="text" />
-    <Property Name="PhoneNumber" Type="bigint" />
-    <Property Name="Password" Type="text" />
-    <Property Name="Address1" Type="text" />
-    <Property Name="Address2" Type="text" />
-    <Property Name="City" Type="text" />
-    <Property Name="State" Type="text" />
-    <Property Name="PostalCode" Type="text" />
-    <Property Name="ShippingAddress1" Type="text" />
-    <Property Name="ShippingAddress2" Type="text" />
-    <Property Name="ShippingCity" Type="text" />
-    <Property Name="ShippingState" Type="text" />
-    <Property Name="ShippingPostalCode" Type="text" />
-    <Property Name="AreasOfExpertise" Type="text" />
-    <Property Name="AdminUserType" Type="int" />
-    <Property Name="IsSystemAdministrator" Type="int" />
-    <Property Name="IsReceivesPastDueNoFixNotifications" Type="int" />
-    <Property Name="Market" Type="int" />
-    <Property Name="Permissions" Type="text" />
-    <Property Name="ValidationPayRateDollarsPerHour" Type="double" />
-    <Property Name="IsActive" Type="int" />
-    <Property Name="IsDeleted" Type="int" />
-    <Property Name="UpdatedDateTimeUTC" Type="text" />
-    <Property Name="CreatedDateTimeUTC" Type="text" />
-    <Property Name="LastLoginDateTimeUTC" Type="text" />
-    <Property Name="PropertyDefinitionDataSetId" Type="text" />
-    <Property Name="EnablePropertyDefinitionEditingOnForms" Type="int" />
-  </EntityType>
   <EntityType Name="DiagnosticReport">
     <Key>
       <PropertyRef Name="id" />
@@ -135,6 +100,70 @@
     <Property Name="NotifiedRequesterDateTimeUTC" Type="datetime" Precision="3" />
     <Property Name="NotifiedRequesterVia" Type="varchar" MaxLength="100" />
     <Property Name="Note" Type="varchar" MaxLength="1500" />
+  </EntityType>
+  <EntityType Name="DiagnosticReportExternalSystemReportId">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DiagnosticReportId" Type="text" />
+    <Property Name="ExternalSystemReportId" Type="text" />
+  </EntityType>
+  <EntityType Name="DLCLocation">
+    <Key>
+      <PropertyRef Name="DlcLocationId" />
+    </Key>
+    <Property Name="DlcLocationId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="Year" Type="varchar" MaxLength="8" />
+    <Property Name="Make" Type="varchar" MaxLength="100" />
+    <Property Name="Model" Type="varchar" MaxLength="100" />
+    <Property Name="LocationNumber" Type="int" />
+    <Property Name="Access" Type="varchar" MaxLength="500" />
+    <Property Name="Access_French" Type="varchar" MaxLength="500" />
+    <Property Name="Access_Spanish" Type="varchar" MaxLength="500" />
+    <Property Name="Comments" Type="varchar" MaxLength="500" />
+    <Property Name="Comments_French" Type="varchar" MaxLength="500" />
+    <Property Name="Comments_Spanish" Type="varchar" MaxLength="500" />
+    <Property Name="ImageFileName" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="DTCCodeLaymanTerm">
+    <Key>
+      <PropertyRef Name="DTCCodeLaymanTermId" />
+    </Key>
+    <Property Name="DTCCodeLaymanTermId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ErrorCode" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Make" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Title" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="Title_es" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="Title_fr" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="Title_zh" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="Description" Type="longtext" Nullable="false" />
+    <Property Name="Description_es" Type="longtext" Nullable="false" />
+    <Property Name="Description_fr" Type="longtext" Nullable="false" />
+    <Property Name="Description_zh" Type="longtext" Nullable="false" />
+    <Property Name="SeverityLevel" Type="int" Nullable="false" />
+    <Property Name="EffectOnVehicle" Type="longtext" Nullable="false" />
+    <Property Name="EffectOnVehicle_es" Type="longtext" Nullable="false" />
+    <Property Name="EffectOnVehicle_fr" Type="longtext" Nullable="false" />
+    <Property Name="EffectOnVehicle_zh" Type="longtext" Nullable="false" />
+    <Property Name="ResponsibleComponentOrSystem" Type="longtext" Nullable="false" />
+    <Property Name="ResponsibleComponentOrSystem_es" Type="longtext" Nullable="false" />
+    <Property Name="ResponsibleComponentOrSystem_fr" Type="longtext" Nullable="false" />
+    <Property Name="ResponsibleComponentOrSystem_zh" Type="longtext" Nullable="false" />
+    <Property Name="WhyItsImportant" Type="longtext" Nullable="false" />
+    <Property Name="WhyItsImportant_es" Type="longtext" Nullable="false" />
+    <Property Name="WhyItsImportant_fr" Type="longtext" Nullable="false" />
+    <Property Name="WhyItsImportant_zh" Type="longtext" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DTCCodeLaymanTermSeverityDefinition">
+    <Key>
+      <PropertyRef Name="SeverityLevel" />
+    </Key>
+    <Property Name="SeverityLevel" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SeverityDefinition" Type="varchar" MaxLength="250" Nullable="false" />
+    <Property Name="SeverityDefinition_es" Type="varchar" MaxLength="250" Nullable="false" />
+    <Property Name="SeverityDefinition_fr" Type="varchar" MaxLength="250" Nullable="false" />
+    <Property Name="SeverityDefinition_zh" Type="varchar" MaxLength="250" />
   </EntityType>
   <EntityType Name="ExternalSystem">
     <Key>
@@ -280,6 +309,103 @@
     <Property Name="CreatedDateTimeUTC" Type="datetime" Precision="3" />
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="Salutation" Type="varchar" MaxLength="5" />
+    <Property Name="FirstName" Type="varchar" MaxLength="100" />
+    <Property Name="LastName" Type="varchar" MaxLength="100" />
+    <Property Name="Address1" Type="varchar" MaxLength="100" />
+    <Property Name="Address2" Type="varchar" MaxLength="100" />
+    <Property Name="City" Type="varchar" MaxLength="100" />
+    <Property Name="Region" Type="varchar" MaxLength="100" />
+    <Property Name="PostCode" Type="varchar" MaxLength="100" />
+    <Property Name="Country" Type="varchar" MaxLength="100" />
+    <Property Name="EmailAddress" Type="varchar" MaxLength="200" />
+    <Property Name="Password" Type="varchar" MaxLength="100" />
+    <Property Name="PasswordHash" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+    <Property Name="EmailValidationCode" Type="varchar" MaxLength="30" />
+    <Property Name="IsEmailValidated" Type="bool" />
+    <Property Name="EmailValidatedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="SignUpPromoCode" Type="varchar" MaxLength="50" />
+    <Property Name="SignUpPromoCodeOrderId" Type="varchar" MaxLength="36" />
+    <Property Name="AdditionalSessions" Type="int" />
+    <Property Name="AdditionalVehicles" Type="int" />
+    <Property Name="AdditionalDTCSearches" Type="int" />
+    <Property Name="AdditionalVINLookups" Type="int" />
+    <Property Name="AdditionalOpenReports" Type="int" />
+    <Property Name="AdditionalDailyReports" Type="int" />
+    <Property Name="UserType" Type="int" />
+    <Property Name="UserTypeExternalId" Type="varchar" MaxLength="36" />
+    <Property Name="UserAccountStatus" Type="int" />
+    <Property Name="UserAccountStatusSetByAdminUserId" Type="varchar" MaxLength="36" />
+    <Property Name="UserAccountStatusSetDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="DeclineReason" Type="text" />
+    <Property Name="ASECertifications" Type="varchar" MaxLength="50" />
+    <Property Name="ASECertificationsOther" Type="varchar" MaxLength="50" />
+    <Property Name="BusinessType" Type="varchar" MaxLength="100" />
+    <Property Name="JobPositionsString" Type="varchar" MaxLength="500" />
+    <Property Name="AutomobileMakesString" Type="varchar" MaxLength="500" />
+    <Property Name="AreasOfExpertiseString" Type="varchar" MaxLength="500" />
+    <Property Name="ShopName" Type="varchar" MaxLength="100" />
+    <Property Name="ShopAddress1" Type="varchar" MaxLength="100" />
+    <Property Name="ShopAddress2" Type="varchar" MaxLength="100" />
+    <Property Name="ShopCity" Type="varchar" MaxLength="100" />
+    <Property Name="ShopRegion" Type="varchar" MaxLength="100" />
+    <Property Name="ShopPostCode" Type="varchar" MaxLength="100" />
+    <Property Name="ShopEmailAddress" Type="varchar" MaxLength="200" />
+    <Property Name="ShopPhoneNumber" Type="varchar" MaxLength="50" />
+    <Property Name="CompanyDescription" Type="varchar" MaxLength="300" />
+    <Property Name="BusinessTypeOther" Type="varchar" MaxLength="50" />
+    <Property Name="AreasOfExpertiseOther" Type="varchar" MaxLength="50" />
+    <Property Name="AutomobileMakeOther" Type="varchar" MaxLength="50" />
+    <Property Name="IsProvidesRepairServicesToPublic" Type="bool" />
+    <Property Name="IsHadPreviousAccount" Type="bool" />
+    <Property Name="JobPositionOther" Type="varchar" MaxLength="50" />
+    <Property Name="YearsExperience" Type="int" />
+    <Property Name="HowHearedAboutOBDFix" Type="varchar" MaxLength="50" />
+    <Property Name="HowHearedAboutOBDFixOther" Type="varchar" MaxLength="50" />
+    <Property Name="AboutMemberWhoReferredYou" Type="text" />
+    <Property Name="WhereTesterWasPurchased" Type="varchar" MaxLength="50" />
+    <Property Name="Comments" Type="text" />
+    <Property Name="ShowIdentityOnPostedComments" Type="bool" />
+    <Property Name="IsMasterTech" Type="bool" />
+    <Property Name="MasterTechMakesString" Type="text" />
+    <Property Name="MasterTechNoFixReportsCap" Type="int" />
+    <Property Name="MasterTechNoFixReportLastAssignedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="DTCSearchCount" Type="int" />
+    <Property Name="DTCLastSearchDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="VINLookupCount" Type="int" />
+    <Property Name="VINLastLookupDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="ReportCount" Type="int" />
+    <Property Name="ReportLastCreatedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="Score" Type="int" />
+    <Property Name="IsPaymentProgramAllowed" Type="bool" />
+    <Property Name="IsPaymentProgramMember" Type="bool" />
+    <Property Name="PaymentProgramStartDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="IsInOBDPromotion" Type="bool" />
+    <Property Name="IsActive" Type="bool" />
+    <Property Name="IsInternal" Type="bool" />
+    <Property Name="CreatedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="UpdatedDateTimeUTC" Type="datetime" Precision="3" />
+    <Property Name="FullTextSearch" Type="text" />
+    <Property Name="PropertyDefinitionDataSetId" Type="varchar" MaxLength="36" />
+    <Property Name="EnablePropertyDefinitionEditingOnForms" Type="bool" />
+    <Property Name="Market" Type="int" />
+    <Property Name="IsSystemAdministrator" Type="int" />
+    <Property Name="IsReceivesPastDueNoFixNotifications" Type="int" />
+    <Property Name="Permissions" Type="text" />
+    <Property Name="ValidationPayRateDollarsPerHour" Type="double" />
+    <Property Name="IsDeleted" Type="int" />
+    <Property Name="LastLoginDateTimeUTC" Type="text" />
+    <Property Name="EnablePropertyDefinitionEditingOnForms_copy1" Type="int" />
+    <Property Name="ApplicationType" Type="int" />
+    <Property Name="ApplicationName" Type="varchar" MaxLength="45" />
+    <Property Name="IsEncrypt" Type="bool" Nullable="false" />
+  </EntityType>
   <EntityType Name="Vehicle">
     <Key>
       <PropertyRef Name="VehicleId" />
@@ -330,8 +456,11 @@
     <Property Name="IsDeleted" Type="bool" />
   </EntityType>
   <EntityContainer Name="innovadev01ModelStoreContainer">
-    <EntitySet Name="AdminUser" EntityType="Self.AdminUser" Schema="innovadev01" store:Type="Tables" />
     <EntitySet Name="DiagnosticReport" EntityType="Self.DiagnosticReport" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="DiagnosticReportExternalSystemReportId" EntityType="Self.DiagnosticReportExternalSystemReportId" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="DLCLocation" EntityType="Self.DLCLocation" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="DTCCodeLaymanTerm" EntityType="Self.DTCCodeLaymanTerm" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="DTCCodeLaymanTermSeverityDefinition" EntityType="Self.DTCCodeLaymanTermSeverityDefinition" Schema="innovadev01" store:Type="Tables" />
     <EntitySet Name="ExternalSystem" EntityType="Self.ExternalSystem" Schema="innovadev01" store:Type="Tables" />
     <EntitySet Name="PolkVehicleYMME" EntityType="Self.PolkVehicleYMME" Schema="innovadev01" store:Type="Tables" />
     <EntitySet Name="Recall" EntityType="Self.Recall" Schema="innovadev01" store:Type="Tables" />
@@ -339,6 +468,7 @@
     <EntitySet Name="TSB" EntityType="Self.TSB" Schema="innovadev01" store:Type="Tables" />
     <EntitySet Name="TSBAAIAToLegacyVehicleID" EntityType="Self.TSBAAIAToLegacyVehicleID" Schema="innovadev01" store:Type="Tables" />
     <EntitySet Name="TSBToVehicle" EntityType="Self.TSBToVehicle" Schema="innovadev01" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="innovadev01" store:Type="Tables" />
     <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="innovadev01" store:Type="Tables" />
   </EntityContainer>
 </Schema>

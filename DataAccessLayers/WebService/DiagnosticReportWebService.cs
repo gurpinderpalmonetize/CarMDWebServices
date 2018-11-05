@@ -1,0 +1,114 @@
+﻿using DataAccessLayers.DataObjects;
+using DataAccessLayers.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccessLayers.WebService
+{
+    public  class DiagnosticReportWebService
+    {
+
+        public static bool IsDuplicate(Guid? Id, ApiRequestModel apiRequest)
+        {
+            bool flag = false;
+            var id = Convert.ToString(Id);
+            using (innovadev01Entities dbContext = new innovadev01Entities())
+            {
+                var vinDecoder = (from diagnosticReports in dbContext.DiagnosticReports join user in dbContext.Users on diagnosticReports.UserId equals user.UserId
+                                  join externalSystems in dbContext.ExternalSystems on user.UserTypeExternalId equals externalSystems.ExternalSystemId
+                                  join vehicles in dbContext.Vehicles on diagnosticReports.VehicleId equals vehicles.VehicleId
+                                  join diagnosticId in dbContext.DiagnosticReportExternalSystemReportIds on diagnosticReports.DiagnosticReportId equals diagnosticId.DiagnosticReportId
+                                  where externalSystems.KeyGuid == id
+                                  && vehicles.Vin == apiRequest.vin
+                                 && diagnosticReports.RawUploadString == apiRequest.rawToolPayload
+                                && diagnosticId.ExternalSystemReportId == apiRequest.reportID
+                                  select diagnosticReports.DiagnosticReportId).Distinct().FirstOrDefault();
+                if (!string.IsNullOrEmpty(vinDecoder))
+                {
+                    return true;
+                }
+            };
+            return flag;
+        }
+
+
+        public static DiagReportInfo GetDiagnosticReport(ApiRequestModel apiRequest)
+        {
+            DiagReportInfo v = new DiagReportInfo();
+            using (innovadev01Entities dbContext = new innovadev01Entities())
+            {
+                var report = (from vehicles in dbContext.Vehicles
+                              join diagnosticReports in dbContext.DiagnosticReports
+                              on vehicles.VehicleId equals diagnosticReports.VehicleId
+                              where vehicles.Vin == apiRequest.vin
+                              select new DiagReportInfo
+                              {
+                                  DiagnosticReportId = diagnosticReports.DiagnosticReportId,
+                                  ScheduledMaintenanceNextMileage = true,
+                                  HasScheduledMaintenance = true,
+                                  HasUnScheduledMaintenance = true,
+                                  HasVehicleWarrantyDetails = true,
+                                  UnScheduledMaintenanceNextMileage = true,
+                                  IsValid = true
+                              }).Distinct().FirstOrDefault();
+                if(report.DiagnosticReportId == null)
+                {
+                    report.DiagnosticReportId = "00000000-0000-0000-0000-000000000000";
+                    report.ScheduledMaintenanceNextMileage = false;
+                    report.HasScheduledMaintenance = false;
+                    report.HasUnScheduledMaintenance = false;
+                    report.HasVehicleWarrantyDetails = false;
+                    report.UnScheduledMaintenanceNextMileage = false;
+                    return report;
+                }
+                if (report.DiagnosticReportId != null)
+                {
+                    return report;
+                }
+            }
+
+            return v;
+        }
+        public static DiagReportInfo GetMileage(ApiRequestModel apiRequest)
+        {
+            DiagReportInfo v = new DiagReportInfo();
+            using (innovadev01Entities dbContext = new innovadev01Entities())
+            {
+                var report = (from vehicles in dbContext.Vehicles
+                              join diagnosticReports in dbContext.DiagnosticReports
+                              on vehicles.VehicleId equals diagnosticReports.VehicleId
+                              where vehicles.Vin == apiRequest.vin && vehicles.Mileage == apiRequest.vehicleMileage
+                            //  && vehicles.MileageLastRecordedDateTimeUTC == apiRequest.createdDateTime
+                              select new DiagReportInfo
+                              {
+                                  DiagnosticReportId = diagnosticReports.DiagnosticReportId,
+                                  ScheduledMaintenanceNextMileage = true,
+                                  HasScheduledMaintenance = true,
+                                  HasUnScheduledMaintenance = true,
+                                  HasVehicleWarrantyDetails = true,
+                                  UnScheduledMaintenanceNextMileage = true,
+                                  IsValid = true
+                              }).Distinct().FirstOrDefault();
+                if (report.DiagnosticReportId == null)
+                {
+                    report.DiagnosticReportId = "00000000-0000-0000-0000-000000000000";
+                    report.ScheduledMaintenanceNextMileage = false;
+                    report.HasScheduledMaintenance = false;
+                    report.HasUnScheduledMaintenance = false;
+                    report.HasVehicleWarrantyDetails = false;
+                    report.UnScheduledMaintenanceNextMileage = false;
+                    return report;
+                }
+                if (report.DiagnosticReportId != null)
+                {
+                    return report;
+                }
+            }
+
+            return v;
+        }
+    }
+}

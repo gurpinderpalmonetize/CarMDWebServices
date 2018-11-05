@@ -25,15 +25,19 @@ namespace DataAccessLayers.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<AdminUser> AdminUsers { get; set; }
         public DbSet<DiagnosticReport> DiagnosticReports { get; set; }
         public DbSet<ExternalSystem> ExternalSystems { get; set; }
         public DbSet<PolkVehicleYMME> PolkVehicleYMMEs { get; set; }
-        public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<TSB> TSBs { get; set; }
         public DbSet<TSBAAIAToLegacyVehicleID> TSBAAIAToLegacyVehicleIDs { get; set; }
         public DbSet<TSBToVehicle> TSBToVehicles { get; set; }
         public DbSet<Recall> Recalls { get; set; }
         public DbSet<Recall_ByCleanModel> Recall_ByCleanModel { get; set; }
+        public DbSet<DiagnosticReportExternalSystemReportId> DiagnosticReportExternalSystemReportIds { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<DTCCodeLaymanTerm> DTCCodeLaymanTerms { get; set; }
+        public DbSet<DTCCodeLaymanTermSeverityDefinition> DTCCodeLaymanTermSeverityDefinitions { get; set; }
+        public DbSet<DLCLocation> DLCLocations { get; set; }
     }
 }

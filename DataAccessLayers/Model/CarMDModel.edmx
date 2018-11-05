@@ -5,41 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="innovadev01Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="AdminUser">
-          <Key>
-            <PropertyRef Name="AdminUserId" />
-          </Key>
-          <Property Name="AdminUserId" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="FirstName" Type="text" />
-          <Property Name="LastName" Type="text" />
-          <Property Name="EmailAddress" Type="text" />
-          <Property Name="PhoneNumber" Type="bigint" />
-          <Property Name="Password" Type="text" />
-          <Property Name="Address1" Type="text" />
-          <Property Name="Address2" Type="text" />
-          <Property Name="City" Type="text" />
-          <Property Name="State" Type="text" />
-          <Property Name="PostalCode" Type="text" />
-          <Property Name="ShippingAddress1" Type="text" />
-          <Property Name="ShippingAddress2" Type="text" />
-          <Property Name="ShippingCity" Type="text" />
-          <Property Name="ShippingState" Type="text" />
-          <Property Name="ShippingPostalCode" Type="text" />
-          <Property Name="AreasOfExpertise" Type="text" />
-          <Property Name="AdminUserType" Type="int" />
-          <Property Name="IsSystemAdministrator" Type="int" />
-          <Property Name="IsReceivesPastDueNoFixNotifications" Type="int" />
-          <Property Name="Market" Type="int" />
-          <Property Name="Permissions" Type="text" />
-          <Property Name="ValidationPayRateDollarsPerHour" Type="double" />
-          <Property Name="IsActive" Type="int" />
-          <Property Name="IsDeleted" Type="int" />
-          <Property Name="UpdatedDateTimeUTC" Type="text" />
-          <Property Name="CreatedDateTimeUTC" Type="text" />
-          <Property Name="LastLoginDateTimeUTC" Type="text" />
-          <Property Name="PropertyDefinitionDataSetId" Type="text" />
-          <Property Name="EnablePropertyDefinitionEditingOnForms" Type="int" />
-        </EntityType>
         <EntityType Name="DiagnosticReport">
           <Key>
             <PropertyRef Name="id" />
@@ -140,6 +105,70 @@
           <Property Name="NotifiedRequesterDateTimeUTC" Type="datetime" Precision="3" />
           <Property Name="NotifiedRequesterVia" Type="varchar" MaxLength="100" />
           <Property Name="Note" Type="varchar" MaxLength="1500" />
+        </EntityType>
+        <EntityType Name="DiagnosticReportExternalSystemReportId">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DiagnosticReportId" Type="text" />
+          <Property Name="ExternalSystemReportId" Type="text" />
+        </EntityType>
+        <EntityType Name="DLCLocation">
+          <Key>
+            <PropertyRef Name="DlcLocationId" />
+          </Key>
+          <Property Name="DlcLocationId" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="Year" Type="varchar" MaxLength="8" />
+          <Property Name="Make" Type="varchar" MaxLength="100" />
+          <Property Name="Model" Type="varchar" MaxLength="100" />
+          <Property Name="LocationNumber" Type="int" />
+          <Property Name="Access" Type="varchar" MaxLength="500" />
+          <Property Name="Access_French" Type="varchar" MaxLength="500" />
+          <Property Name="Access_Spanish" Type="varchar" MaxLength="500" />
+          <Property Name="Comments" Type="varchar" MaxLength="500" />
+          <Property Name="Comments_French" Type="varchar" MaxLength="500" />
+          <Property Name="Comments_Spanish" Type="varchar" MaxLength="500" />
+          <Property Name="ImageFileName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="DTCCodeLaymanTerm">
+          <Key>
+            <PropertyRef Name="DTCCodeLaymanTermId" />
+          </Key>
+          <Property Name="DTCCodeLaymanTermId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ErrorCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Make" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Title_es" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Title_fr" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Title_zh" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Description" Type="longtext" Nullable="false" />
+          <Property Name="Description_es" Type="longtext" Nullable="false" />
+          <Property Name="Description_fr" Type="longtext" Nullable="false" />
+          <Property Name="Description_zh" Type="longtext" Nullable="false" />
+          <Property Name="SeverityLevel" Type="int" Nullable="false" />
+          <Property Name="EffectOnVehicle" Type="longtext" Nullable="false" />
+          <Property Name="EffectOnVehicle_es" Type="longtext" Nullable="false" />
+          <Property Name="EffectOnVehicle_fr" Type="longtext" Nullable="false" />
+          <Property Name="EffectOnVehicle_zh" Type="longtext" Nullable="false" />
+          <Property Name="ResponsibleComponentOrSystem" Type="longtext" Nullable="false" />
+          <Property Name="ResponsibleComponentOrSystem_es" Type="longtext" Nullable="false" />
+          <Property Name="ResponsibleComponentOrSystem_fr" Type="longtext" Nullable="false" />
+          <Property Name="ResponsibleComponentOrSystem_zh" Type="longtext" Nullable="false" />
+          <Property Name="WhyItsImportant" Type="longtext" Nullable="false" />
+          <Property Name="WhyItsImportant_es" Type="longtext" Nullable="false" />
+          <Property Name="WhyItsImportant_fr" Type="longtext" Nullable="false" />
+          <Property Name="WhyItsImportant_zh" Type="longtext" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DTCCodeLaymanTermSeverityDefinition">
+          <Key>
+            <PropertyRef Name="SeverityLevel" />
+          </Key>
+          <Property Name="SeverityLevel" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeverityDefinition" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="SeverityDefinition_es" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="SeverityDefinition_fr" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="SeverityDefinition_zh" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="ExternalSystem">
           <Key>
@@ -285,6 +314,103 @@
           <Property Name="CreatedDateTimeUTC" Type="datetime" Precision="3" />
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="Salutation" Type="varchar" MaxLength="5" />
+          <Property Name="FirstName" Type="varchar" MaxLength="100" />
+          <Property Name="LastName" Type="varchar" MaxLength="100" />
+          <Property Name="Address1" Type="varchar" MaxLength="100" />
+          <Property Name="Address2" Type="varchar" MaxLength="100" />
+          <Property Name="City" Type="varchar" MaxLength="100" />
+          <Property Name="Region" Type="varchar" MaxLength="100" />
+          <Property Name="PostCode" Type="varchar" MaxLength="100" />
+          <Property Name="Country" Type="varchar" MaxLength="100" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="200" />
+          <Property Name="Password" Type="varchar" MaxLength="100" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+          <Property Name="EmailValidationCode" Type="varchar" MaxLength="30" />
+          <Property Name="IsEmailValidated" Type="bool" />
+          <Property Name="EmailValidatedDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="SignUpPromoCode" Type="varchar" MaxLength="50" />
+          <Property Name="SignUpPromoCodeOrderId" Type="varchar" MaxLength="36" />
+          <Property Name="AdditionalSessions" Type="int" />
+          <Property Name="AdditionalVehicles" Type="int" />
+          <Property Name="AdditionalDTCSearches" Type="int" />
+          <Property Name="AdditionalVINLookups" Type="int" />
+          <Property Name="AdditionalOpenReports" Type="int" />
+          <Property Name="AdditionalDailyReports" Type="int" />
+          <Property Name="UserType" Type="int" />
+          <Property Name="UserTypeExternalId" Type="varchar" MaxLength="36" />
+          <Property Name="UserAccountStatus" Type="int" />
+          <Property Name="UserAccountStatusSetByAdminUserId" Type="varchar" MaxLength="36" />
+          <Property Name="UserAccountStatusSetDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="DeclineReason" Type="text" />
+          <Property Name="ASECertifications" Type="varchar" MaxLength="50" />
+          <Property Name="ASECertificationsOther" Type="varchar" MaxLength="50" />
+          <Property Name="BusinessType" Type="varchar" MaxLength="100" />
+          <Property Name="JobPositionsString" Type="varchar" MaxLength="500" />
+          <Property Name="AutomobileMakesString" Type="varchar" MaxLength="500" />
+          <Property Name="AreasOfExpertiseString" Type="varchar" MaxLength="500" />
+          <Property Name="ShopName" Type="varchar" MaxLength="100" />
+          <Property Name="ShopAddress1" Type="varchar" MaxLength="100" />
+          <Property Name="ShopAddress2" Type="varchar" MaxLength="100" />
+          <Property Name="ShopCity" Type="varchar" MaxLength="100" />
+          <Property Name="ShopRegion" Type="varchar" MaxLength="100" />
+          <Property Name="ShopPostCode" Type="varchar" MaxLength="100" />
+          <Property Name="ShopEmailAddress" Type="varchar" MaxLength="200" />
+          <Property Name="ShopPhoneNumber" Type="varchar" MaxLength="50" />
+          <Property Name="CompanyDescription" Type="varchar" MaxLength="300" />
+          <Property Name="BusinessTypeOther" Type="varchar" MaxLength="50" />
+          <Property Name="AreasOfExpertiseOther" Type="varchar" MaxLength="50" />
+          <Property Name="AutomobileMakeOther" Type="varchar" MaxLength="50" />
+          <Property Name="IsProvidesRepairServicesToPublic" Type="bool" />
+          <Property Name="IsHadPreviousAccount" Type="bool" />
+          <Property Name="JobPositionOther" Type="varchar" MaxLength="50" />
+          <Property Name="YearsExperience" Type="int" />
+          <Property Name="HowHearedAboutOBDFix" Type="varchar" MaxLength="50" />
+          <Property Name="HowHearedAboutOBDFixOther" Type="varchar" MaxLength="50" />
+          <Property Name="AboutMemberWhoReferredYou" Type="text" />
+          <Property Name="WhereTesterWasPurchased" Type="varchar" MaxLength="50" />
+          <Property Name="Comments" Type="text" />
+          <Property Name="ShowIdentityOnPostedComments" Type="bool" />
+          <Property Name="IsMasterTech" Type="bool" />
+          <Property Name="MasterTechMakesString" Type="text" />
+          <Property Name="MasterTechNoFixReportsCap" Type="int" />
+          <Property Name="MasterTechNoFixReportLastAssignedDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="DTCSearchCount" Type="int" />
+          <Property Name="DTCLastSearchDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="VINLookupCount" Type="int" />
+          <Property Name="VINLastLookupDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="ReportCount" Type="int" />
+          <Property Name="ReportLastCreatedDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="Score" Type="int" />
+          <Property Name="IsPaymentProgramAllowed" Type="bool" />
+          <Property Name="IsPaymentProgramMember" Type="bool" />
+          <Property Name="PaymentProgramStartDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="IsInOBDPromotion" Type="bool" />
+          <Property Name="IsActive" Type="bool" />
+          <Property Name="IsInternal" Type="bool" />
+          <Property Name="CreatedDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="UpdatedDateTimeUTC" Type="datetime" Precision="3" />
+          <Property Name="FullTextSearch" Type="text" />
+          <Property Name="PropertyDefinitionDataSetId" Type="varchar" MaxLength="36" />
+          <Property Name="EnablePropertyDefinitionEditingOnForms" Type="bool" />
+          <Property Name="Market" Type="int" />
+          <Property Name="IsSystemAdministrator" Type="int" />
+          <Property Name="IsReceivesPastDueNoFixNotifications" Type="int" />
+          <Property Name="Permissions" Type="text" />
+          <Property Name="ValidationPayRateDollarsPerHour" Type="double" />
+          <Property Name="IsDeleted" Type="int" />
+          <Property Name="LastLoginDateTimeUTC" Type="text" />
+          <Property Name="EnablePropertyDefinitionEditingOnForms_copy1" Type="int" />
+          <Property Name="ApplicationType" Type="int" />
+          <Property Name="ApplicationName" Type="varchar" MaxLength="45" />
+          <Property Name="IsEncrypt" Type="bool" Nullable="false" />
+        </EntityType>
         <EntityType Name="Vehicle">
           <Key>
             <PropertyRef Name="VehicleId" />
@@ -335,8 +461,11 @@
           <Property Name="IsDeleted" Type="bool" />
         </EntityType>
         <EntityContainer Name="innovadev01ModelStoreContainer">
-          <EntitySet Name="AdminUser" EntityType="Self.AdminUser" Schema="innovadev01" store:Type="Tables" />
           <EntitySet Name="DiagnosticReport" EntityType="Self.DiagnosticReport" Schema="innovadev01" store:Type="Tables" />
+          <EntitySet Name="DiagnosticReportExternalSystemReportId" EntityType="Self.DiagnosticReportExternalSystemReportId" Schema="innovadev01" store:Type="Tables" />
+          <EntitySet Name="DLCLocation" EntityType="Self.DLCLocation" Schema="innovadev01" store:Type="Tables" />
+          <EntitySet Name="DTCCodeLaymanTerm" EntityType="Self.DTCCodeLaymanTerm" Schema="innovadev01" store:Type="Tables" />
+          <EntitySet Name="DTCCodeLaymanTermSeverityDefinition" EntityType="Self.DTCCodeLaymanTermSeverityDefinition" Schema="innovadev01" store:Type="Tables" />
           <EntitySet Name="ExternalSystem" EntityType="Self.ExternalSystem" Schema="innovadev01" store:Type="Tables" />
           <EntitySet Name="PolkVehicleYMME" EntityType="Self.PolkVehicleYMME" Schema="innovadev01" store:Type="Tables" />
           <EntitySet Name="Recall" EntityType="Self.Recall" Schema="innovadev01" store:Type="Tables" />
@@ -344,47 +473,13 @@
           <EntitySet Name="TSB" EntityType="Self.TSB" Schema="innovadev01" store:Type="Tables" />
           <EntitySet Name="TSBAAIAToLegacyVehicleID" EntityType="Self.TSBAAIAToLegacyVehicleID" Schema="innovadev01" store:Type="Tables" />
           <EntitySet Name="TSBToVehicle" EntityType="Self.TSBToVehicle" Schema="innovadev01" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="innovadev01" store:Type="Tables" />
           <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="innovadev01" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="innovadev01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="AdminUser">
-          <Key>
-            <PropertyRef Name="AdminUserId" />
-          </Key>
-          <Property Name="AdminUserId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="LastName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="EmailAddress" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="PhoneNumber" Type="Int64" />
-          <Property Name="Password" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Address1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Address2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="State" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="PostalCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="ShippingAddress1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="ShippingAddress2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="ShippingCity" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="ShippingState" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="ShippingPostalCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="AreasOfExpertise" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="AdminUserType" Type="Int32" />
-          <Property Name="IsSystemAdministrator" Type="Int32" />
-          <Property Name="IsReceivesPastDueNoFixNotifications" Type="Int32" />
-          <Property Name="Market" Type="Int32" />
-          <Property Name="Permissions" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="ValidationPayRateDollarsPerHour" Type="Double" />
-          <Property Name="IsActive" Type="Int32" />
-          <Property Name="IsDeleted" Type="Int32" />
-          <Property Name="UpdatedDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="LastLoginDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="PropertyDefinitionDataSetId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="EnablePropertyDefinitionEditingOnForms" Type="Int32" />
-        </EntityType>
         <EntityType Name="DiagnosticReport">
           <Key>
             <PropertyRef Name="id" />
@@ -552,66 +647,21 @@
           <Property Name="PrimaryEngineType" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="BodyStyleDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Vehicle">
-          <Key>
-            <PropertyRef Name="VehicleId" />
-          </Key>
-          <Property Name="VehicleId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="UserId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="VehicleTypeId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="ScheduleMaintenancePlanId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Vin" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="LicensePlateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ManufacturerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ManufacturerNameAlt" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Year" Type="Int32" />
-          <Property Name="Make" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="AAIA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="TrimLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="EngineVINCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="EngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FuelType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="TransmissionControlType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VPManufacturer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="VPYear" Type="Int32" />
-          <Property Name="VPMake" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="VPModel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="VPAAIA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="VPTrimLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="VPEngineVINCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="VPEngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VPFuelType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VinPowerDatabaseVersion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="VinStatus" Type="Int32" />
-          <Property Name="VinStatusDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="DetailedDecodingProcessDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="PolkVehicleYMMEId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="PurchasedTsbsString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Mileage" Type="Int32" />
-          <Property Name="MileageLastRecordedDateTimeUTC" Type="DateTime" />
-          <Property Name="SendScheduledMaintenanceAlerts" Type="Boolean" />
-          <Property Name="ScheduleMaintenanceMileageIntervalLastFound" Type="Int32" />
-          <Property Name="ScheduleMaintenanceAlertLastSentDateTimeUTC" Type="DateTime" />
-          <Property Name="SendNewRecallAlerts" Type="Boolean" />
-          <Property Name="NewRecallAlertLastSentDateTimeUTC" Type="DateTime" />
-          <Property Name="SendNewTSBAlerts" Type="Boolean" />
-          <Property Name="NewTSBAlertLastSentDateTimeUTC" Type="DateTime" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="IsDeleted" Type="Boolean" />
-        </EntityType>
         <EntityContainer Name="innovadev01Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
           <EntitySet Name="DiagnosticReports" EntityType="Self.DiagnosticReport" />
           <EntitySet Name="ExternalSystems" EntityType="Self.ExternalSystem" />
           <EntitySet Name="PolkVehicleYMMEs" EntityType="Self.PolkVehicleYMME" />
-          <EntitySet Name="Vehicles" EntityType="Self.Vehicle" />
           <EntitySet Name="TSBs" EntityType="innovadev01Model.TSB" />
           <EntitySet Name="TSBAAIAToLegacyVehicleIDs" EntityType="innovadev01Model.TSBAAIAToLegacyVehicleID" />
           <EntitySet Name="TSBToVehicles" EntityType="innovadev01Model.TSBToVehicle" />
           <EntitySet Name="Recalls" EntityType="innovadev01Model.Recall" />
           <EntitySet Name="Recall_ByCleanModel" EntityType="innovadev01Model.Recall_ByCleanModel" />
+          <EntitySet Name="DiagnosticReportExternalSystemReportIds" EntityType="innovadev01Model.DiagnosticReportExternalSystemReportId" />
+          <EntitySet Name="Users" EntityType="innovadev01Model.User" />
+          <EntitySet Name="Vehicles" EntityType="innovadev01Model.Vehicle" />
+          <EntitySet Name="DTCCodeLaymanTerms" EntityType="innovadev01Model.DTCCodeLaymanTerm" />
+          <EntitySet Name="DTCCodeLaymanTermSeverityDefinitions" EntityType="innovadev01Model.DTCCodeLaymanTermSeverityDefinition" />
+          <EntitySet Name="DLCLocations" EntityType="innovadev01Model.DLCLocation" />
         </EntityContainer>
         <EntityType Name="TSB">
           <Key>
@@ -691,48 +741,222 @@
           <Property Name="RecordNumber" Type="Int32" Nullable="false" />
           <Property Name="CleanModel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="DiagnosticReportExternalSystemReportId">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DiagnosticReportId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ExternalSystemReportId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Region" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PostCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmailValidationCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="IsEmailValidated" Type="Boolean" />
+          <Property Name="EmailValidatedDateTimeUTC" Type="DateTime" />
+          <Property Name="SignUpPromoCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SignUpPromoCodeOrderId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="AdditionalSessions" Type="Int32" />
+          <Property Name="AdditionalVehicles" Type="Int32" />
+          <Property Name="AdditionalDTCSearches" Type="Int32" />
+          <Property Name="AdditionalVINLookups" Type="Int32" />
+          <Property Name="AdditionalOpenReports" Type="Int32" />
+          <Property Name="AdditionalDailyReports" Type="Int32" />
+          <Property Name="UserType" Type="Int32" />
+          <Property Name="UserTypeExternalId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="UserAccountStatus" Type="Int32" />
+          <Property Name="UserAccountStatusSetByAdminUserId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="UserAccountStatusSetDateTimeUTC" Type="DateTime" />
+          <Property Name="DeclineReason" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ASECertifications" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ASECertificationsOther" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="JobPositionsString" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AutomobileMakesString" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AreasOfExpertiseString" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ShopName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ShopAddress1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ShopAddress2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ShopCity" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ShopRegion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ShopPostCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ShopEmailAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ShopPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyDescription" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessTypeOther" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AreasOfExpertiseOther" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AutomobileMakeOther" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsProvidesRepairServicesToPublic" Type="Boolean" />
+          <Property Name="IsHadPreviousAccount" Type="Boolean" />
+          <Property Name="JobPositionOther" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YearsExperience" Type="Int32" />
+          <Property Name="HowHearedAboutOBDFix" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HowHearedAboutOBDFixOther" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AboutMemberWhoReferredYou" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="WhereTesterWasPurchased" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ShowIdentityOnPostedComments" Type="Boolean" />
+          <Property Name="IsMasterTech" Type="Boolean" />
+          <Property Name="MasterTechMakesString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="MasterTechNoFixReportsCap" Type="Int32" />
+          <Property Name="MasterTechNoFixReportLastAssignedDateTimeUTC" Type="DateTime" />
+          <Property Name="DTCSearchCount" Type="Int32" />
+          <Property Name="DTCLastSearchDateTimeUTC" Type="DateTime" />
+          <Property Name="VINLookupCount" Type="Int32" />
+          <Property Name="VINLastLookupDateTimeUTC" Type="DateTime" />
+          <Property Name="ReportCount" Type="Int32" />
+          <Property Name="ReportLastCreatedDateTimeUTC" Type="DateTime" />
+          <Property Name="Score" Type="Int32" />
+          <Property Name="IsPaymentProgramAllowed" Type="Boolean" />
+          <Property Name="IsPaymentProgramMember" Type="Boolean" />
+          <Property Name="PaymentProgramStartDateTimeUTC" Type="DateTime" />
+          <Property Name="IsInOBDPromotion" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsInternal" Type="Boolean" />
+          <Property Name="CreatedDateTimeUTC" Type="DateTime" />
+          <Property Name="UpdatedDateTimeUTC" Type="DateTime" />
+          <Property Name="FullTextSearch" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="PropertyDefinitionDataSetId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="EnablePropertyDefinitionEditingOnForms" Type="Boolean" />
+          <Property Name="Market" Type="Int32" />
+          <Property Name="IsSystemAdministrator" Type="Int32" />
+          <Property Name="IsReceivesPastDueNoFixNotifications" Type="Int32" />
+          <Property Name="Permissions" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ValidationPayRateDollarsPerHour" Type="Double" />
+          <Property Name="IsDeleted" Type="Int32" />
+          <Property Name="LastLoginDateTimeUTC" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="EnablePropertyDefinitionEditingOnForms_copy1" Type="Int32" />
+          <Property Name="ApplicationType" Type="Int32" />
+          <Property Name="ApplicationName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="IsEncrypt" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="VehicleId" />
+          </Key>
+          <Property Name="VehicleId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleTypeId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="ScheduleMaintenancePlanId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Vin" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LicensePlateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ManufacturerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ManufacturerNameAlt" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Make" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AAIA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TrimLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="EngineVINCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FuelType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransmissionControlType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VPManufacturer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="VPYear" Type="Int32" />
+          <Property Name="VPMake" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="VPModel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="VPAAIA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="VPTrimLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="VPEngineVINCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="VPEngineType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VPFuelType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VinPowerDatabaseVersion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="VinStatus" Type="Int32" />
+          <Property Name="VinStatusDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="DetailedDecodingProcessDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="PolkVehicleYMMEId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="PurchasedTsbsString" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Mileage" Type="Int32" />
+          <Property Name="MileageLastRecordedDateTimeUTC" Type="DateTime" />
+          <Property Name="SendScheduledMaintenanceAlerts" Type="Boolean" />
+          <Property Name="ScheduleMaintenanceMileageIntervalLastFound" Type="Int32" />
+          <Property Name="ScheduleMaintenanceAlertLastSentDateTimeUTC" Type="DateTime" />
+          <Property Name="SendNewRecallAlerts" Type="Boolean" />
+          <Property Name="NewRecallAlertLastSentDateTimeUTC" Type="DateTime" />
+          <Property Name="SendNewTSBAlerts" Type="Boolean" />
+          <Property Name="NewTSBAlertLastSentDateTimeUTC" Type="DateTime" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="DTCCodeLaymanTerm">
+          <Key>
+            <PropertyRef Name="DTCCodeLaymanTermId" />
+          </Key>
+          <Property Name="DTCCodeLaymanTermId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ErrorCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Make" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Title_es" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Title_fr" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Title_zh" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="Description_es" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="Description_fr" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="Description_zh" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="SeverityLevel" Type="Int32" Nullable="false" />
+          <Property Name="EffectOnVehicle" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="EffectOnVehicle_es" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="EffectOnVehicle_fr" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="EffectOnVehicle_zh" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="ResponsibleComponentOrSystem" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="ResponsibleComponentOrSystem_es" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="ResponsibleComponentOrSystem_fr" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="ResponsibleComponentOrSystem_zh" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="WhyItsImportant" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="WhyItsImportant_es" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="WhyItsImportant_fr" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="WhyItsImportant_zh" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DTCCodeLaymanTermSeverityDefinition">
+          <Key>
+            <PropertyRef Name="SeverityLevel" />
+          </Key>
+          <Property Name="SeverityLevel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeverityDefinition" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SeverityDefinition_es" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SeverityDefinition_fr" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SeverityDefinition_zh" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DLCLocation">
+          <Key>
+            <PropertyRef Name="DlcLocationId" />
+          </Key>
+          <Property Name="DlcLocationId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="Year" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Make" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LocationNumber" Type="Int32" />
+          <Property Name="Access" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Access_French" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Access_Spanish" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Comments_French" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Comments_Spanish" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ImageFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="innovadev01ModelStoreContainer" CdmEntityContainer="innovadev01Entities">
-          <EntitySetMapping Name="AdminUsers">
-            <EntityTypeMapping TypeName="innovadev01Model.AdminUser">
-              <MappingFragment StoreEntitySet="AdminUser">
-                <ScalarProperty Name="AdminUserId" ColumnName="AdminUserId" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
-                <ScalarProperty Name="ShippingAddress1" ColumnName="ShippingAddress1" />
-                <ScalarProperty Name="ShippingAddress2" ColumnName="ShippingAddress2" />
-                <ScalarProperty Name="ShippingCity" ColumnName="ShippingCity" />
-                <ScalarProperty Name="ShippingState" ColumnName="ShippingState" />
-                <ScalarProperty Name="ShippingPostalCode" ColumnName="ShippingPostalCode" />
-                <ScalarProperty Name="AreasOfExpertise" ColumnName="AreasOfExpertise" />
-                <ScalarProperty Name="AdminUserType" ColumnName="AdminUserType" />
-                <ScalarProperty Name="IsSystemAdministrator" ColumnName="IsSystemAdministrator" />
-                <ScalarProperty Name="IsReceivesPastDueNoFixNotifications" ColumnName="IsReceivesPastDueNoFixNotifications" />
-                <ScalarProperty Name="Market" ColumnName="Market" />
-                <ScalarProperty Name="Permissions" ColumnName="Permissions" />
-                <ScalarProperty Name="ValidationPayRateDollarsPerHour" ColumnName="ValidationPayRateDollarsPerHour" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="UpdatedDateTimeUTC" ColumnName="UpdatedDateTimeUTC" />
-                <ScalarProperty Name="CreatedDateTimeUTC" ColumnName="CreatedDateTimeUTC" />
-                <ScalarProperty Name="LastLoginDateTimeUTC" ColumnName="LastLoginDateTimeUTC" />
-                <ScalarProperty Name="PropertyDefinitionDataSetId" ColumnName="PropertyDefinitionDataSetId" />
-                <ScalarProperty Name="EnablePropertyDefinitionEditingOnForms" ColumnName="EnablePropertyDefinitionEditingOnForms" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DiagnosticReports">
             <EntityTypeMapping TypeName="innovadev01Model.DiagnosticReport">
               <MappingFragment StoreEntitySet="DiagnosticReport">
@@ -903,56 +1127,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Vehicles">
-            <EntityTypeMapping TypeName="innovadev01Model.Vehicle">
-              <MappingFragment StoreEntitySet="Vehicle">
-                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="VehicleTypeId" ColumnName="VehicleTypeId" />
-                <ScalarProperty Name="ScheduleMaintenancePlanId" ColumnName="ScheduleMaintenancePlanId" />
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
-                <ScalarProperty Name="Vin" ColumnName="Vin" />
-                <ScalarProperty Name="LicensePlateNumber" ColumnName="LicensePlateNumber" />
-                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
-                <ScalarProperty Name="ManufacturerNameAlt" ColumnName="ManufacturerNameAlt" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="Make" ColumnName="Make" />
-                <ScalarProperty Name="Model" ColumnName="Model" />
-                <ScalarProperty Name="AAIA" ColumnName="AAIA" />
-                <ScalarProperty Name="TrimLevel" ColumnName="TrimLevel" />
-                <ScalarProperty Name="EngineVINCode" ColumnName="EngineVINCode" />
-                <ScalarProperty Name="EngineType" ColumnName="EngineType" />
-                <ScalarProperty Name="FuelType" ColumnName="FuelType" />
-                <ScalarProperty Name="TransmissionControlType" ColumnName="TransmissionControlType" />
-                <ScalarProperty Name="VPManufacturer" ColumnName="VPManufacturer" />
-                <ScalarProperty Name="VPYear" ColumnName="VPYear" />
-                <ScalarProperty Name="VPMake" ColumnName="VPMake" />
-                <ScalarProperty Name="VPModel" ColumnName="VPModel" />
-                <ScalarProperty Name="VPAAIA" ColumnName="VPAAIA" />
-                <ScalarProperty Name="VPTrimLevel" ColumnName="VPTrimLevel" />
-                <ScalarProperty Name="VPEngineVINCode" ColumnName="VPEngineVINCode" />
-                <ScalarProperty Name="VPEngineType" ColumnName="VPEngineType" />
-                <ScalarProperty Name="VPFuelType" ColumnName="VPFuelType" />
-                <ScalarProperty Name="VinPowerDatabaseVersion" ColumnName="VinPowerDatabaseVersion" />
-                <ScalarProperty Name="VinStatus" ColumnName="VinStatus" />
-                <ScalarProperty Name="VinStatusDescription" ColumnName="VinStatusDescription" />
-                <ScalarProperty Name="DetailedDecodingProcessDescription" ColumnName="DetailedDecodingProcessDescription" />
-                <ScalarProperty Name="PolkVehicleYMMEId" ColumnName="PolkVehicleYMMEId" />
-                <ScalarProperty Name="PurchasedTsbsString" ColumnName="PurchasedTsbsString" />
-                <ScalarProperty Name="Mileage" ColumnName="Mileage" />
-                <ScalarProperty Name="MileageLastRecordedDateTimeUTC" ColumnName="MileageLastRecordedDateTimeUTC" />
-                <ScalarProperty Name="SendScheduledMaintenanceAlerts" ColumnName="SendScheduledMaintenanceAlerts" />
-                <ScalarProperty Name="ScheduleMaintenanceMileageIntervalLastFound" ColumnName="ScheduleMaintenanceMileageIntervalLastFound" />
-                <ScalarProperty Name="ScheduleMaintenanceAlertLastSentDateTimeUTC" ColumnName="ScheduleMaintenanceAlertLastSentDateTimeUTC" />
-                <ScalarProperty Name="SendNewRecallAlerts" ColumnName="SendNewRecallAlerts" />
-                <ScalarProperty Name="NewRecallAlertLastSentDateTimeUTC" ColumnName="NewRecallAlertLastSentDateTimeUTC" />
-                <ScalarProperty Name="SendNewTSBAlerts" ColumnName="SendNewTSBAlerts" />
-                <ScalarProperty Name="NewTSBAlertLastSentDateTimeUTC" ColumnName="NewTSBAlertLastSentDateTimeUTC" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TSBs">
             <EntityTypeMapping TypeName="innovadev01Model.TSB">
               <MappingFragment StoreEntitySet="TSB">
@@ -1033,6 +1207,222 @@
               <MappingFragment StoreEntitySet="Recall_ByCleanModel">
                 <ScalarProperty Name="CleanModel" ColumnName="CleanModel" />
                 <ScalarProperty Name="RecordNumber" ColumnName="RecordNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DiagnosticReportExternalSystemReportIds">
+            <EntityTypeMapping TypeName="innovadev01Model.DiagnosticReportExternalSystemReportId">
+              <MappingFragment StoreEntitySet="DiagnosticReportExternalSystemReportId">
+                <ScalarProperty Name="ExternalSystemReportId" ColumnName="ExternalSystemReportId" />
+                <ScalarProperty Name="DiagnosticReportId" ColumnName="DiagnosticReportId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="innovadev01Model.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="IsEncrypt" ColumnName="IsEncrypt" />
+                <ScalarProperty Name="ApplicationName" ColumnName="ApplicationName" />
+                <ScalarProperty Name="ApplicationType" ColumnName="ApplicationType" />
+                <ScalarProperty Name="EnablePropertyDefinitionEditingOnForms_copy1" ColumnName="EnablePropertyDefinitionEditingOnForms_copy1" />
+                <ScalarProperty Name="LastLoginDateTimeUTC" ColumnName="LastLoginDateTimeUTC" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="ValidationPayRateDollarsPerHour" ColumnName="ValidationPayRateDollarsPerHour" />
+                <ScalarProperty Name="Permissions" ColumnName="Permissions" />
+                <ScalarProperty Name="IsReceivesPastDueNoFixNotifications" ColumnName="IsReceivesPastDueNoFixNotifications" />
+                <ScalarProperty Name="IsSystemAdministrator" ColumnName="IsSystemAdministrator" />
+                <ScalarProperty Name="Market" ColumnName="Market" />
+                <ScalarProperty Name="EnablePropertyDefinitionEditingOnForms" ColumnName="EnablePropertyDefinitionEditingOnForms" />
+                <ScalarProperty Name="PropertyDefinitionDataSetId" ColumnName="PropertyDefinitionDataSetId" />
+                <ScalarProperty Name="FullTextSearch" ColumnName="FullTextSearch" />
+                <ScalarProperty Name="UpdatedDateTimeUTC" ColumnName="UpdatedDateTimeUTC" />
+                <ScalarProperty Name="CreatedDateTimeUTC" ColumnName="CreatedDateTimeUTC" />
+                <ScalarProperty Name="IsInternal" ColumnName="IsInternal" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsInOBDPromotion" ColumnName="IsInOBDPromotion" />
+                <ScalarProperty Name="PaymentProgramStartDateTimeUTC" ColumnName="PaymentProgramStartDateTimeUTC" />
+                <ScalarProperty Name="IsPaymentProgramMember" ColumnName="IsPaymentProgramMember" />
+                <ScalarProperty Name="IsPaymentProgramAllowed" ColumnName="IsPaymentProgramAllowed" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="ReportLastCreatedDateTimeUTC" ColumnName="ReportLastCreatedDateTimeUTC" />
+                <ScalarProperty Name="ReportCount" ColumnName="ReportCount" />
+                <ScalarProperty Name="VINLastLookupDateTimeUTC" ColumnName="VINLastLookupDateTimeUTC" />
+                <ScalarProperty Name="VINLookupCount" ColumnName="VINLookupCount" />
+                <ScalarProperty Name="DTCLastSearchDateTimeUTC" ColumnName="DTCLastSearchDateTimeUTC" />
+                <ScalarProperty Name="DTCSearchCount" ColumnName="DTCSearchCount" />
+                <ScalarProperty Name="MasterTechNoFixReportLastAssignedDateTimeUTC" ColumnName="MasterTechNoFixReportLastAssignedDateTimeUTC" />
+                <ScalarProperty Name="MasterTechNoFixReportsCap" ColumnName="MasterTechNoFixReportsCap" />
+                <ScalarProperty Name="MasterTechMakesString" ColumnName="MasterTechMakesString" />
+                <ScalarProperty Name="IsMasterTech" ColumnName="IsMasterTech" />
+                <ScalarProperty Name="ShowIdentityOnPostedComments" ColumnName="ShowIdentityOnPostedComments" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="WhereTesterWasPurchased" ColumnName="WhereTesterWasPurchased" />
+                <ScalarProperty Name="AboutMemberWhoReferredYou" ColumnName="AboutMemberWhoReferredYou" />
+                <ScalarProperty Name="HowHearedAboutOBDFixOther" ColumnName="HowHearedAboutOBDFixOther" />
+                <ScalarProperty Name="HowHearedAboutOBDFix" ColumnName="HowHearedAboutOBDFix" />
+                <ScalarProperty Name="YearsExperience" ColumnName="YearsExperience" />
+                <ScalarProperty Name="JobPositionOther" ColumnName="JobPositionOther" />
+                <ScalarProperty Name="IsHadPreviousAccount" ColumnName="IsHadPreviousAccount" />
+                <ScalarProperty Name="IsProvidesRepairServicesToPublic" ColumnName="IsProvidesRepairServicesToPublic" />
+                <ScalarProperty Name="AutomobileMakeOther" ColumnName="AutomobileMakeOther" />
+                <ScalarProperty Name="AreasOfExpertiseOther" ColumnName="AreasOfExpertiseOther" />
+                <ScalarProperty Name="BusinessTypeOther" ColumnName="BusinessTypeOther" />
+                <ScalarProperty Name="CompanyDescription" ColumnName="CompanyDescription" />
+                <ScalarProperty Name="ShopPhoneNumber" ColumnName="ShopPhoneNumber" />
+                <ScalarProperty Name="ShopEmailAddress" ColumnName="ShopEmailAddress" />
+                <ScalarProperty Name="ShopPostCode" ColumnName="ShopPostCode" />
+                <ScalarProperty Name="ShopRegion" ColumnName="ShopRegion" />
+                <ScalarProperty Name="ShopCity" ColumnName="ShopCity" />
+                <ScalarProperty Name="ShopAddress2" ColumnName="ShopAddress2" />
+                <ScalarProperty Name="ShopAddress1" ColumnName="ShopAddress1" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="AreasOfExpertiseString" ColumnName="AreasOfExpertiseString" />
+                <ScalarProperty Name="AutomobileMakesString" ColumnName="AutomobileMakesString" />
+                <ScalarProperty Name="JobPositionsString" ColumnName="JobPositionsString" />
+                <ScalarProperty Name="BusinessType" ColumnName="BusinessType" />
+                <ScalarProperty Name="ASECertificationsOther" ColumnName="ASECertificationsOther" />
+                <ScalarProperty Name="ASECertifications" ColumnName="ASECertifications" />
+                <ScalarProperty Name="DeclineReason" ColumnName="DeclineReason" />
+                <ScalarProperty Name="UserAccountStatusSetDateTimeUTC" ColumnName="UserAccountStatusSetDateTimeUTC" />
+                <ScalarProperty Name="UserAccountStatusSetByAdminUserId" ColumnName="UserAccountStatusSetByAdminUserId" />
+                <ScalarProperty Name="UserAccountStatus" ColumnName="UserAccountStatus" />
+                <ScalarProperty Name="UserTypeExternalId" ColumnName="UserTypeExternalId" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="AdditionalDailyReports" ColumnName="AdditionalDailyReports" />
+                <ScalarProperty Name="AdditionalOpenReports" ColumnName="AdditionalOpenReports" />
+                <ScalarProperty Name="AdditionalVINLookups" ColumnName="AdditionalVINLookups" />
+                <ScalarProperty Name="AdditionalDTCSearches" ColumnName="AdditionalDTCSearches" />
+                <ScalarProperty Name="AdditionalVehicles" ColumnName="AdditionalVehicles" />
+                <ScalarProperty Name="AdditionalSessions" ColumnName="AdditionalSessions" />
+                <ScalarProperty Name="SignUpPromoCodeOrderId" ColumnName="SignUpPromoCodeOrderId" />
+                <ScalarProperty Name="SignUpPromoCode" ColumnName="SignUpPromoCode" />
+                <ScalarProperty Name="EmailValidatedDateTimeUTC" ColumnName="EmailValidatedDateTimeUTC" />
+                <ScalarProperty Name="IsEmailValidated" ColumnName="IsEmailValidated" />
+                <ScalarProperty Name="EmailValidationCode" ColumnName="EmailValidationCode" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehicles">
+            <EntityTypeMapping TypeName="innovadev01Model.Vehicle">
+              <MappingFragment StoreEntitySet="Vehicle">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="NewTSBAlertLastSentDateTimeUTC" ColumnName="NewTSBAlertLastSentDateTimeUTC" />
+                <ScalarProperty Name="SendNewTSBAlerts" ColumnName="SendNewTSBAlerts" />
+                <ScalarProperty Name="NewRecallAlertLastSentDateTimeUTC" ColumnName="NewRecallAlertLastSentDateTimeUTC" />
+                <ScalarProperty Name="SendNewRecallAlerts" ColumnName="SendNewRecallAlerts" />
+                <ScalarProperty Name="ScheduleMaintenanceAlertLastSentDateTimeUTC" ColumnName="ScheduleMaintenanceAlertLastSentDateTimeUTC" />
+                <ScalarProperty Name="ScheduleMaintenanceMileageIntervalLastFound" ColumnName="ScheduleMaintenanceMileageIntervalLastFound" />
+                <ScalarProperty Name="SendScheduledMaintenanceAlerts" ColumnName="SendScheduledMaintenanceAlerts" />
+                <ScalarProperty Name="MileageLastRecordedDateTimeUTC" ColumnName="MileageLastRecordedDateTimeUTC" />
+                <ScalarProperty Name="Mileage" ColumnName="Mileage" />
+                <ScalarProperty Name="PurchasedTsbsString" ColumnName="PurchasedTsbsString" />
+                <ScalarProperty Name="PolkVehicleYMMEId" ColumnName="PolkVehicleYMMEId" />
+                <ScalarProperty Name="DetailedDecodingProcessDescription" ColumnName="DetailedDecodingProcessDescription" />
+                <ScalarProperty Name="VinStatusDescription" ColumnName="VinStatusDescription" />
+                <ScalarProperty Name="VinStatus" ColumnName="VinStatus" />
+                <ScalarProperty Name="VinPowerDatabaseVersion" ColumnName="VinPowerDatabaseVersion" />
+                <ScalarProperty Name="VPFuelType" ColumnName="VPFuelType" />
+                <ScalarProperty Name="VPEngineType" ColumnName="VPEngineType" />
+                <ScalarProperty Name="VPEngineVINCode" ColumnName="VPEngineVINCode" />
+                <ScalarProperty Name="VPTrimLevel" ColumnName="VPTrimLevel" />
+                <ScalarProperty Name="VPAAIA" ColumnName="VPAAIA" />
+                <ScalarProperty Name="VPModel" ColumnName="VPModel" />
+                <ScalarProperty Name="VPMake" ColumnName="VPMake" />
+                <ScalarProperty Name="VPYear" ColumnName="VPYear" />
+                <ScalarProperty Name="VPManufacturer" ColumnName="VPManufacturer" />
+                <ScalarProperty Name="TransmissionControlType" ColumnName="TransmissionControlType" />
+                <ScalarProperty Name="FuelType" ColumnName="FuelType" />
+                <ScalarProperty Name="EngineType" ColumnName="EngineType" />
+                <ScalarProperty Name="EngineVINCode" ColumnName="EngineVINCode" />
+                <ScalarProperty Name="TrimLevel" ColumnName="TrimLevel" />
+                <ScalarProperty Name="AAIA" ColumnName="AAIA" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Make" ColumnName="Make" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ManufacturerNameAlt" ColumnName="ManufacturerNameAlt" />
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+                <ScalarProperty Name="LicensePlateNumber" ColumnName="LicensePlateNumber" />
+                <ScalarProperty Name="Vin" ColumnName="Vin" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="ScheduleMaintenancePlanId" ColumnName="ScheduleMaintenancePlanId" />
+                <ScalarProperty Name="VehicleTypeId" ColumnName="VehicleTypeId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DTCCodeLaymanTerms">
+            <EntityTypeMapping TypeName="innovadev01Model.DTCCodeLaymanTerm">
+              <MappingFragment StoreEntitySet="DTCCodeLaymanTerm">
+                <ScalarProperty Name="WhyItsImportant_zh" ColumnName="WhyItsImportant_zh" />
+                <ScalarProperty Name="WhyItsImportant_fr" ColumnName="WhyItsImportant_fr" />
+                <ScalarProperty Name="WhyItsImportant_es" ColumnName="WhyItsImportant_es" />
+                <ScalarProperty Name="WhyItsImportant" ColumnName="WhyItsImportant" />
+                <ScalarProperty Name="ResponsibleComponentOrSystem_zh" ColumnName="ResponsibleComponentOrSystem_zh" />
+                <ScalarProperty Name="ResponsibleComponentOrSystem_fr" ColumnName="ResponsibleComponentOrSystem_fr" />
+                <ScalarProperty Name="ResponsibleComponentOrSystem_es" ColumnName="ResponsibleComponentOrSystem_es" />
+                <ScalarProperty Name="ResponsibleComponentOrSystem" ColumnName="ResponsibleComponentOrSystem" />
+                <ScalarProperty Name="EffectOnVehicle_zh" ColumnName="EffectOnVehicle_zh" />
+                <ScalarProperty Name="EffectOnVehicle_fr" ColumnName="EffectOnVehicle_fr" />
+                <ScalarProperty Name="EffectOnVehicle_es" ColumnName="EffectOnVehicle_es" />
+                <ScalarProperty Name="EffectOnVehicle" ColumnName="EffectOnVehicle" />
+                <ScalarProperty Name="SeverityLevel" ColumnName="SeverityLevel" />
+                <ScalarProperty Name="Description_zh" ColumnName="Description_zh" />
+                <ScalarProperty Name="Description_fr" ColumnName="Description_fr" />
+                <ScalarProperty Name="Description_es" ColumnName="Description_es" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title_zh" ColumnName="Title_zh" />
+                <ScalarProperty Name="Title_fr" ColumnName="Title_fr" />
+                <ScalarProperty Name="Title_es" ColumnName="Title_es" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Make" ColumnName="Make" />
+                <ScalarProperty Name="ErrorCode" ColumnName="ErrorCode" />
+                <ScalarProperty Name="DTCCodeLaymanTermId" ColumnName="DTCCodeLaymanTermId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DTCCodeLaymanTermSeverityDefinitions">
+            <EntityTypeMapping TypeName="innovadev01Model.DTCCodeLaymanTermSeverityDefinition">
+              <MappingFragment StoreEntitySet="DTCCodeLaymanTermSeverityDefinition">
+                <ScalarProperty Name="SeverityDefinition_zh" ColumnName="SeverityDefinition_zh" />
+                <ScalarProperty Name="SeverityDefinition_fr" ColumnName="SeverityDefinition_fr" />
+                <ScalarProperty Name="SeverityDefinition_es" ColumnName="SeverityDefinition_es" />
+                <ScalarProperty Name="SeverityDefinition" ColumnName="SeverityDefinition" />
+                <ScalarProperty Name="SeverityLevel" ColumnName="SeverityLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DLCLocations">
+            <EntityTypeMapping TypeName="innovadev01Model.DLCLocation">
+              <MappingFragment StoreEntitySet="DLCLocation">
+                <ScalarProperty Name="ImageFileName" ColumnName="ImageFileName" />
+                <ScalarProperty Name="Comments_Spanish" ColumnName="Comments_Spanish" />
+                <ScalarProperty Name="Comments_French" ColumnName="Comments_French" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Access_Spanish" ColumnName="Access_Spanish" />
+                <ScalarProperty Name="Access_French" ColumnName="Access_French" />
+                <ScalarProperty Name="Access" ColumnName="Access" />
+                <ScalarProperty Name="LocationNumber" ColumnName="LocationNumber" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Make" ColumnName="Make" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="DlcLocationId" ColumnName="DlcLocationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
