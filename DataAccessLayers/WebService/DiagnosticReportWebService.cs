@@ -1,10 +1,7 @@
-﻿using DataAccessLayers.DataObjects;
-using DataAccessLayers.Model;
+﻿using DataAccessLayers.DataBase;
+using DataAccessLayers.DataObjects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayers.WebService
 {
@@ -15,7 +12,7 @@ namespace DataAccessLayers.WebService
         {
             bool flag = false;
             var id = Convert.ToString(Id);
-            using (innovadev01Entities dbContext = new innovadev01Entities())
+            using (innovaEntities dbContext = new innovaEntities())
             {
                 var vinDecoder = (from diagnosticReports in dbContext.DiagnosticReports join user in dbContext.Users on diagnosticReports.UserId equals user.UserId
                                   join externalSystems in dbContext.ExternalSystems on user.UserTypeExternalId equals externalSystems.ExternalSystemId
@@ -26,7 +23,7 @@ namespace DataAccessLayers.WebService
                                  && diagnosticReports.RawUploadString == apiRequest.rawToolPayload
                                 && diagnosticId.ExternalSystemReportId == apiRequest.reportID
                                   select diagnosticReports.DiagnosticReportId).Distinct().FirstOrDefault();
-                if (!string.IsNullOrEmpty(vinDecoder))
+                if (vinDecoder != 0)
                 {
                     return true;
                 }
@@ -38,7 +35,7 @@ namespace DataAccessLayers.WebService
         public static DiagReportInfo GetDiagnosticReport(ApiRequestModel apiRequest)
         {
             DiagReportInfo v = new DiagReportInfo();
-            using (innovadev01Entities dbContext = new innovadev01Entities())
+            using (innovaEntities dbContext = new innovaEntities())
             {
                 var report = (from vehicles in dbContext.Vehicles
                               join diagnosticReports in dbContext.DiagnosticReports
@@ -54,9 +51,9 @@ namespace DataAccessLayers.WebService
                                   UnScheduledMaintenanceNextMileage = true,
                                   IsValid = true
                               }).Distinct().FirstOrDefault();
-                if(report.DiagnosticReportId == null)
+                if(report.DiagnosticReportId == 0)
                 {
-                    report.DiagnosticReportId = "00000000-0000-0000-0000-000000000000";
+                    report.DiagnosticReportId = 0;
                     report.ScheduledMaintenanceNextMileage = false;
                     report.HasScheduledMaintenance = false;
                     report.HasUnScheduledMaintenance = false;
@@ -64,10 +61,8 @@ namespace DataAccessLayers.WebService
                     report.UnScheduledMaintenanceNextMileage = false;
                     return report;
                 }
-                if (report.DiagnosticReportId != null)
-                {
-                    return report;
-                }
+                if (report.DiagnosticReportId != 0)
+                       return report;
             }
 
             return v;
@@ -75,7 +70,7 @@ namespace DataAccessLayers.WebService
         public static DiagReportInfo GetMileage(ApiRequestModel apiRequest)
         {
             DiagReportInfo v = new DiagReportInfo();
-            using (innovadev01Entities dbContext = new innovadev01Entities())
+            using (innovaEntities dbContext = new innovaEntities())
             {
                 var report = (from vehicles in dbContext.Vehicles
                               join diagnosticReports in dbContext.DiagnosticReports
@@ -92,9 +87,9 @@ namespace DataAccessLayers.WebService
                                   UnScheduledMaintenanceNextMileage = true,
                                   IsValid = true
                               }).Distinct().FirstOrDefault();
-                if (report.DiagnosticReportId == null)
+                if (report.DiagnosticReportId == 0)
                 {
-                    report.DiagnosticReportId = "00000000-0000-0000-0000-000000000000";
+                    report.DiagnosticReportId = 0;
                     report.ScheduledMaintenanceNextMileage = false;
                     report.HasScheduledMaintenance = false;
                     report.HasUnScheduledMaintenance = false;

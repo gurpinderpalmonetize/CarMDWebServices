@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccessLayers.DataBase;
 using Metafuse3.Security;
-using DataAccessLayers.WebService;
-using DataAccessLayers.Model;
-using DataAccessLayers.DataObjects;
 
 namespace DataAccessLayers.WebService
 {
@@ -33,10 +29,10 @@ namespace DataAccessLayers.WebService
 
             if (id.HasValue)
             {
-                using(innovadev01Entities dbContext = new innovadev01Entities())
+                using(innovaEntities dbContext = new innovaEntities())
                 {
                     var keyGuid = Convert.ToString(id);
-                    var extIdList = dbContext.ExternalSystems.Where(x => x.KeyGuid == keyGuid && x.IsActive == 1).FirstOrDefault();
+                    var extIdList = dbContext.ExternalSystems.Where(x => x.KeyGuid == keyGuid && x.IsActive == true).FirstOrDefault();
                     if(extIdList != null)
                     {
                         externalSystem.keyGuid = new Guid(extIdList.KeyGuid);

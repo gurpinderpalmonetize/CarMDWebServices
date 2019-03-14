@@ -16,19 +16,15 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetDLCLocation")]
         public HttpResponseMessage GetDLCLocation(VehicleRequest apiRequest)
         {
-            var vehicleInfo = _diagnosticReportService.GetVehicleInfo(apiRequest.Key);
-            if (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0)
-            {
+            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
+
+            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.VIN);
+            if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
-            }
 
-            var GetVehicleInfoByVin = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.VIN);
-            if (GetVehicleInfoByVin == null || (GetVehicleInfoByVin.ValidationFailures != null && GetVehicleInfoByVin.ValidationFailures.Length > 0))
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, GetVehicleInfoByVin.ValidationFailures);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK,_diagnosticReportService.GetDLCLocation(apiRequest));
+            return Request.CreateResponse(HttpStatusCode.OK, _diagnosticReportService.GetDLCLocation(apiRequest));
         }
         #endregion
 
@@ -37,20 +33,13 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetRecallsCountForVehicle")]
         public HttpResponseMessage GetRecallsCountForVehicle(Request request)
         {
-            var GetTSBCountByVehicle = _diagnosticReportService.ValidateKeyAndLogTransaction(request.Key);
+            var vaildatekey = _diagnosticReportService.vaildatekey(request.Key);
+            if (vaildatekey == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
 
-            if (GetTSBCountByVehicle == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, GetTSBCountByVehicle);
-            }
-
-            var vehicleInfo = _diagnosticReportService.GetVehicleInfo(request.Key, request.Vin);
-
+            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(request.Vin);
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
-            {
-
                 return Request.CreateResponse(HttpStatusCode.NoContent, vehicleInfo.ValidationFailures);
-            }
 
             return Request.CreateResponse(HttpStatusCode.OK, _diagnosticReportService.GetRecallsCountForVehicleByYearMakeModel(Int32.Parse(vehicleInfo.Year), vehicleInfo.Make, vehicleInfo.Model, vehicleInfo.TrimLevel, null, null));
         }
@@ -61,20 +50,13 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetTSBCountByVehicle")]
         public HttpResponseMessage GetTSBCountByVehicle(Request request)
         {
-            var GetTSBCountByVehicle = _diagnosticReportService.ValidateKeyAndLogTransaction(request.Key);
+            var vaildatekey = _diagnosticReportService.vaildatekey(request.Key);
+            if (vaildatekey == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
 
-            if (GetTSBCountByVehicle == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, GetTSBCountByVehicle);
-            }
-
-            var vehicleInfo = _diagnosticReportService.GetVehicleInfo(request.Key, request.Vin);
-
+            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(request.Vin);
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
-            {
-
                 return Request.CreateResponse(HttpStatusCode.NoContent, vehicleInfo.ValidationFailures);
-            }
 
             return Request.CreateResponse(HttpStatusCode.OK, _diagnosticReportService.GetTSBCountByVehicleCount(vehicleInfo.AAIA));
         }
@@ -85,19 +67,15 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetScheduledMaintenanceNextServiceForVehicle")]
         public HttpResponseMessage GetScheduledMaintenanceNextServiceForVehicle(Request apiRequest)
         {
-            var vehicleInfo = _diagnosticReportService.GetVehicleInfo(apiRequest.Key);
-            if (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0)
-            {
+            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
+
+            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.Vin);
+            if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
-            }
 
-            var GetVehicleInfoByVin = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.Vin);
-            if (GetVehicleInfoByVin == null || (GetVehicleInfoByVin.ValidationFailures != null && GetVehicleInfoByVin.ValidationFailures.Length > 0))
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, GetVehicleInfoByVin.ValidationFailures);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK);// _diagnosticReportService.GetScheduledMaintenanceNextServiceForVehicle(apiRequest));
+            return Request.CreateResponse(HttpStatusCode.OK, _diagnosticReportService.GetScheduledMaintenanceNextServiceForVehicle(Convert.ToInt16(vehicleInfo.Year), vehicleInfo.ManufacturerName, vehicleInfo.Make, vehicleInfo.Model, vehicleInfo.EngineType, vehicleInfo.TrimLevel, vehicleInfo.Transmission, vehicleInfo.EngineVINCode, Convert.ToInt32(apiRequest.VehicleMileage)));
         }
         #endregion
     }

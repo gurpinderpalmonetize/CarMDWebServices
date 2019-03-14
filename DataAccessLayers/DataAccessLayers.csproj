@@ -62,6 +62,462 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataBase\AdminUser.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\AppForm.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Article.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ArticleCategory.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ArticleCategoryAssignment.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\AutoZoneStore.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\CarScanSession.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\CarScanSession_OLD.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\changelog.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\CodemasterIDPart.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\CodemasterIDPartLocation.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Country.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\CurrencyExchangeRate.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\C__EFMigrationsHistory.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Device.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReport.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportExternalSystemReportId.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportFeedback.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportFixFeedback.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportFixFeedbackPart.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportFixFeedbackView.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportFixFeedback_OLD.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportMasterTechUser.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportMasterTechUser_OLD.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportRawData.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportResult.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportResultErrorCode.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportResultErrorCodeDefinition.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportResultFix.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReportResult_Old.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReport_ByAbsDiagnosticReportFixStatus.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReport_ByObd1DiagnosticReportFixStatus.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReport_ByPwrDiagnosticReportFixStatus.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DiagnosticReport_ByUserIdAndCreatedDate.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DLCLocation.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCCode.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCCodeLaymanTerm.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCCodeLaymanTermSeverityDefinition.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCEngineType.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCEngineVINCode.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCMake.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCMasterCodeList.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCMasterCodeList_ByErrorCode.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCMasterCodeList_ByManufacturerName.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCMasterCodeMake.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCModel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCTransmission.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCTrimLevel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\DTCYear.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ExternalSystem.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Fix.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixComment.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixCommentUserLastViewed.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixCommentUserLastViewed_NEW.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixDTC.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixDTC_NEW.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixEngineType.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixEngineTypePolk.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixEngineTypeVinPower.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixEngineTypeVinPower_NEW.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixEngineVinCode.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixEngineVINCodeVinPower.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixFrequencyCount.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixFrequencyCount_OLD.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixGeneration.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixMake.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixMakePolk.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixMakeVinPower.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixModel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixModelPolk.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixModelVinPower.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixName.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixNameArticleAssignment.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixNameFragment.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixPart.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixPart_ByFix.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixPolkVehicleDiscrepancy.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixPolkVehicleYmme.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixSymptom.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixSymptom_NEW.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixTransmission.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixTransmissionVinPower.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixTrimLevel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixTrimLevelPolk.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixTrimLevelVinPower.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixYear.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixYearPolk.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FixYearVINPower.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\FormPermissionByRole.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\innova.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>innova.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\innova.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\innova.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>innova.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\LoadByFixAndDtc_View.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\LogManagement.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ManageSearchCount.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ObdFix.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ObdFixPaymentSchedule.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Part.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PartMake.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PartName.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PartOem.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PolkVehicleU.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PolkVehicleUSManufacturerYearStat.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PolkVehicleUSStat.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PolkVehicleUSStatsGrouped.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PolkVehicleYmme.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\PredictiveDiagnosticReportView.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ProRSFix.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Recall.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Region.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Role.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenanceFixNameVehicle.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlan.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanDetail.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanEngineType.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanEngineVINCode.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanMake.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanModel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanPolkVehicleYmme.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanTransmission.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanTrimLevel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenancePlanYear.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenanceService.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ScheduleMaintenanceTransmission.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\StateLaborRate.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Symptom.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\SymptomDiagnosticReportItem.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\SymptomFragment.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\SystemEmail.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TSB.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TSBAAIAToLegacyVehicleID.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TSBDTC.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TSBToDTC.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TSBToVehicle.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\User.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\UserRoleManager.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\UserStatusChange.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Vehicle.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleManufacturerAlternateName.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehiclesWithScheduledMaintenanceRemindersView.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleType.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleTypeAltModel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleTypeCode.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleTypeCodeAssignment.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleWarranty.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleWarrantyDetail.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleWarrantyEngineType.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleWarrantyMake.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\VehicleWarrantyModel.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Vehicle_ByUser.cs">
+      <DependentUpon>innova.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataObjects\ApiRequestModel.cs" />
     <Compile Include="DataObjects\DiagReportInfo.cs" />
     <Compile Include="DataObjects\DLCLocationInfo.cs" />
@@ -72,63 +528,6 @@
     <Compile Include="DataObjects\ScheduleMaintenanceServiceInfo.cs" />
     <Compile Include="DataObjects\ValidationFailureModel.cs" />
     <Compile Include="DataObjects\VehicleInfoModel.cs" />
-    <Compile Include="Model\CarMDModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CarMDModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\CarMDModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\CarMDModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CarMDModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Model\DiagnosticReport.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\DiagnosticReportExternalSystemReportId.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\DLCLocation.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\DTCCodeLaymanTerm.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\DTCCodeLaymanTermSeverityDefinition.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ExternalSystem.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PolkVehicleYMME.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Recall.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Recall_ByCleanModel.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\TSB.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\TSBAAIAToLegacyVehicleID.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\TSBToVehicle.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\User.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Vehicle.cs">
-      <DependentUpon>CarMDModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\DiagnosticReportService.cs" />
     <Compile Include="WebService\DiagnosticReportWebService.cs" />
@@ -139,12 +538,12 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="App.Config" />
-    <EntityDeploy Include="Model\CarMDModel.edmx">
+    <EntityDeploy Include="DataBase\innova.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CarMDModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>innova.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Model\CarMDModel.edmx.diagram">
-      <DependentUpon>CarMDModel.edmx</DependentUpon>
+    <None Include="DataBase\innova.edmx.diagram">
+      <DependentUpon>innova.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
@@ -152,15 +551,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Model\CarMDModel.Context.tt">
+    <Content Include="DataBase\innova.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CarMDModel.Context.cs</LastGenOutput>
-      <DependentUpon>CarMDModel.edmx</DependentUpon>
+      <DependentUpon>innova.edmx</DependentUpon>
+      <LastGenOutput>innova.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Model\CarMDModel.tt">
+    <Content Include="DataBase\innova.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CarMDModel.edmx</DependentUpon>
-      <LastGenOutput>CarMDModel.cs</LastGenOutput>
+      <DependentUpon>innova.edmx</DependentUpon>
+      <LastGenOutput>innova.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

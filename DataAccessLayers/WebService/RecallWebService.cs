@@ -1,11 +1,8 @@
-﻿using DataAccessLayers.DataObjects;
-using DataAccessLayers.Model;
+﻿using DataAccessLayers.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayers.WebService
 {
@@ -14,11 +11,9 @@ namespace DataAccessLayers.WebService
         public static int Search(int year, string make, string model, string trimLevel)
         {
             var recallCollection = new List<RecallCollection>();
-            using (innovadev01Entities dbContext = new innovadev01Entities())
+            using (innovaEntities dbContext = new innovaEntities())
             {
                var recall = (from recalls in dbContext.Recalls
-                                    join recall_ByCleanModel in dbContext.Recall_ByCleanModel
-                                    on recalls.RecordNumber equals recall_ByCleanModel.RecordNumber
                                     where
                                      recalls.Make != string.Empty && recalls.Make == make
                                      && recalls.Model != string.Empty && recalls.Model == model
@@ -41,7 +36,7 @@ namespace DataAccessLayers.WebService
                                         DefectCorrectiveAction_zh = recalls.DefectConsequence_zh,
                                     }).Distinct().OrderByDescending(x => x.RecallDate).FirstOrDefault();
 
-                //if (!string.IsNullOrEmpty(recallCollection.RecallDate))
+                //if (!string.IsNullOrEmpty(recallCollection.))
                 //{
                 //    DateTime recallDate = DateTime.MinValue;
                 //    recallDate = DateTime.ParseExact(recallCollection.RecallDate, "yyyymmdd", (IFormatProvider)CultureInfo.CurrentCulture.DateTimeFormat);
@@ -58,11 +53,9 @@ namespace DataAccessLayers.WebService
         public static RecallCollection GetByYearMakeModelDateRange(int? year, string make, string model, string startDate = null, string endDate = null)
         {
             var recallCollection = new RecallCollection();
-            using (innovadev01Entities dbContext = new innovadev01Entities())
+            using (innovaEntities dbContext = new innovaEntities())
             {
                 recallCollection = (from recalls in dbContext.Recalls
-                                    join recall_ByCleanModel in dbContext.Recall_ByCleanModel
-                                    on recalls.RecordNumber equals recall_ByCleanModel.RecordNumber
                                     where
                                      recalls.Make != string.Empty && recalls.Make == make
                                      && recalls.Model != string.Empty && recalls.Model == model
