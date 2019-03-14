@@ -46,8 +46,6 @@ C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\Newtonsoft.
 C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\System.Net.Http.Formatting.dll
 C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\WebApiContrib.Formatting.JavaScriptSerializer.dll
 C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\EntityFramework.xml
-C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\Metafuse3.pdb
-C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\Metafuse3.xml
 C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\Newtonsoft.Json.xml
 C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\bin\Debug\System.Net.Http.Formatting.xml
 C:\Users\I4\source\repos\CarMDWebServices\DataAccessLayers\obj\Debug\DataAccessLayers.csproj.CopyComplete

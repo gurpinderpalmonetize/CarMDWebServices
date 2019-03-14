@@ -316,8 +316,6 @@ C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\WebMatrix.Data.dl
 C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\DataAccessLayers.pdb
 C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\DataAccessLayers.dll.config
 C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\EntityFramework.xml
-C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\Metafuse3.pdb
-C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\Metafuse3.xml
 C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\MySql.Data.xml
 C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\MySql.Data.Entity.EF6.xml
 C:\Users\I4\source\repos\CarMDWebServices\CarMDWebServices\bin\MySql.Web.xml

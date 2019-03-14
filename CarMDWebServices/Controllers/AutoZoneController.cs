@@ -10,7 +10,8 @@ namespace CarMDWebServices.Controllers
     public class AutoZoneController : ApiController
     {
         DiagnosticReportService _diagnosticReportService = new DiagnosticReportService();
-
+        GetMostLikelyFixService _GetMostLikelyFixService = new GetMostLikelyFixService();
+        
         #region DiagnosticWithMileage
         [HttpPost]
         [Route("api/AutoZone/GetDLCLocation")]
@@ -20,7 +21,7 @@ namespace CarMDWebServices.Controllers
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
-            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.VIN);
+            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.Vin);
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
 
@@ -78,5 +79,24 @@ namespace CarMDWebServices.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, _diagnosticReportService.GetScheduledMaintenanceNextServiceForVehicle(Convert.ToInt16(vehicleInfo.Year), vehicleInfo.ManufacturerName, vehicleInfo.Make, vehicleInfo.Model, vehicleInfo.EngineType, vehicleInfo.TrimLevel, vehicleInfo.Transmission, vehicleInfo.EngineVINCode, Convert.ToInt32(apiRequest.VehicleMileage)));
         }
         #endregion
+
+
+        #region GetScheduledMaintenanceNextServiceForVehicle
+        [HttpPost]
+        [Route("api/AutoZone/GetMostLikelyFix")]
+        public HttpResponseMessage GetMostLikelyFix(VehicleRequest apiRequest)
+        {
+            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
+
+            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.Vin);
+            if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
+                return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
+
+            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicle(apiRequest));
+        }
+        #endregion
+
     }
 }

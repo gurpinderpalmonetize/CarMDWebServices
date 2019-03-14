@@ -33,26 +33,20 @@ namespace DataAccessLayers.DataObjects
     public class VehicleRequest 
     {
         public string Key { get; set; }
-        //public string FirstName { get; set; }
-        //public string LastName { get; set; }
-        //public string Email { get; set; }
-        //public string PhoneNumber { get; set; }
-        //public string Region { get; set; }
-        //public int PageSize { get; set; }
-        //public int CurrentPage { get; set; }
-        //public int UserId { get; set; }
-        public string VIN;
-        public string VehicleClass;
-        public string Manufacturer;
-        public string Make;
-        public string Model;
-        public string Trim;
-        public int? Year;
-        public string EngineType;
-        public string EngineVinCode;
+        public string Vin { get; set; }
+        public string VehicleClass { get; set; }
+        public string Manufacturer { get; set; }
+        public string Make { get; set; }
+        public string Model { get; set; }
+        public string Trim { get; set; }
+        public int? Year { get; set; }
+        public string EngineType { get; set; }
+        public string EngineVinCode { get; set; }
         public string Transmission;
-        public string AAIA;
-        public int? CurrentMileage;
+        public string AAIA { get; set; }
+        public int? CurrentMileage { get; set; }
+        public string RawToolPayload { get; set; }
+        public string ReportID { get; set; }
     }
 
 }
