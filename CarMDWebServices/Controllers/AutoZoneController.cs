@@ -80,8 +80,7 @@ namespace CarMDWebServices.Controllers
         }
         #endregion
 
-
-        #region GetScheduledMaintenanceNextServiceForVehicle
+        #region GetMostLikelyFix
         [HttpPost]
         [Route("api/AutoZone/GetMostLikelyFix")]
         public HttpResponseMessage GetMostLikelyFix(VehicleRequest apiRequest)
@@ -94,7 +93,7 @@ namespace CarMDWebServices.Controllers
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
 
-            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicle(apiRequest));
+            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicle(apiRequest, vehicleInfo));
         }
         #endregion
 
