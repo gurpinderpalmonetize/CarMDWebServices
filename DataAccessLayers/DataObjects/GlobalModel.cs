@@ -49,5 +49,48 @@ namespace DataAccessLayers.DataObjects
                 return ConfigurationManager.AppSettings["DlcImageRootUrl"];
             }
         }
+
+        public static bool UsePolkData
+        {
+            get
+            {
+                return Convert.ToBoolean( ConfigurationManager.AppSettings["UsePolkData"]);
+            }
+        }
+        public static bool MasterTechAssignPwrNoFixReports
+        {
+            get
+            {
+                return Convert.ToBoolean(ConfigurationManager.AppSettings["MasterTechAssignPwrNoFixReports"]);
+            }
+        }
+        public static bool MasterTechAssignObd1NoFixReports
+        {
+            get
+            {
+                return Convert.ToBoolean(ConfigurationManager.AppSettings["MasterTechAssignObd1NoFixReports"]);
+            }
+        }
+        public static bool MasterTechAssignAbsNoFixReports
+        {
+            get
+            {
+                return Convert.ToBoolean(ConfigurationManager.AppSettings["MasterTechAssignAbsNoFixReports"]);
+            }
+        }
+        public static bool MasterTechAssignSrsNoFixReports
+        {
+            get
+            {
+                return Convert.ToBoolean(ConfigurationManager.AppSettings["MasterTechAssignSrsNoFixReports"]);
+            }
+        }
+        public static string ScoreLetterGradeCuttoffsList
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ScoreLetterGradeCuttoffsList"];
+            }
+        }
     }
 }

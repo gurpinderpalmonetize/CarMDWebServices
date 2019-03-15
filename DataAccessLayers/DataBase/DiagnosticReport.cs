@@ -11,7 +11,9 @@ namespace DataAccessLayers.DataBase
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class DiagnosticReport
     {
         public long DiagnosticReportId { get; set; }
@@ -110,5 +112,19 @@ namespace DataAccessLayers.DataBase
         public string NotifiedRequesterVia { get; set; }
         public string Note { get; set; }
         public string Old_DiagnosticReportId { get; set; }
+
+        [ForeignKey("VehicleId")]
+        [Required]
+        public Vehicle Vehicle { get; set; }
+
+        [ForeignKey("UserId")]
+        [Required]
+        public User User { get; set; }
+
+        [ForeignKey("DeviceId")]
+        public Device Device { get; set; }
+
+        [ForeignKey("SymptomId")]
+        public Symptom Symptom { get; set; }
     }
 }

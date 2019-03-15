@@ -93,7 +93,7 @@ namespace CarMDWebServices.Controllers
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
 
-            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicle(apiRequest, vehicleInfo));
+            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicle(apiRequest));
         }
         #endregion
 

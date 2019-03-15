@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.ComponentModel;
 using System.Reflection;
 using DataAccessLayers.DataBase;
+using DataAccessLayers.Common;
 
 namespace DataAccessLayers.Service
 {
@@ -461,7 +462,7 @@ namespace DataAccessLayers.Service
                     {
                                 using (innovaEntities dbContext = new innovaEntities())
                                 {
-                                    var polkVehicleYMME = dbContext.PolkVehicleYmmes.Where(x => x.VinPatternMask == apiRequest.vin).FirstOrDefault();
+                               var polkVehicleYMME = dbContext.PolkVehicleYmmes.Where(x => x.VinPatternMask == apiRequest.vin).FirstOrDefault();
                                     if (polkVehicleYMME != null)
                                     {
                                         int vehicleYear = Convert.ToInt32(polkVehicleYMME.Year);
@@ -1129,40 +1130,6 @@ namespace DataAccessLayers.Service
             {
                 return _context.PartNames.Where(x => x.PartNameId == PartNameId).FirstOrDefault();
             }
-        }
-        public enum FixDifficultyRating
-        {
-            [Description("Difficulty Rating 1")]
-            DifficultyRating1 = 0,
-            [Description("Difficulty Rating 2")]
-            DifficultyRating2 = 1,
-            [Description("Difficulty Rating 3")]
-            DifficultyRating3 = 2,
-            [Description("Difficulty Rating 4")]
-            DifficultyRating4 = 3,
-            [Description("Difficulty Rating 5")]
-            DifficultyRating5 = 4
-        }
-        public enum Currency
-        {
-            [Description("US Dollars")] USD,
-            [Description("Canadian Dollars")] CAD,
-            [Description("Euros")] EUR,
-            [Description("Chinese Yuan")] CNY,
-            [Description("Mexico Nuevo Peso")] MXN,
-        }
-        public enum DiagnosticReportErrorCodeSystemType
-        {
-            [Description("OBD2")]
-            PowertrainObd2 = 0,
-            [Description("OBD1")]
-            PowertrainOBD1 = 1,
-            [Description("ABS")]
-            ABS = 2,
-            [Description("SRS")]
-            SRS = 3,
-            [Description("Enhanced")]
-            Enhanced = 4
         }
     }
 }

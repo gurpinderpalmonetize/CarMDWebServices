@@ -11,7 +11,9 @@ namespace DataAccessLayers.DataBase
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Vehicle
     {
         public string VehicleId { get; set; }
@@ -58,5 +60,13 @@ namespace DataAccessLayers.DataBase
         public Nullable<System.DateTime> NewTSBAlertLastSentDateTimeUTC { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+
+        [ForeignKey("UserId")]
+        [Required]
+        public User User { get; set; }
+
+        [ForeignKey("PolkVehicleYMMEId")]
+        [Required]
+        public PolkVehicleYmme PolkVehicleYmme { get; set; }
     }
 }

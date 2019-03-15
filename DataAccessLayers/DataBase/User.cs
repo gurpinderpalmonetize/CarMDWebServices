@@ -11,7 +11,9 @@ namespace DataAccessLayers.DataBase
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class User
     {
         public string UserId { get; set; }
@@ -105,5 +107,9 @@ namespace DataAccessLayers.DataBase
         public Nullable<int> ApplicationType { get; set; }
         public string ApplicationName { get; set; }
         public string LastLoginDateTimeUTC { get; set; }
+
+        [ForeignKey("UserTypeExternalId")]
+        [Required]
+        public ExternalSystem ExternalSystem { get; set; }
     }
 }
