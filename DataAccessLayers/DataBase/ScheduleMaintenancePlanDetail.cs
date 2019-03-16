@@ -17,7 +17,7 @@ namespace DataAccessLayers.DataBase
         public string ScheduleMaintenancePlanDetailId { get; set; }
         public string ScheduleMaintenancePlanId { get; set; }
         public string ScheduleMaintenanceServiceId { get; set; }
-        public Nullable<int> Mileage { get; set; }
-        public Nullable<int> MileageRepeat { get; set; }
+        public int Mileage { get; set; } = 0;
+        public int  MileageRepeat { get; set; } = 0;
     }
 }

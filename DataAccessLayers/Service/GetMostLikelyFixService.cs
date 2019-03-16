@@ -5,6 +5,7 @@ using DataAccessLayers.Repository;
 using Innova.Utilities.Shared;
 using Innova.Utilities.Shared.Enums;
 using Innova.Utilities.Shared.Model;
+using Innova.VehicleDataLib.Firmware;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -23,6 +24,7 @@ namespace DataAccessLayers.Service
         public innovaEntities _innovaEntities;
         public DiagnosticReportService _diagnosticReportService;
         public GetMostLikelyFixRepository  _getMostLikelyFixRepository;
+        public ScheduleMaintenanceServiceRepository _scheduleMaintenanceServiceRepository;
         public DiagnosticReport _diagnosticReport;
         public PolkVehicleYmme _objPolkVehicleYmme;
         public Vehicle _Vehicle;
@@ -322,7 +324,7 @@ namespace DataAccessLayers.Service
                     createdDateTimeUTCString,
                     //New params - Nam added 1/9/2017 for new OBDFIX
                     parentDiagnosticReportIdGuidString,
-                    manualRawFreezeFrameDataString: manualRawFreezeFrameDataString,
+                    manualRawFreezeFrameDataString,
                     additionalHelpRequired: additionalHelpRequired,
                     isNotifiedRequester: isNotifiedRequester,
                     notifiedRequesterDateTimeUTC: notifiedRequesterDateTimeUTC,
@@ -2882,17 +2884,414 @@ namespace DataAccessLayers.Service
             }
         }
 
-        public virtual  DiagReportInfo GetDiagnosticReportExisting(
-                      int diagnosticReportId,
-                      bool includeRecallsForVehicle,
-                      bool includeTSBsForVehicleAndMatchingErrorCodes,
-                      bool includeTSBCountForVehicle,
-                      bool includeNextScheduledMaintenance,
-                      bool includeWarrantyInfo,
-                      bool autoZone = false)
+        public virtual DiagReportInfo GetDiagnosticReportExisting(
+                int diagnosticReportId,
+                bool includeRecallsForVehicle,
+                bool includeTSBsForVehicleAndMatchingErrorCodes,
+                bool includeTSBCountForVehicle,
+                bool includeNextScheduledMaintenance,
+                bool includeWarrantyInfo,
+                bool autoZone = false)
         {
-            return new DiagReportInfo(); ;
+
+            //list of parallel tasks to execute
+
+            var result = new DiagReportInfo();
+
+            var report =  _getMostLikelyFixRepository.GetDiagnosticReportByReportId(diagnosticReportId);
+
+            VehicleInfo vehicleInfo = GetvehicleInfo(report);
+            result.Vehicle = vehicleInfo;
+            result.ToolLEDStatusDesc = report.ToolLEDStatus.ToString();
+            result.FixStatusInfo = GetFixInfo(report, false);
+            result.DiagnosticReportId = diagnosticReportId;
+            var geterrorcode = _getMostLikelyFixRepository.GetDiagnosticReportResultErrorCode(report.DiagnosticReportResultId);
+            result.Errors = geterrorcode.Select(item => new ErrorCodeInfo()
+            {
+                Code = item.ErrorCode,
+                CodeType = (int)item.DiagnosticReportErrorCodeType,
+                ErrorCodeSystemType = (int)item.DiagnosticReportErrorCodeSystemType,
+                HasMultipleDefinitions = true
+            }).ToArray();
+
+            ToolInformation ti = ToolInformation(report);
+            if (ti != null)
+            {
+                result.Monitors = new MonitorInfo[ti.Monitors.Count];
+
+                for (int i = 0; i < ti.Monitors.Count; i++)
+                {
+                    MonitorInfo mi = new MonitorInfo();
+                    mi.Description = ti.Monitors[i].Description;
+                    mi.Value = ti.Monitors[i].Value;
+
+                    result.Monitors[i] = mi;
+                }
+            }
+            else
+            {
+                result.Monitors = new MonitorInfo[0];
+            }
+            if (ti != null)
+            {
+                result.FreezeFrame = new FreezeFrameInfo[ti.FreezeFrames.Count];
+
+
+                for (int i = 0; i < ti.FreezeFrames.Count; i++)
+                {
+                    FreezeFrameInfo ffi = new FreezeFrameInfo();
+
+                    ffi.Description = ti.FreezeFrames[i].Description;
+                    ffi.Value = ti.FreezeFrames[i].Value;
+
+                    result.FreezeFrame[i] = ffi;
+                }
+            }
+            else
+            {
+                result.FreezeFrame = new FreezeFrameInfo[0];
+            }
+
+            result.Symptoms = _getMostLikelyFixRepository.GetSymptomRecords(report.DiagnosticReportResultId).Select(x => new SymptomInfo()
+            {
+                SymptomId = Guid.Parse( x.SymptomId),
+                Type = x.SymptomFragmentIdType,
+                ObservedEvent = x.SymptomFragmentIdObservedEvent,
+                Location = x.SymptomFragmentIdLocation,
+                OperationalCondition = x.SymptomFragmentIdOperationalCondition,
+                SurveyTechnicalInspection = x.SymptomFragmentIdSurveyTechnicalInspection
+            }).ToArray();
+
+            var diagnosticReportResultFixes =  _getMostLikelyFixRepository.GetDiagnosticReportResultFixes(report.DiagnosticReportResultId);
+            result.FixInfo = new FixInfo[diagnosticReportResultFixes.Count];
+
+            for (int i = 0; i < diagnosticReportResultFixes.Count; i++)
+            {
+                FixInfo fixInfo = GetWebServiceObject(diagnosticReportResultFixes[i]);
+                result.FixInfo[i] = fixInfo;
+            }
+
+            if (includeRecallsForVehicle)
+            {
+                var recalls = _getMostLikelyFixRepository.Search(Convert.ToInt32( report.Vehicle.Year), report.Vehicle.Make, report.Vehicle.Model);
+                result.Recalls = recalls.Select(e => new RecallInfo
+                {
+                    RecordNumber = e.RecordNumber,
+                    CampaignNumber = e.CampaignNumber,
+                    RecallDateString = e.RecallDate,
+                    DefectDescription = e.DefectDescription,
+                    DefectConsequence = e.DefectConsequence,
+                    DefectCorrectiveAction = e.DefectCorrectiveAction
+                }).Distinct().ToArray();
+            }
+
+            if (includeWarrantyInfo)
+            {
+                var vehicleWarrantyDetails =  _getMostLikelyFixRepository.GetCurrentlyValidWarranty(report.Vehicle, 0);
+                result.VehicleWarrantyDetails = vehicleWarrantyDetails.Select(e => new VehicleWarrantyDetailInfo
+                {
+                    WarrantyTypeDescription = e.VehicleWarrantyDetail.Notes,
+                    WarrantyType = (int)e.VehicleWarrantyDetail.WarrantyType,
+                    MaxYears = e.VehicleWarranty.MinYear,
+                    MaxMileage = e.VehicleWarrantyDetail.MaxMileage,
+                    Notes = e.VehicleWarranty.Name,
+                    IsTransferable = (bool)e.VehicleWarranty.IsTransferable,
+                    DescriptionFormatted = e.VehicleWarrantyDetail.Notes_fr
+                }).Distinct().ToArray();
+                result.HasVehicleWarrantyDetails = true;
+            }
+
+            GettsbType(includeTSBsForVehicleAndMatchingErrorCodes, includeTSBCountForVehicle, result, report);
+
+            if (includeNextScheduledMaintenance)
+            {
+                int[] reportIds = new int[1];
+                reportIds[0] = (diagnosticReportId);
+                result.ScheduleMaintenanceServices = _scheduleMaintenanceServiceRepository.GetScheduledMaintenanceNextService(reportIds).ToArray();
+                // result.UnScheduledMaintenanceServices = _scheduleMaintenanceServiceRepository.GetUnScheduledMaintenanceNextService(reportIds);
+                result.HasScheduledMaintenance = result.ScheduleMaintenanceServices.Any() ? true : false;
+                result.HasUnScheduledMaintenance = result.UnScheduledMaintenanceServices.Any() ? true : false;
+            }
+
+            return result;
         }
 
+
+        public FixInfo GetWebServiceObject(DiagnosticReportResultFix sdkObject)
+        {
+
+            FixName fixName = _getMostLikelyFixRepository.GetByFixNameId(sdkObject.FixNameId);
+            FixInfo wsObject = new FixInfo();
+            wsObject.FixId = sdkObject.FixId;
+            wsObject.FixNameId = sdkObject.FixNameId;
+            wsObject.Name = sdkObject.Name;
+            wsObject.Description = fixName.Description;
+            wsObject.FixRating = (int)fixName.FixRating;
+            wsObject.ErrorCode = sdkObject.PrimaryErrorCode;
+            wsObject.ErrorCodeSystemType = (int)sdkObject.DiagnosticReportErrorCodeSystemType;
+            wsObject.SortOrder = (int)sdkObject.SortOrder;
+            wsObject = ReCalculateFixInfoCosts(wsObject, sdkObject);
+
+            var fixFeedbacks = _getMostLikelyFixRepository.LoadByFixAndDtc(sdkObject.FixId, sdkObject.PrimaryErrorCode);
+
+            wsObject.FixFeedbacks = new FixFeedbackInfo[fixFeedbacks.Count];
+
+            wsObject.FixFeedbacks = fixFeedbacks.Select(x => new FixFeedbackInfo()
+            {
+                DiagnosticReportId = (int)x.DiagnosticReportId,
+                IsReportValid = (bool)x.IsReportValid,
+                CouldNotFixReason = x.CouldNotFixReason,
+                PrimaryErrorCode = x.PrimaryErrorCode,
+                Fix = x.FixId,
+                AverageDiagnosticTimeMinutes = (int)x.AverageDiagnosticTime,
+                FrequencyEncountered = (int)x.FrequencyEncountered,
+                ErrorCodesThatApply = x.ErrorCodesThatApply,
+                TechComments = x.TechComments,
+                BasicToolsRequired = x.BasicToolsRequired,
+                SpecialtyToolsRequired = x.SpecialtyToolsRequired,
+                TipsAndTricks = x.TipsAndTricks,
+            }).ToArray();
+
+            var articles = _getMostLikelyFixRepository.GetRelatedArticles(sdkObject.FixNameId);
+            var articleBody = string.Empty;
+            articleBody.Replace(GlobalModel.ArticleImageFileVirtualPath, GlobalModel.ResourcesBaseUrl + GlobalModel.ArticleImageFileVirtualPath).
+                        Replace(GlobalModel.ArticleDocumentFileVirtualPath, GlobalModel.ResourcesBaseUrl + GlobalModel.ArticleDocumentFileVirtualPath)
+                       .Replace(GlobalModel.ArticleMediaFileVirtualPath, GlobalModel.ResourcesBaseUrl + GlobalModel.ArticleMediaFileVirtualPath)
+                       .Replace(GlobalModel.ArticleFlashFileVirtualPath, GlobalModel.ResourcesBaseUrl + GlobalModel.ArticleFlashFileVirtualPath);
+
+            wsObject.RelatedArticles = articles.Select(x => new ArticleInfo()
+            {
+                ArticleId = new Guid(x.ArticleId),
+                AdminUserNameCreated = x.AdminUserIdCreated,
+                AdminUserNameUpdated = x.AdminUserIdUpdated,
+                PrimaryArticleCategoryId = new Guid(x.ArticleCategoryIdPrimary),
+                Author = x.Author,
+                Body = articleBody + x.Body,
+                DateString = x.Date?.ToLongDateString(),
+                EndDateString = x.EndDate?.ToLongDateString(),
+                IsActive = (bool)x.IsActive,
+                Keywords = x.Keywords,
+                StartDateString = x.StartDate?.ToLongDateString(),
+                Summary = x.Summary,
+                Title = x.Title,
+                VideoDurationSeconds =(int) x.VideoDurationSeconds,
+                VideoHeight = (int)x.VideoHeight,
+                VideoWidth = (int)x.VideoWidth,
+                VideoDownloadUrl = GlobalModel. ArticleVideoFileBaseUrl,
+                VideoThumbnailUrl = GlobalModel.ResourcesBaseUrl + GlobalModel.ArticleVideoThumbnailVirtualPath + x.VideoThumbnailUrl,
+                VideoStreamingUrl = GlobalModel.ArticleVideoStreamingBaseUrl + x.VideoUrl,
+            }).ToArray();
+
+
+            var fixPartInfo = _getMostLikelyFixRepository.GetByDiagnosticReportResultFixId(sdkObject.DiagnosticReportResultFixId);
+            wsObject.FixParts = fixPartInfo.Select(x => new FixPartInfo()
+            {
+                //ACESPartTypeID = x.PartId,
+                //Quantity = x.Quantity,
+                //MakesList = x.MakesList,
+                //PartNumber = x.PartNumber,
+                //NapaPartNumber = x.NapaPartNumber,
+                //Name = x.Name,
+                //Description = x.Description,
+                //Price = x.Price,
+                //CodemasterID = x.CodemasterID,
+            }).ToArray();
+
+            return wsObject;
+        }
+
+        private void GettsbType(bool includeTSBsForVehicleAndMatchingErrorCodes, bool includeTSBCountForVehicle, DiagReportInfo result, DiagnosticReport report)
+        {
+            if (includeTSBsForVehicleAndMatchingErrorCodes == true && includeTSBCountForVehicle == true)
+            {
+                result.TSBCategories = _getMostLikelyFixRepository.GetTSBCountByVehicleByCategory(Convert.ToInt32(report.Vehicle.AAIA)).Select(x => new TSBCategoryInfo() {
+                    Id = x.TSBID,
+                    Description = x.Description,
+                }).ToArray();
+
+             result.TSBCategories[0].TSBCount = result.TSBCategories.Count();
+             result.TSBCountAll = _getMostLikelyFixRepository.GetTSBCountAll(Convert.ToInt32(report.Vehicle.AAIA));
+            }
+
+            if (includeTSBsForVehicleAndMatchingErrorCodes == true && includeTSBCountForVehicle == false)
+            {
+                result.TSBCategories = _getMostLikelyFixRepository.GetTSBCountByVehicleByCategory(Convert.ToInt32(report.Vehicle.AAIA)).Select(x => new TSBCategoryInfo()
+                {
+                    Id = x.TSBID,
+                    Description = x.Description,
+                }).ToArray();
+
+                result.TSBCategories[0].TSBCount = result.TSBCategories.Count();
+            }
+
+            if (includeTSBsForVehicleAndMatchingErrorCodes == false && includeTSBCountForVehicle == true)
+            {
+                result.TSBCountAll = _getMostLikelyFixRepository.GetTSBCountAll(Convert.ToInt32(report.Vehicle.AAIA));
+            }
+
+            result.TSBs = _getMostLikelyFixRepository.GetTSBCategory(Convert.ToInt32(report.Vehicle.AAIA)).ToArray();
+        }
+
+
+        protected FixInfo ReCalculateFixInfoCosts(FixInfo wsObject, DiagnosticReportResultFix sdkObject)
+        {
+            // Calculate the total cost of the solution
+            wsObject.LaborHours = sdkObject.Labor;
+            wsObject.LaborRate = sdkObject.LaborRate;
+            wsObject.LaborCost = sdkObject.Labor * wsObject.LaborRate;
+            wsObject.AdditionalCost = sdkObject.AdditionalCost;
+            wsObject.PartsCost = 0;
+            var diagnosticReportResultFixParts = _getMostLikelyFixRepository.GetByDiagnosticReportResultFixId(sdkObject.DiagnosticReportResultFixId);
+            //foreach (DiagnosticReportResultFixPart resultFixPart in diagnosticReportResultFixParts)
+            //{
+            //    var part = _partRepository.GetPartByPartId(resultFixPart.PartId);
+            //    wsObject.PartsCost += (resultFixPart.Quantity * part.Price);
+            //}
+
+            wsObject.TotalCost = wsObject.LaborCost + wsObject.AdditionalCost + wsObject.PartsCost;
+
+            // Now calculate the local curreny values if necessary.
+            wsObject.LaborRate = GetLocalCurrencyValueFromUSDollars(Convert.ToDecimal(wsObject.LaborRate));
+            wsObject.LaborCost = GetLocalCurrencyValueFromUSDollars(Convert.ToDecimal(wsObject.LaborCost));
+            wsObject.AdditionalCost = GetLocalCurrencyValueFromUSDollars(Convert.ToDecimal(wsObject.AdditionalCost));
+            wsObject.PartsCost = GetLocalCurrencyValueFromUSDollars(Convert.ToDecimal(wsObject.PartsCost));
+            wsObject.TotalCost = GetLocalCurrencyValueFromUSDollars(Convert.ToDecimal(wsObject.TotalCost));
+            return wsObject;
+        }
+
+
+
+        public decimal findExchangeRatePerUSDByCurrenctISOCode(string CurrenctISOCode)
+        {
+            return _getMostLikelyFixRepository.GetCurrenctISOCode(CurrenctISOCode);
+        }
+
+
+        public ToolInformation ToolInformation(DiagnosticReport diagnosticReport)
+        {
+            var toolInformation = new ToolInformation();
+            if (!string.IsNullOrEmpty(diagnosticReport.RawUploadString))
+            {
+                string partnerId = _getMostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
+
+                toolInformation = GetToolInformationAsync(diagnosticReport.RawUploadString, diagnosticReport.Market, partnerId);
+                if (diagnosticReport.RawUploadString.StartsWith(FLEET_PAYLOAD_PREFIX))
+                {
+                    diagnosticReport.RawUploadString = diagnosticReport.RawUploadString.Replace(FLEET_PAYLOAD_PREFIX, "");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(diagnosticReport.RawFreezeFrameDataString) || !string.IsNullOrEmpty(diagnosticReport.RawMonitorsDataString))
+            {
+                ToolInformation tempTi = GetToolInformation(diagnosticReport.Vehicle.Vin, diagnosticReport.PwrMilCode, diagnosticReport.RawFreezeFrameDataString, diagnosticReport.RawMonitorsDataString);
+                toolInformation.FreezeFrames = tempTi.FreezeFrames;
+                toolInformation.Monitors = tempTi.Monitors;
+            }
+
+            return toolInformation;
+        }
+
+        public static ToolInformation GetToolInformation(string vin, string primaryDtc, string rawFreezeFrameString, string rawMonitorsString)
+        {
+            FirmwareRawData firmwareRawData = new FirmwareRawData();
+            firmwareRawData.FFSemiRaw = rawFreezeFrameString;
+            firmwareRawData.MonitoRaw = rawMonitorsString;
+            firmwareRawData.MilDTC = primaryDtc;
+            firmwareRawData.VIN = vin;
+            FirmwareDataProcessor firmwareDataProcessor = new FirmwareDataProcessor();
+            ToolInformation toolInformation = firmwareDataProcessor.ParseToolInfomation(firmwareRawData);
+            return toolInformation;
+        }
+
+        public FixStatusInfo GetFixInfo(DiagnosticReport diagnosticReport, bool determineNoFixStatusAutomatically)
+        {
+            FixStatusInfo fixStatusInfo = new FixStatusInfo();
+            fixStatusInfo.DiagnosticReportInfo = new DiagReportInfo();
+
+            fixStatusInfo.PwrFixStatus = (int)diagnosticReport.PwrDiagnosticReportFixStatus;
+            fixStatusInfo.PwrFixStatusDesc = diagnosticReport.PwrDiagnosticReportFixStatus.ToString();
+            if (diagnosticReport.PwrDiagnosticReportFixStatus == (int)DiagnosticReportFixStatus.FixNotFoundLookupCanceled)
+            {
+                fixStatusInfo.PwrFixLookupCancelledReason = diagnosticReport.PwrDiagnosticReportFixCancelReason;
+            }
+
+            fixStatusInfo.Obd1FixStatus = (int)diagnosticReport.Obd1DiagnosticReportFixStatus;
+            fixStatusInfo.Obd1FixStatusDesc = diagnosticReport.Obd1DiagnosticReportFixStatus.ToString();
+            if (diagnosticReport.Obd1DiagnosticReportFixStatus == (int)DiagnosticReportFixStatus.FixNotFoundLookupCanceled)
+            {
+                fixStatusInfo.Obd1FixLookupCancelledReason = diagnosticReport.Obd1DiagnosticReportFixCancelReason;
+            }
+
+            fixStatusInfo.AbsFixStatus = (int)diagnosticReport.AbsDiagnosticReportFixStatus;
+            fixStatusInfo.AbsFixStatusDesc = diagnosticReport.AbsDiagnosticReportFixStatus.ToString();
+            if (diagnosticReport.AbsDiagnosticReportFixStatus == (int)DiagnosticReportFixStatus.FixNotFoundLookupCanceled)
+            {
+                fixStatusInfo.AbsFixLookupCancelledReason = diagnosticReport.AbsDiagnosticReportFixCancelReason;
+            }
+            fixStatusInfo.SrsFixStatus = (int)diagnosticReport.SrsDiagnosticReportFixStatus;
+            fixStatusInfo.SrsFixStatusDesc = diagnosticReport.SrsDiagnosticReportFixStatus.ToString();
+            if (diagnosticReport.SrsDiagnosticReportFixStatus == (int)DiagnosticReportFixStatus.FixNotFoundLookupCanceled)
+            {
+                fixStatusInfo.SrsFixLookupCancelledReason = diagnosticReport.SrsDiagnosticReportFixCancelReason;
+            }
+            return fixStatusInfo;
+        }
+
+        private VehicleInfo GetvehicleInfo(DiagnosticReport report)
+        {
+            VehicleInfo vehicleInfo = new VehicleInfo();
+            vehicleInfo.VehicleId =Guid.Parse( report.VehicleId);
+            vehicleInfo.IsValid = true;
+            vehicleInfo.VIN = report.Vehicle.Vin;
+            PolkVehicleYmme polkVehicleYmme = _getMostLikelyFixRepository.GetByPolkVehicleYMMEId(report.Vehicle.PolkVehicleYMMEId);
+            if (polkVehicleYmme != null)
+            {
+                vehicleInfo.ManufacturerName = polkVehicleYmme.Manufacturer;
+                vehicleInfo.Make = polkVehicleYmme.Make;
+                vehicleInfo.Year = polkVehicleYmme.Year.ToString();
+                vehicleInfo.Model = polkVehicleYmme.Model;
+                vehicleInfo.Transmission = polkVehicleYmme.Transmission;
+                vehicleInfo.EngineType = polkVehicleYmme.EngineType;
+                vehicleInfo.TrimLevel = polkVehicleYmme.Trim;
+                vehicleInfo.EngineVINCode = polkVehicleYmme.EngineVinCode;
+                vehicleInfo.AAIA = polkVehicleYmme.AAIA;
+            }
+            else
+            {
+                vehicleInfo.ManufacturerName = report.Vehicle.ManufacturerName;
+                vehicleInfo.Make = report.Vehicle.Make;
+                vehicleInfo.Year = report.Vehicle.Year.ToString();
+                vehicleInfo.Model = report.Vehicle.Model;
+                vehicleInfo.Transmission = report.Vehicle.TransmissionControlType;
+                vehicleInfo.EngineType = report.Vehicle.EngineType;
+                string bodyCode = "";
+                if (report.Vehicle.ManufacturerName.IndexOf("General") >= 0)
+                {
+                    Regex regex = new Regex(@"\d");
+                    if (!regex.IsMatch(report.Vehicle.Vin.Substring(2, 1)))
+                    {
+                        bodyCode = report.Vehicle.Vin.Substring(4, 1);
+                    }
+                }
+                vehicleInfo.ManufacturerNameAlt = report.Vehicle.ManufacturerNameAlt;
+                vehicleInfo.TrimLevel = report.Vehicle.TrimLevel;
+                vehicleInfo.EngineVINCode = report.Vehicle.EngineVINCode;
+                vehicleInfo.BodyType = bodyCode;
+                vehicleInfo.AAIA = report.Vehicle.AAIA;
+            }
+
+            if (report.Vehicle.Mileage != null)
+            {
+                vehicleInfo.Mileage = report.Vehicle.Mileage.Value;
+            }
+            if (report.Vehicle.MileageLastRecordedDateTimeUTC != null)
+            {
+                vehicleInfo.MileageLastRecordedDateTimeUTC = report.Vehicle.MileageLastRecordedDateTimeUTC.Value;
+            }
+            vehicleInfo.SendNewRecallAlerts = (bool)report.Vehicle.SendNewRecallAlerts;
+            vehicleInfo.SendNewTSBAlerts = (bool)report.Vehicle.SendNewTSBAlerts;
+            vehicleInfo.SendScheduledMaintenanceAlerts = (bool)report.Vehicle.SendScheduledMaintenanceAlerts;
+            return vehicleInfo;
+        }
     }
 }

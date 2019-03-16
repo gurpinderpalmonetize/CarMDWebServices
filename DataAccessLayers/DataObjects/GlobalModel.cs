@@ -92,5 +92,69 @@ namespace DataAccessLayers.DataObjects
                 return ConfigurationManager.AppSettings["ScoreLetterGradeCuttoffsList"];
             }
         }
+
+        public static string ArticleVideoFileBaseUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ArticleVideoFileBaseUrl"];
+            }
+        }
+
+        public static string ResourcesBaseUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ResourcesBaseUrl"];
+            }
+        }
+
+        public static string ArticleVideoThumbnailVirtualPath
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ArticleVideoThumbnailVirtualPath"];
+            }
+        }
+
+        public static string ArticleVideoStreamingBaseUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ArticleVideoStreamingBaseUrl"];
+            }
+        }
+
+        public static string ArticleImageFileVirtualPath
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ArticleImageFileVirtualPath"];
+            }
+        }
+
+        public static string ArticleDocumentFileVirtualPath
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ArticleDocumentFileVirtualPath"];
+            }
+        }
+
+        public static string ArticleMediaFileVirtualPath
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ArticleMediaFileVirtualPath"];
+            }
+        }
+
+        public static string ArticleFlashFileVirtualPath
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ArticleFlashFileVirtualPath"];
+            }
+        }
     }
 }

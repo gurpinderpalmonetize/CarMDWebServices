@@ -4,6 +4,7 @@
     {
         public WebServiceSessionStatus WebServiceSessionStatus { get; set; }
         public VehicleInfo Vehicle { get; set; }
+        public FixInfo[] FixInfo { get; set; }
         public SymptomInfo[] Symptoms { get; set; }
         public ErrorCodeInfo[] Errors { get; set; }
         public FreezeFrameInfo[] FreezeFrame { get; set; }
@@ -18,6 +19,7 @@
         public ScheduleMaintenanceServiceInfo[] UnScheduledMaintenanceServices { get; set; }
         public VehicleWarrantyDetailInfo[] VehicleWarrantyDetails { get; set; }
         public FixStatusInfo FixStatusInfo { get; set; }
+
         public long DiagnosticReportId { get; set; }
         public bool? ScheduledMaintenanceNextMileage { get; set; }
         public bool? HasScheduledMaintenance { get; set; }

@@ -11,16 +11,5 @@ namespace DataAccessLayers.DataObjects
         public int Id { get; set; }
         public string Description { get; set; }
         public int? TSBCount { get; set; }
-        //protected internal static TSBCategoryInfo GetWebServiceObject(TsbCategory sdkObject)
-        //{
-        //    TSBCategoryInfo wsObject = new TSBCategoryInfo();
-
-        //    wsObject.Id = sdkObject.Id;
-        //    wsObject.Description = sdkObject.Description;
-        //    wsObject.TSBCount = sdkObject.Count;
-
-        //    return wsObject;
-
-        //}
     }
 }

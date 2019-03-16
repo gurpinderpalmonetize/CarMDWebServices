@@ -113,10 +113,6 @@ namespace DataAccessLayers.DataBase
         public string Note { get; set; }
         public string Old_DiagnosticReportId { get; set; }
 
-        [ForeignKey("VehicleId")]
-        [Required]
-        public Vehicle Vehicle { get; set; }
-
         [ForeignKey("UserId")]
         [Required]
         public User User { get; set; }
@@ -126,5 +122,9 @@ namespace DataAccessLayers.DataBase
 
         [ForeignKey("SymptomId")]
         public Symptom Symptom { get; set; }
+
+        [ForeignKey("VehicleId")]
+        [Required]
+        public Vehicle Vehicle { get; set; }
     }
 }

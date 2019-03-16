@@ -1,4 +1,5 @@
 ﻿using DataAccessLayers.DataBase;
+using DataAccessLayers.DataObjects;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,6 +14,13 @@ namespace DataAccessLayers.Repository
         public GetMostLikelyFixRepository(innovaEntities context)
         {
             _context = context;
+        }
+
+        public Vehicle GetByDiagnosticReportId(int diagnosticReportId)
+        {
+            return _context.Vehicles
+                               .Join(_context.DiagnosticReports, Vehicle => Vehicle.VehicleId, B => B.VehicleId, (Vehicle, B) => new { Vehicle, B })
+                               .Where(e => diagnosticReportId == e.B.DiagnosticReportId).Select(e => e.Vehicle).FirstOrDefault();
         }
 
 
@@ -495,5 +503,148 @@ namespace DataAccessLayers.Repository
             return _context.PolkVehicleYmmes.Where(x => x.PolkVehicleYMMEId == polkVehicleYMMEId).FirstOrDefault();
         }
 
+
+        public List<DiagnosticReportResultErrorCode> GetDiagnosticReportResultErrorCode(string diagnosticReportResultId)
+        {
+         return _context.DiagnosticReports
+                         .Join(_context.DiagnosticReportResults, diagnosticReport => diagnosticReport.DiagnosticReportId, B => B.DiagnosticReportId, (diagnosticReport, B) => new { diagnosticReport, B })
+                         .Join(_context.DiagnosticReportResultErrorCodes, A => A.diagnosticReport.DiagnosticReportResultId, diagnosticReportResultErrorCode => diagnosticReportResultErrorCode.DiagnosticReportResultId, (A, diagnosticReportResultErrorCode) => new { A, diagnosticReportResultErrorCode }).Where(x => x.A.diagnosticReport.DiagnosticReportResultId == diagnosticReportResultId)
+                         .Select(e => e.diagnosticReportResultErrorCode).Distinct().ToList();
+  
+        }
+        public List<Symptom> GetSymptomRecords(string diagnosticReportResultId)
+        {
+          return _context.DiagnosticReports
+                              .Join(_context.Symptoms, diagnosticReport => diagnosticReport.SymptomId, Symptom => Symptom.SymptomId, (diagnosticReport, Symptom) =>
+                               new { diagnosticReport, Symptom }).Where(x => x.diagnosticReport.DiagnosticReportResultId == diagnosticReportResultId)
+                              .Select(e => e.Symptom).Distinct().ToList();
+        }
+
+        public List<DiagnosticReportResultFix> GetDiagnosticReportResultFixes(string diagnosticReportResultId)
+        {
+          return _context.DiagnosticReportResultFixes.Where(x => x.DiagnosticReportResultId == diagnosticReportResultId)
+                         .OrderByDescending(x => x.DiagnosticReportErrorCodeSystemType)
+                         .Distinct()
+                         .ToList();
+
+        }
+
+        public virtual decimal GetCurrenctISOCode(string CurrenctISOCode)
+        {
+         return _context.CurrencyExchangeRates.Where(e => (e.CurrencyISOCode == CurrenctISOCode)).Distinct().Select(x => x.ExchangeRatePerUSD).FirstOrDefault();
+        }
+
+
+        public virtual List<DiagnosticReportFixFeedback> LoadByFixAndDtc(string fixId, string primaryErrorCode)
+        {
+            return (from a in _context.DiagnosticReportFixFeedbacks
+                    join b in _context.ObdFixes on a.ObdFixId equals b.ObdFixId
+                    where a.FixId == fixId && a.FixId == fixId && a.PrimaryErrorCode == primaryErrorCode
+                    select a).ToList();
+
+        }
+
+        public virtual List<Article> GetRelatedArticles(string FixNameId)
+        {
+        return _context.Articles
+                    .Join(_context.FixNameArticleAssignments, Article => Article.ArticleId, fixName => fixName.ArticleId, (Article, fixName) =>
+                     new { Article, fixName }).Where(x => x.fixName.FixNameId == FixNameId)
+                    .Select(e => e.Article).Distinct().ToList();
+
+        }
+
+        public List<string> GetByDiagnosticReportResultFixId(string diagnosticReportResultFixId)
+        {
+            return new List<string>(); //_context.DiagnosticReportResultFixParts.Where(x => x.DiagnosticReportResultFixId == diagnosticReportResultFixId).Distinct().ToList();
+        }
+
+        public List<Recall> Search(int year, string make, string model)
+        {
+            int? years = Convert.ToInt32(year);
+            return _context.Recalls
+                .Join(_context.Recalls, Recall => Recall.RecordNumber, B => B.RecordNumber, (Recall, B) => new { Recall, B })
+                          .Where(e => (((year == 0 || e.Recall.Year == years)))                             //filter by years
+                          && (((make == null || make.Length == 0) || make.Contains(e.Recall.Make)))        //filter by makes 
+                          && (((model == null || model.Length == 0) || model.Contains(e.Recall.Model))))   //filter by models 
+                .Select(e => e.Recall).Distinct().ToList();
+        }
+
+        public List<VehicleWarrantyInfo> GetCurrentlyValidWarranty(Vehicle vehicle, int averageMilesDrivenPerDay)
+        {
+            var currentmillage = GetEstimatedMileage(vehicle, new DateTime(), averageMilesDrivenPerDay);
+            var VehicleAgeInYears = DateTime.Now.Year - vehicle.Year;
+
+
+            var warrantyInfo = _context.VehicleWarranties
+                   .Join(_context.VehicleWarrantyDetails, VehicleWarranty => VehicleWarranty.VehicleWarrantyId, vehicleWarrantyDetail => vehicleWarrantyDetail.VehicleWarrantyId, (VehicleWarranty, vehicleWarrantyDetail) => new { VehicleWarranty, vehicleWarrantyDetail })
+                    .Join(_context.VehicleWarrantyMakes, A => A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
+                    .Join(_context.VehicleWarrantyModels, A => A.A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
+                    .Join(_context.VehicleWarrantyEngineTypes, A => A.A.A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
+                    .Join(_context.VehicleWarrantyEngineVINCodes, A => A.A.A.A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
+                    .Join(_context.VehicleWarrantyTrimLevels, A => A.A.A.A.A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
+                    .Join(_context.VehicleWarrantyTransmissions, A => A.A.A.A.A.A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
+                    .Where(e => (vehicle.Year == 0 || e.A.A.A.A.A.A.VehicleWarranty.MinYear >= vehicle.Year || e.A.A.A.A.A.A.VehicleWarranty.MaxYear <= vehicle.Year)
+                    && (vehicle.Make == null || vehicle.Make.Length == 0 || vehicle.Make.Contains(e.A.A.A.A.A.A.VehicleWarranty.MakesString))
+                    && (vehicle.Model == null || vehicle.Model.Length == 0 || (vehicle.Model.Contains(e.A.A.A.A.A.A.VehicleWarranty.ModelsString))
+                    && (vehicle.TrimLevel == null || vehicle.TrimLevel.Length == 0 || (vehicle.TrimLevel.Contains(e.A.A.A.A.A.A.VehicleWarranty.TrimLevelsString))
+                    && (vehicle.TransmissionControlType == null || vehicle.TransmissionControlType.Length == 0 || (vehicle.TransmissionControlType.Contains(e.A.A.A.A.A.A.VehicleWarranty.TransmissionsString))
+                    && (currentmillage == 0 || e.A.A.A.A.A.A.vehicleWarrantyDetail.MaxMileage >= currentmillage)
+                    && (VehicleAgeInYears == 0 || e.A.A.A.A.A.A.vehicleWarrantyDetail.MaxYears >= VehicleAgeInYears))))).Distinct();
+
+            var result = warrantyInfo.ToList();
+            var vehicleWarranty = result.Select(x => new VehicleWarrantyInfo
+            {
+                VehicleWarranty = x.A.A.A.A.A.A.VehicleWarranty,
+                VehicleWarrantyDetail = x.A.A.A.A.A.A.vehicleWarrantyDetail
+            }).ToList();
+
+            return vehicleWarranty;
+        }
+
+
+        public int GetEstimatedMileage(Vehicle vehicleInfo, DateTime date, int milesDrivenPerDay)
+        {
+            if (vehicleInfo.Mileage == 0)
+                vehicleInfo.Mileage = GetLastVehicleMileage(vehicleInfo);
+            TimeSpan ts = date.Subtract(Convert.ToDateTime(vehicleInfo.MileageLastRecordedDateTimeUTC));
+            int daysSinceLastMileage = (int)ts.TotalDays;
+            return Convert.ToInt32(vehicleInfo.Mileage) + (daysSinceLastMileage * milesDrivenPerDay);
+        }
+
+        public int? GetLastVehicleMileage(Vehicle info)
+        {
+            return _context.DiagnosticReports.Where(e => info.VehicleId == e.VehicleId && info.UserId == e.UserId).Select(x => x.VehicleMileage).FirstOrDefault();
+        }
+
+        public virtual List<TSB> GetTSBCountByVehicleByCategory(int legacyVehicleId)
+        {
+             return _context.TSBs
+                .Join(_context.TSBToVehicles, tsb => tsb.TSBID, tsbtovehicle => tsbtovehicle.TSBID,
+                    (tsb, tsbtovehicle) => new { tsb, tsbtovehicle })
+                .Join(_context.TSBAAIAToLegacyVehicleIDs, tsbtovehicle => tsbtovehicle.tsbtovehicle.VehicleId,
+                    tsblegacy => tsblegacy.LegacyVehicleID, (tsbtovehicle, tsblegacy) => new { tsbtovehicle, tsblegacy })
+                .Where(e => e.tsbtovehicle.tsbtovehicle.VehicleId == legacyVehicleId)
+                .Select(e => e.tsbtovehicle.tsb)
+                .Distinct().GroupBy(x => x.TSBID).Select(x => x.FirstOrDefault()).ToList();
+        }
+
+        public int GetTSBCountAll(int AAIA)
+        {
+            return GetTSBCountByVehicleByCategory(AAIA).Count;
+        }
+
+        public List<TSBInfo> GetTSBCategory(int AAIA)
+        {
+            var category = GetTSBCountByVehicleByCategory(AAIA);
+           return category.Select(item => new TSBInfo()
+            {
+                TsbId = item.TSBID,
+                TsbText = item.TSBText,
+                PDFFileUrl = item.FileNamePDF,
+                Description = item.Description,
+                IssueDateString = Convert.ToString( item.IssueDate),
+                ManufacturerNumber = item.ManufacturerNumber,
+            }).ToList();
+        }
     }
 }

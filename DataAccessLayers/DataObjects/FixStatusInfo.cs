@@ -6,7 +6,6 @@
         {
 
         }
-        public WebServiceSessionStatus WebServiceSessionStatus;
         public DiagReportInfo DiagnosticReportInfo;
         public int PwrFixStatus { get; set; }
         public string PwrFixStatusDesc { get; set; }

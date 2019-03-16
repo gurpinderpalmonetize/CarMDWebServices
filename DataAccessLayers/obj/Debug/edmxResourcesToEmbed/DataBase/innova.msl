@@ -2620,5 +2620,29 @@
     <FunctionImportMapping FunctionImportName="PolkVehicleUSStatsGrouped_LoadBySearch" FunctionName="innovaModel.Store.PolkVehicleUSStatsGrouped_LoadBySearch" />
     <FunctionImportMapping FunctionImportName="sp_UpdateUsertoMasterTech" FunctionName="innovaModel.Store.sp_UpdateUsertoMasterTech" />
     <FunctionImportMapping FunctionImportName="User_GetMasterTechStats" FunctionName="innovaModel.Store.User_GetMasterTechStats" />
+    <EntitySetMapping Name="VehicleWarrantyEngineVINCodes">
+      <EntityTypeMapping TypeName="innovaModel.VehicleWarrantyEngineVINCode">
+        <MappingFragment StoreEntitySet="VehicleWarrantyEngineVINCode">
+          <ScalarProperty Name="EngineVINCode" ColumnName="EngineVINCode" />
+          <ScalarProperty Name="VehicleWarrantyId" ColumnName="VehicleWarrantyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleWarrantyTransmissions">
+      <EntityTypeMapping TypeName="innovaModel.VehicleWarrantyTransmission">
+        <MappingFragment StoreEntitySet="VehicleWarrantyTransmission">
+          <ScalarProperty Name="Transmission" ColumnName="Transmission" />
+          <ScalarProperty Name="VehicleWarrantyId" ColumnName="VehicleWarrantyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleWarrantyTrimLevels">
+      <EntityTypeMapping TypeName="innovaModel.VehicleWarrantyTrimLevel">
+        <MappingFragment StoreEntitySet="VehicleWarrantyTrimLevel">
+          <ScalarProperty Name="TrimLevel" ColumnName="TrimLevel" />
+          <ScalarProperty Name="VehicleWarrantyId" ColumnName="VehicleWarrantyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

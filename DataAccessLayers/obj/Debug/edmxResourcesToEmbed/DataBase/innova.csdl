@@ -2734,5 +2734,32 @@
       <Parameter Name="p_StartDateTimeUTC" Mode="In" Type="DateTime" />
       <Parameter Name="p_EndDateTimeUTC" Mode="In" Type="DateTime" />
     </FunctionImport>
+    <EntitySet Name="VehicleWarrantyEngineVINCodes" EntityType="innovaModel.VehicleWarrantyEngineVINCode" />
+    <EntitySet Name="VehicleWarrantyTransmissions" EntityType="innovaModel.VehicleWarrantyTransmission" />
+    <EntitySet Name="VehicleWarrantyTrimLevels" EntityType="innovaModel.VehicleWarrantyTrimLevel" />
   </EntityContainer>
+  <EntityType Name="VehicleWarrantyEngineVINCode">
+    <Key>
+      <PropertyRef Name="VehicleWarrantyId" />
+      <PropertyRef Name="EngineVINCode" />
+    </Key>
+    <Property Name="VehicleWarrantyId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="EngineVINCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="VehicleWarrantyTransmission">
+    <Key>
+      <PropertyRef Name="VehicleWarrantyId" />
+      <PropertyRef Name="Transmission" />
+    </Key>
+    <Property Name="VehicleWarrantyId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="Transmission" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="VehicleWarrantyTrimLevel">
+    <Key>
+      <PropertyRef Name="VehicleWarrantyId" />
+      <PropertyRef Name="TrimLevel" />
+    </Key>
+    <Property Name="VehicleWarrantyId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="TrimLevel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

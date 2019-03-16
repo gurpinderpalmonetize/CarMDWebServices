@@ -680,6 +680,29 @@
     <Property Name="IsFromPolkMatch" Type="bool" />
     <Property Name="IsFromVinPowerMatch" Type="bool" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'def.innova.DiagnosticReportResultFixPart' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="DiagnosticReportResultFixPart">
+          <Property Name="DiagnosticReportResultFixPartId" Type="varchar" MaxLength="36" />
+          <Property Name="DiagnosticReportResultFixId" Type="varchar" MaxLength="36" />
+          <Property Name="PartId" Type="varchar" MaxLength="36" />
+          <Property Name="ManufacturerName" Type="varchar" MaxLength="100" />
+          <Property Name="MakesList" Type="text" />
+          <Property Name="PartNumber" Type="varchar" MaxLength="50" />
+          <Property Name="NapaPartNumber" Type="varchar" MaxLength="20" />
+          <Property Name="Name" Type="varchar" MaxLength="200" />
+          <Property Name="Name_es" Type="varchar" MaxLength="200" />
+          <Property Name="Name_fr" Type="varchar" MaxLength="200" />
+          <Property Name="Name_zh" Type="varchar" MaxLength="200" />
+          <Property Name="Description" Type="text" />
+          <Property Name="Description_es" Type="text" />
+          <Property Name="Description_fr" Type="text" />
+          <Property Name="Description_zh" Type="text" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PriceInLocalCurrency" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="CodemasterID" Type="varchar" MaxLength="50" />
+        </EntityType>-->
   <EntityType Name="DLCLocation">
     <Key>
       <PropertyRef Name="DlcLocationId" />
@@ -2378,12 +2401,14 @@ warning 6002: The table/view 'def.innova.FixSymptom_NEW' does not have a primary
     <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" Nullable="false" />
     <Property Name="EngineType" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.innova.VehicleWarrantyEngineVINCode' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="VehicleWarrantyEngineVINCode">
-          <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" />
-          <Property Name="EngineVINCode" Type="varchar" MaxLength="50" />
-        </EntityType>-->
+  <EntityType Name="VehicleWarrantyEngineVINCode">
+    <Key>
+      <PropertyRef Name="VehicleWarrantyId" />
+      <PropertyRef Name="EngineVINCode" />
+    </Key>
+    <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="EngineVINCode" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
   <EntityType Name="VehicleWarrantyMake">
     <Key>
       <PropertyRef Name="VehicleWarrantyId" />
@@ -2400,18 +2425,22 @@ warning 6013: The table/view 'def.innova.VehicleWarrantyEngineVINCode' does not 
     <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" Nullable="false" />
     <Property Name="Model" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.innova.VehicleWarrantyTransmission' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="VehicleWarrantyTransmission">
-          <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" />
-          <Property Name="Transmission" Type="varchar" MaxLength="50" />
-        </EntityType>-->
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.innova.VehicleWarrantyTrimLevel' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="VehicleWarrantyTrimLevel">
-          <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" />
-          <Property Name="TrimLevel" Type="varchar" MaxLength="50" />
-        </EntityType>-->
+  <EntityType Name="VehicleWarrantyTransmission">
+    <Key>
+      <PropertyRef Name="VehicleWarrantyId" />
+      <PropertyRef Name="Transmission" />
+    </Key>
+    <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="Transmission" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VehicleWarrantyTrimLevel">
+    <Key>
+      <PropertyRef Name="VehicleWarrantyId" />
+      <PropertyRef Name="TrimLevel" />
+    </Key>
+    <Property Name="VehicleWarrantyId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="TrimLevel" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'def.innova.DiagnosticReport_ByAbsDiagnosticReportFixStatus' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="DiagnosticReport_ByAbsDiagnosticReportFixStatus">
@@ -2766,8 +2795,11 @@ warning 6002: The table/view 'def.innova.VehiclesWithScheduledMaintenanceReminde
     <EntitySet Name="VehicleWarranty" EntityType="Self.VehicleWarranty" Schema="innova" store:Type="Tables" />
     <EntitySet Name="VehicleWarrantyDetail" EntityType="Self.VehicleWarrantyDetail" Schema="innova" store:Type="Tables" />
     <EntitySet Name="VehicleWarrantyEngineType" EntityType="Self.VehicleWarrantyEngineType" Schema="innova" store:Type="Tables" />
+    <EntitySet Name="VehicleWarrantyEngineVINCode" EntityType="Self.VehicleWarrantyEngineVINCode" Schema="innova" store:Type="Tables" />
     <EntitySet Name="VehicleWarrantyMake" EntityType="Self.VehicleWarrantyMake" Schema="innova" store:Type="Tables" />
     <EntitySet Name="VehicleWarrantyModel" EntityType="Self.VehicleWarrantyModel" Schema="innova" store:Type="Tables" />
+    <EntitySet Name="VehicleWarrantyTransmission" EntityType="Self.VehicleWarrantyTransmission" Schema="innova" store:Type="Tables" />
+    <EntitySet Name="VehicleWarrantyTrimLevel" EntityType="Self.VehicleWarrantyTrimLevel" Schema="innova" store:Type="Tables" />
     <EntitySet Name="FixCommentUserLastViewed_NEW" EntityType="Self.FixCommentUserLastViewed_NEW" store:Type="Tables" store:Schema="innova">
       <DefiningQuery>SELECT
 `FixCommentUserLastViewed_NEW`.`FixCommentId`, 

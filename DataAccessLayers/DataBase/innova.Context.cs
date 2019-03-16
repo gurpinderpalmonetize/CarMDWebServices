@@ -175,6 +175,9 @@ namespace DataAccessLayers.DataBase
         public DbSet<PredictiveDiagnosticReportView> PredictiveDiagnosticReportViews { get; set; }
         public DbSet<Vehicle_ByUser> Vehicle_ByUser { get; set; }
         public DbSet<VehiclesWithScheduledMaintenanceRemindersView> VehiclesWithScheduledMaintenanceRemindersViews { get; set; }
+        public DbSet<VehicleWarrantyEngineVINCode> VehicleWarrantyEngineVINCodes { get; set; }
+        public DbSet<VehicleWarrantyTransmission> VehicleWarrantyTransmissions { get; set; }
+        public DbSet<VehicleWarrantyTrimLevel> VehicleWarrantyTrimLevels { get; set; }
     
         public virtual int DiagnosticReport_LoadNoFixReports(Nullable<bool> getCountOnly, string masterTechAssignedToUserId, string markets, Nullable<System.DateTime> startDateTimeUTC, Nullable<System.DateTime> endDateTimeUTC, string userTypes, string externalSystemXmlGuidList, Nullable<bool> includeReportsWithoutAFixPromiseDate, Nullable<bool> includeUnassignedReports, Nullable<bool> includeAssignedReports, Nullable<bool> includePowertrainReports, Nullable<bool> includeObd1Reports, Nullable<bool> includeAbsReports, Nullable<bool> includeSrsReports, string adminUserId_WorkingOnFix, Nullable<bool> includeAdminUserWorkingOnFix, Nullable<bool> includeReportsWithFeedback, Nullable<System.DateTime> startFixPromiseDateTimeUTC, Nullable<System.DateTime> endFixPromiseDateTimeUTC, Nullable<bool> excludeReportsWithPastDueEmailSentDate)
         {
