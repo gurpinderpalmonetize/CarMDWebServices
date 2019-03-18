@@ -1,0 +1,2 @@
+C:\Users\I4\source\repos\CarMDWebServices2\DataAccessLayers\obj\Release\DataAccessLayers.csprojAssemblyReference.cache
+C:\Users\I4\source\repos\CarMDWebServices2\DataAccessLayers\obj\Release\DataAccessLayers.csproj.CoreCompileInputs.cache

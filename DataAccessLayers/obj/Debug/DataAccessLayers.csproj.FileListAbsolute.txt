@@ -59,8 +59,9 @@ C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\bin\Debug\WebApiCont
 C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\bin\Debug\EntityFramework.xml
 C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\bin\Debug\Newtonsoft.Json.xml
 C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\bin\Debug\System.Net.Http.Formatting.xml
-C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\obj\Debug\DataAccessLayers.csprojAssemblyReference.cache
 C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\obj\Debug\DataAccessLayers.csproj.CoreCompileInputs.cache
 C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\obj\Debug\DataAccessLayers.csproj.CopyComplete
 C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\obj\Debug\DataAccessLayers.dll
 C:\Users\I4\Source\Repos\CarMDWebServices2\DataAccessLayers\obj\Debug\DataAccessLayers.pdb
+C:\Users\I4\source\repos\CarMDWebServices2\DataAccessLayers\bin\Debug\Innova.Utilities.Shared.dll
+C:\Users\I4\source\repos\CarMDWebServices2\DataAccessLayers\bin\Debug\Innova.VehicleDataLib.Firmware.dll

@@ -2,6 +2,7 @@
 using DataAccessLayers.DataBase;
 using DataAccessLayers.DataObjects;
 using DataAccessLayers.Repository;
+using DataAccessLayers.WebService;
 using Innova.Utilities.Shared;
 using Innova.Utilities.Shared.Enums;
 using Innova.Utilities.Shared.Model;
@@ -11,24 +12,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace DataAccessLayers.Service
 {
     public class GetMostLikelyFixService
     {
         public innovaEntities _innovaEntities;
-        public DiagnosticReportService _diagnosticReportService;
-        public GetMostLikelyFixRepository  _getMostLikelyFixRepository;
+        public DiagnosticReportService _diagnosticReportService =  new DiagnosticReportService();
+        public GetMostLikelyFixRepository  _mostLikelyFixRepository;
         public ScheduleMaintenanceServiceRepository _scheduleMaintenanceServiceRepository;
         public DiagnosticReport _diagnosticReport;
         public PolkVehicleYmme _objPolkVehicleYmme;
         public Vehicle _Vehicle;
 
+        private const string WS_KEY_TESTING = "Vo4MKXS92WRp65IY7luiz8CqwhDahRFcH8AnUDR39OcmKVMW/eK/9Wtdo6exmNAY";
+        private const string WS_KEY_PRODUCTION = "LhDis0Bk+VQ+6uVaf8nG+VbOQ4+3zF+LFLcWNTKrRjkOcNEdqmh4KbVvKTsrpVnH";
+        private static object processLocker = new object();
         private const string FLEET_PAYLOAD_PREFIX = "__FLEET_PAYLOAD__";
         private readonly Guid FLEET_TOOL_ID = new Guid("{ED8EB8DA-DFEE-4C42-941C-4F1E997A755E}");
         private readonly Guid AUTOZONE_TOOL_ID = new Guid("{CE2D229A-E2FE-474E-9C91-6BA5DDC68477}");
@@ -100,17 +107,68 @@ namespace DataAccessLayers.Service
         }
 
         public GetMostLikelyFixService() { }
-        public GetMostLikelyFixService(innovaEntities innovaEntities, DiagnosticReportService diagnosticReportService, GetMostLikelyFixRepository GetMostLikelyFixRepository, DiagnosticReport diagnosticReport, PolkVehicleYmme polkVehicleYmme,Vehicle vehicle)
+        public GetMostLikelyFixService(innovaEntities innovaEntities,
+            GetMostLikelyFixRepository GetMostLikelyFixRepository, DiagnosticReport diagnosticReport, PolkVehicleYmme polkVehicleYmme,Vehicle vehicle)
         {
             _innovaEntities = innovaEntities;
-            _diagnosticReportService = diagnosticReportService;
-            _getMostLikelyFixRepository = GetMostLikelyFixRepository;
+
+            _mostLikelyFixRepository = GetMostLikelyFixRepository;
             _diagnosticReport = diagnosticReport;
             _objPolkVehicleYmme = polkVehicleYmme;
             _Vehicle = vehicle;
         }
 
-        public DiagReportInfo GetMostLikelyFixForVehicle(VehicleRequest apiRequest)
+        public DiagReportInfo GetMostLikelyFixForVehicleCurrentMileage(VehicleRequest apiRequest)
+        {
+            DiagReportInfo drInfo = new DiagReportInfo();
+            drInfo = this.GetDiagnosticReport(
+                                    apiRequest.Key,
+                                    "GetMostLikelyFix",
+                                    apiRequest.ReportID,
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    apiRequest.Vin,
+                                    false,
+                                    apiRequest.CurrentMileage,
+                                    "",
+                                    "false",
+                                    "false",
+                                    "false",
+                                    "false",
+                                    "false",
+                                    int.MinValue,
+                                    int.MinValue,
+                                    null,
+                                    apiRequest.RawToolPayload,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    "false",
+                                    false);
+
+
+            return new DiagReportInfo();
+        }
+
+
+        public DiagReportInfo GetMostLikelyFix(VehicleRequest apiRequest)
         {
             DiagReportInfo drInfo = new DiagReportInfo();
             drInfo = this.GetDiagnosticReport(
@@ -156,7 +214,164 @@ namespace DataAccessLayers.Service
                                     false);
 
 
-            return new DiagReportInfo();
+            ThreadStart threadStarter = () => SavePayload(apiRequest.ReportID, apiRequest.Vin, apiRequest.CurrentMileage, apiRequest.RawToolPayload, apiRequest.Key);
+            Thread newThread = new Thread(threadStarter);
+            newThread.Start();
+
+
+
+            return drInfo;
+        }
+
+        protected void SavePayload(string reportID, string vin, int vehicleMileage, string rawToolPayload, string wsKey)
+        {
+            if (!String.IsNullOrEmpty(vin) && !String.IsNullOrEmpty(rawToolPayload) && !String.IsNullOrEmpty(reportID))
+            {
+                DiagnosticReportLogging service = new DiagnosticReportLogging();
+                WebServiceKey newKey = new WebServiceKey();
+
+                switch (wsKey)
+                {
+                    case WS_KEY_TESTING:
+                        service.Url = GlobalModel.InnovaLoggingWebServiceUrlTesting;
+                        newKey.Key = GlobalModel.InnovaAutozoneBlackboxLoggingWebServiceKeyTesting;
+                        break;
+
+                    case WS_KEY_PRODUCTION:
+                        service.Url = GlobalModel.InnovaLoggingWebServiceUrl;
+                        newKey.Key = GlobalModel.InnovaAutozoneBlackboxLoggingWebServiceKey;
+                        break;
+                }
+                try
+                {                                                            //"" here newKey
+                    DiagReportInfo newDRInfo = LogDiagnosticReportWithMileage("", "073B9358-6FCD-49E2-AC41-61D43C37DD18", vin, rawToolPayload, reportID, vehicleMileage, "");
+                }
+                catch (Exception soapEx)
+                {
+                    EventLog appLog = new EventLog("Application");
+                    appLog.Source = "AutoZone Web Service";
+                    appLog.WriteEntry("The payload could not be logged via the Innova web service." + Environment.NewLine + Environment.NewLine + soapEx.ToString(), EventLogEntryType.Warning);
+
+                    string dirPath = GlobalModel.AutozonePayloadPath;
+                    string fileName = "AutoZonePayload_" + DateTime.Now.ToString("yyyyMMdd HHmmss.fffffff") + ".txt";
+                    string filePath = GlobalModel.AutozonePayloadPath + fileName;
+
+                    try
+                    {
+                        if (!Directory.Exists(dirPath))
+                        {
+                            Directory.CreateDirectory(dirPath);
+                        }
+
+                        if (File.Exists(filePath))
+                        {
+                            int count = 0;
+
+                            do
+                            {
+                                count++;
+                                filePath = filePath.Replace("(" + (count - 1).ToString() + ").txt", ".txt");
+                                filePath = filePath.Replace(".txt", "(" + count.ToString() + ").txt");
+                            }
+                            while (File.Exists(filePath));
+                        }
+
+                        FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                        using (StreamWriter sw = new StreamWriter(fs))
+                        {
+                            sw.WriteLine(DateTime.UtcNow.ToString() + "|" + reportID + "|" + vin + "|" + vehicleMileage.ToString() + "|" + rawToolPayload);
+                        }
+                    }
+                    catch (Exception fileEx)
+                    {
+                        appLog = new EventLog("Application");
+                        appLog.Source = "AutoZone Web Service";
+                        appLog.WriteEntry("The payload could not be logged to the log text file." + Environment.NewLine + Environment.NewLine + "ReportID: " + reportID + Environment.NewLine + Environment.NewLine + "Payload: " + rawToolPayload + Environment.NewLine + Environment.NewLine + fileEx.ToString(), EventLogEntryType.Warning);
+                    }
+                }
+            }
+        }
+
+
+        public DiagReportInfo LogDiagnosticReportWithMileage(string key, string externalSystemUserIdString, string vin, string rawToolPayload, string reportID, int vehicleMileage, string createdDateTimeUTCString)
+        {
+            DiagReportInfo drInfo = new DiagReportInfo();
+
+            if (_diagnosticReportService.vaildatekey(key) != null)
+            {
+                ExternalSystem es = new ExternalSystem();
+                var request = new ApiRequestModel();
+                request.rawToolPayload = rawToolPayload;
+                request.reportID = reportID;
+                request.UserId = externalSystemUserIdString;
+                request.vehicleMileage = vehicleMileage;
+                request.vin = vin;
+                request.createdDateTime = createdDateTimeUTCString;
+
+                Guid id  = Guid.Parse(externalSystemUserIdString);
+                if (DiagnosticReportWebService.IsDuplicate(id, request))
+                {
+                    if (vehicleMileage == 0)
+                    {
+                        PolkVehicleYmme polkVehicleYMME = _diagnosticReportService.DecodeVIN(vin, false);
+
+                        if (polkVehicleYMME != null)
+                        {
+                            int vehicleYear = (int)polkVehicleYMME.Year;
+                            int currentYear = DateTime.Now.Year;
+                            int currentMonth = DateTime.Now.Month;
+                            int vehicleAgeInMonths = ((currentYear - vehicleYear) * 12) + currentMonth;
+                            vehicleMileage = vehicleAgeInMonths * 1000;
+                        }
+                    }
+
+                    drInfo = this.GetDiagnosticReport(
+                        "",
+                        "LogDiagnosticReport",
+                        reportID,
+                        externalSystemUserIdString,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        vin,
+                        false,
+                        vehicleMileage,
+                        "automatic",
+                        "false",
+                        "false",
+                        "false",
+                        "false",
+                        "false",
+                        (int)SoftwareType.Unknown,
+                        int.MinValue,
+                        null,
+                        rawToolPayload,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        DateTime.UtcNow.AddDays(GlobalModel.DaysMasterTechHaveToProvideAFix).ToString(),
+                        DateTime.UtcNow.AddDays(GlobalModel.DaysMasterTechHaveToProvideAFix).ToString(),
+                        DateTime.UtcNow.AddDays(GlobalModel.DaysMasterTechHaveToProvideAFix).ToString(),
+                        DateTime.UtcNow.AddDays(GlobalModel.DaysMasterTechHaveToProvideAFix).ToString(),
+                        "true",
+                        false,
+                        createdDateTimeUTCString);
+
+                }
+            }
+
+            return drInfo;
         }
 
         protected DiagReportInfo GetDiagnosticReport(
@@ -270,7 +485,7 @@ namespace DataAccessLayers.Service
             else
             {
                 return this.MasterGetDiagnosticReport(
-                    null, //symptom request
+                     null, //symptom request
                     key,
                     methodInvoked,
                     externalSystemReportId,
@@ -283,13 +498,11 @@ namespace DataAccessLayers.Service
                     vin,
                     validateVin,
                     v.AAIA,
-					"",
                     v.ManufacturerName,
                     v.Make,
                     v.Year,
                     v.Model,
                     v.TrimLevel,
-					"",
                     v.EngineType,
                     v.EngineVINCode,
                     mileage,
@@ -322,9 +535,8 @@ namespace DataAccessLayers.Service
                     saveReport,
                     isUpdateNoFix,
                     createdDateTimeUTCString,
-                    //New params - Nam added 1/9/2017 for new OBDFIX
-                    parentDiagnosticReportIdGuidString,
-                    manualRawFreezeFrameDataString,
+                    parentDiagnosticReportIdGuidString: parentDiagnosticReportIdGuidString,
+                    manualRawFreezeFrameDataString: manualRawFreezeFrameDataString,
                     additionalHelpRequired: additionalHelpRequired,
                     isNotifiedRequester: isNotifiedRequester,
                     notifiedRequesterDateTimeUTC: notifiedRequesterDateTimeUTC,
@@ -335,63 +547,63 @@ namespace DataAccessLayers.Service
         }
 
         protected DiagReportInfo MasterGetDiagnosticReport(
-                    string symptomRequest = null,
-                    string key = null,
-                    string methodInvoked = "",
-                    string externalSystemReportId = "",
-                    string externalSystemUserIdGuidString = "",
-                    string externalSystemUserFirstName = "",
-                    string externalSystemUserLastName = "",
-                    string externalSystemUserEmailAddress = "",
-                    string externalSystemUserPhoneNumber = "",
-                    string externalSystemUserRegion = "",
-                    string vin = "",
-                    bool validateVin = false,
-                    string aaia = "",
-                    string manufacturer = "",
-                    string make = "",
-                    string year = "",
-                    string model = "",
-                    string trimLevel = "",
-                    string engineType = "",
-                    string engineCode = "",
-                    int mileage = -1,
-                    string transmission = "",
-                    string includeRecallsForVehicle = "",
-                    string includeTSBsForVehicleAndMatchingErrorCodes = "",
-                    string includeTSBCountForVehicle = "",
-                    string includeNextScheduledMaintenance = "",
-                    string includeWarrantyInfo = "",
-                    int softwareTypeInt = -1,
-                    int toolTypeFormatInt = -1,
-                    string diagnosticReportIdGuidString = "",
-                    string rawUpload = "",
-                    string rawFreezeFrameDataString = "",
-                    string rawMonitorsDataString = "",
-                    string pwrPrimaryDtc = "",
-                    string pwrStoredDtcCommaSeparatedList = "",
-                    string pwrPendingDtcCommaSeparatedList = "",
-                    string pwrPermanentDtcCommaSeparatedList = "",
-                    string obd1StoredCodesCommaSeparatedList = "",
-                    string obd1PendingCodesCommaSeparatedList = "",
-                    string absStoredCodesCommaSeparatedList = "",
-                    string absPendingCodesCommaSeparatedList = "",
-                    string srsStoredCodesCommaSeparatedList = "",
-                    string srsPendingCodesCommaSeparatedList = "",
-                    string pwrFixNotFoundFixPromisedByDateTimeUTCString = "",
-                    string obd1FixNotFoundFixPromisedByDateTimeUTCString = "",
-                    string absFixNotFoundFixPromisedByDateTimeUTCString = "",
-                    string srsFixNotFoundFixPromisedByDateTimeUTCString = "",
-                    string saveReport = "",
-                    bool isUpdateNoFix = false,
-                    string createdDateTimeUTCString = "",
-                    string parentDiagnosticReportIdGuidString = "",
-                    string manualRawFreezeFrameDataString = "",
-                    bool additionalHelpRequired = false,
-                    bool isNotifiedRequester = false,
-                    DateTime? notifiedRequesterDateTimeUTC = null,
-                    string notifiedRequesterVia = "",
-                    string note = "")
+              string symptomRequest = null,
+              string key = null,
+              string methodInvoked = "",
+              string externalSystemReportId = "",
+              string externalSystemUserIdGuidString = "",
+              string externalSystemUserFirstName = "",
+              string externalSystemUserLastName = "",
+              string externalSystemUserEmailAddress = "",
+              string externalSystemUserPhoneNumber = "",
+              string externalSystemUserRegion = "",
+              string vin = "",
+              bool validateVin = false,
+              string aaia = "",
+              string manufacturer = "",
+              string make = "",
+              string year = "",
+              string model = "",
+              string trimLevel = "",
+              string engineType = "",
+              string engineCode = "",
+              int mileage = -1,
+              string transmission = "",
+              string includeRecallsForVehicle = "",
+              string includeTSBsForVehicleAndMatchingErrorCodes = "",
+              string includeTSBCountForVehicle = "",
+              string includeNextScheduledMaintenance = "",
+              string includeWarrantyInfo = "",
+              int softwareTypeInt = -1,
+              int toolTypeFormatInt = -1,
+              string diagnosticReportIdGuidString = "",
+              string rawUpload = "",
+              string rawFreezeFrameDataString = "",
+              string rawMonitorsDataString = "",
+              string pwrPrimaryDtc = "",
+              string pwrStoredDtcCommaSeparatedList = "",
+              string pwrPendingDtcCommaSeparatedList = "",
+              string pwrPermanentDtcCommaSeparatedList = "",
+              string obd1StoredCodesCommaSeparatedList = "",
+              string obd1PendingCodesCommaSeparatedList = "",
+              string absStoredCodesCommaSeparatedList = "",
+              string absPendingCodesCommaSeparatedList = "",
+              string srsStoredCodesCommaSeparatedList = "",
+              string srsPendingCodesCommaSeparatedList = "",
+              string pwrFixNotFoundFixPromisedByDateTimeUTCString = "",
+              string obd1FixNotFoundFixPromisedByDateTimeUTCString = "",
+              string absFixNotFoundFixPromisedByDateTimeUTCString = "",
+              string srsFixNotFoundFixPromisedByDateTimeUTCString = "",
+              string saveReport = "true",
+              bool isUpdateNoFix = false,
+              string createdDateTimeUTCString = "",
+              string parentDiagnosticReportIdGuidString = "",
+              string manualRawFreezeFrameDataString = "",
+              bool additionalHelpRequired = false,
+              bool isNotifiedRequester = false,
+              DateTime? notifiedRequesterDateTimeUTC = null,
+              string notifiedRequesterVia = "",
+              string note = "")
         {
 
             bool IsObjectCreated = false;
@@ -434,7 +646,7 @@ namespace DataAccessLayers.Service
                 {
                     user.Region = externalSystemUserRegion.ToUpper(); //ie. CA
                 }
-                _getMostLikelyFixRepository.Save(user);
+                _mostLikelyFixRepository.Save(user);
             }
             else
             {
@@ -455,8 +667,8 @@ namespace DataAccessLayers.Service
                 try
                 {
 
-                     diagnosticReport = _getMostLikelyFixRepository.GetDiagnosticReportByReportId(Convert.ToInt32(diagnosticReportIdGuidString));
-                    _getMostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
+                     diagnosticReport = _mostLikelyFixRepository.GetDiagnosticReportByReportId(Convert.ToInt32(diagnosticReportIdGuidString));
+                    _mostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
                 }
                 catch (Exception ex)
                 {
@@ -620,13 +832,13 @@ namespace DataAccessLayers.Service
             {
                 if (!String.IsNullOrEmpty(vin))
                 {
-                    vehicle = _getMostLikelyFixRepository.GetVehicleInfoByVinAndUserId(vin, user.UserId);
+                    vehicle = _mostLikelyFixRepository.GetVehicleInfoByVinAndUserId(vin, user.UserId);
                 }
                 else
                 {
                     int vehYear = 0;
                     int.TryParse(year, out vehYear);
-                    vehicle = _getMostLikelyFixRepository.GetVehicleInfoForVehicleByYearMakeModelAsync(make, model, vehYear, engineType);
+                    vehicle = _mostLikelyFixRepository.GetVehicleInfoForVehicleByYearMakeModelAsync(make, model, vehYear, engineType);
                 }
             }
 
@@ -681,7 +893,7 @@ namespace DataAccessLayers.Service
 
             if (saveThisReport)
             {
-                _getMostLikelyFixRepository.SaveChanges(vehicle);
+                _mostLikelyFixRepository.SaveChanges(vehicle);
             }
 
             if (diagnosticReport.IsPwrObd1FixFeedbackRequired == false)
@@ -709,7 +921,7 @@ namespace DataAccessLayers.Service
             }
 
             Device manualDevice = null;
-            manualDevice = _getMostLikelyFixRepository.GetManualDevice(vehicle.UserId);
+            manualDevice = _mostLikelyFixRepository.GetManualDevice(vehicle.UserId);
             string userId = null;
             if (IsObjectCreated)
             {
@@ -731,7 +943,7 @@ namespace DataAccessLayers.Service
                     //apply the device to the diagnostic report
                     Device device = new Device();
                     string toolId = null;
-                    string partnerId = _getMostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
+                    string partnerId = _mostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
                     ToolInformation toolInformation = GetToolInformationAsync(diagnosticReport.RawUploadString, diagnosticReport.Market, partnerId);
                     if (user.UserTypeExternalId == "00000000-0000-0000-0000-000000000015")
                     {
@@ -744,7 +956,7 @@ namespace DataAccessLayers.Service
 
                     if (saveThisReport && !string.IsNullOrEmpty(toolId))
                     {
-                        device = _getMostLikelyFixRepository.GetDeviceByChipIdAndUserIdAndActive(toolId, user.UserId);
+                        device = _mostLikelyFixRepository.GetDeviceByChipIdAndUserIdAndActive(toolId, user.UserId);
                     }
 
                     if (device == null)
@@ -765,7 +977,7 @@ namespace DataAccessLayers.Service
 
                         if (saveThisReport)
                         {
-                            _getMostLikelyFixRepository.SaveDevice(device);
+                            _mostLikelyFixRepository.SaveDevice(device);
                         }
                     }
 
@@ -855,7 +1067,7 @@ namespace DataAccessLayers.Service
                     diagnosticReport.SrsStoredCodesString = GetCodesStringFromCommaDelimitedString(srsStoredCodesCommaSeparatedList);
                     diagnosticReport.SrsPendingCodesString = GetCodesStringFromCommaDelimitedString(srsPendingCodesCommaSeparatedList);
 
-                    string partnerId = _getMostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
+                    string partnerId = _mostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
                     ToolInformation toolInformation = GetToolInformationAsync(diagnosticReport.RawUploadString, diagnosticReport.Market, partnerId);
 
 
@@ -869,7 +1081,7 @@ namespace DataAccessLayers.Service
                     {
                         bool allMMonitorsComplete = true;
 
-                        foreach (Monitor m in toolInformation.Monitors)
+                        foreach (Innova.Utilities.Shared.Model.Monitor m in toolInformation.Monitors)
                         {
                             if (String.IsNullOrEmpty(m.Value) || (!String.IsNullOrEmpty(m.Value) && m.Value.ToLower() != "complete"))
                             {
@@ -915,7 +1127,7 @@ namespace DataAccessLayers.Service
             {
                 diagnosticReport.Device = manualDevice;
             }
-            var needsErrorsCodes = _getMostLikelyFixRepository.GetDiagnosticReportResultErrorCodeCount(diagnosticReport.DiagnosticReportResultId);
+            var needsErrorsCodes = _mostLikelyFixRepository.GetDiagnosticReportResultErrorCodeCount(diagnosticReport.DiagnosticReportResultId);
             if (isUpdateNoFix)
             {
                 bool save = false;
@@ -973,7 +1185,7 @@ namespace DataAccessLayers.Service
                     }
                     //-------------------------------------------------------------------------------------------------
                      diagnosticReport.UpdatedDateTimeUTC = DateTime.UtcNow;
-                    _getMostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
+                    _mostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
 
                 }
             }
@@ -1050,13 +1262,13 @@ namespace DataAccessLayers.Service
                     }
 
                     diagnosticReport.UpdatedDateTimeUTC = DateTime.UtcNow;
-                    _getMostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
+                    _mostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
                     AssignNoFixReportToMasterTechAndSave(diagnosticReport, vehicle, DaysMasterTechHaveToProvideAFix, MasterTechAssignPwrNoFixReports, MasterTechAssignObd1NoFixReports, MasterTechAssignAbsNoFixReports, MasterTechAssignSrsNoFixReports);
 
                 }
                 else if (needsErrorsCodes.Count > 0)
                 {
-                    _getMostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
+                    _mostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
                     AssignNoFixReportToMasterTechAndSave(diagnosticReport, vehicle, DaysMasterTechHaveToProvideAFix, MasterTechAssignPwrNoFixReports, MasterTechAssignObd1NoFixReports, MasterTechAssignAbsNoFixReports, MasterTechAssignSrsNoFixReports);
 
                 }
@@ -1075,7 +1287,7 @@ namespace DataAccessLayers.Service
 
         public void AssignNoFixReportToMasterTechAndSave(DiagnosticReport diagnosticReport, Vehicle vehicle, int maxDaysToProvideFeedback, bool masterTechAssignPwrNoFixReports, bool masterTechAssignObd1NoFixReports, bool masterTechAssignAbsNoFixReports, bool masterTechAssignSrsNoFixReports)
         {
-            List<User> masterTechUsers = _getMostLikelyFixRepository.GetOBDFixMasterTechs(vehicle.Make, vehicle.UserId);
+            List<User> masterTechUsers = _mostLikelyFixRepository.GetOBDFixMasterTechs(vehicle.Make, vehicle.UserId);
             AssignNoFixReportToMasterTechAndSave(diagnosticReport, vehicle, masterTechUsers, maxDaysToProvideFeedback, masterTechAssignPwrNoFixReports, masterTechAssignObd1NoFixReports, masterTechAssignAbsNoFixReports, masterTechAssignSrsNoFixReports);
         }
 
@@ -1111,10 +1323,10 @@ namespace DataAccessLayers.Service
                     {
                         this.AddAssignedMasterTech(mt, diagnosticReport);
                          mt.MasterTechNoFixReportLastAssignedDateTimeUTC = DateTime.UtcNow;
-                        _getMostLikelyFixRepository.SaveUser(mt);
+                        _mostLikelyFixRepository.SaveUser(mt);
                     }
                 }
-              _getMostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
+              _mostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
             }
         }
 
@@ -1195,7 +1407,7 @@ namespace DataAccessLayers.Service
                 return null;
             }
 
-            User user = _getMostLikelyFixRepository.GetUser(userId).Result;
+            User user = _mostLikelyFixRepository.GetUser(userId).Result;
 
             if (user.ExternalSystem.ExternalSystemId == null)
             {
@@ -1208,8 +1420,8 @@ namespace DataAccessLayers.Service
         public void SetPropertiesAndToolInformationFromRawUploadString(string rawUploadString, ToolTypeFormat toolTypeFormat, User user,DiagnosticReport diagnosticReport)
         {
             ExternalSystem externalSystem = new ExternalSystem();
-            externalSystem = _getMostLikelyFixRepository.GetPartnerIdbyUderId(user.UserId);
-            string vin = _getMostLikelyFixRepository.GetVin(user.UserId);
+            externalSystem = _mostLikelyFixRepository.GetPartnerIdbyUderId(user.UserId);
+            string vin = _mostLikelyFixRepository.GetVin(user.UserId);
             SetPropertiesFromToolInformation(GetToolInformationAsync(rawUploadString, 0, externalSystem.PartnerID), diagnosticReport);
             bool saveUpdatedRawUploadString = false;
             if (rawUploadString.StartsWith(FLEET_PAYLOAD_PREFIX))
@@ -1222,7 +1434,7 @@ namespace DataAccessLayers.Service
 
             if (saveUpdatedRawUploadString)
             {
-                _getMostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
+                _mostLikelyFixRepository.SaveDiagnosticReport(diagnosticReport);
             }
         }
 
@@ -1590,7 +1802,7 @@ namespace DataAccessLayers.Service
             {
                 if (this.diagnosticReportResult == null)
                 {
-                    _getMostLikelyFixRepository.SaveDiagnosticReportResult(_diagnosticReport.DiagnosticReportId);
+                    _mostLikelyFixRepository.SaveDiagnosticReportResult(_diagnosticReport.DiagnosticReportId);
                 }
             }
             if (fixFound && this.FixProvidedDateTimeUTC == null)
@@ -1615,7 +1827,7 @@ namespace DataAccessLayers.Service
 
                 if (diagnosticReportResult == null)
                 {
-                    _getMostLikelyFixRepository.SaveDiagnosticReportResult(_diagnosticReport.DiagnosticReportId);
+                    _mostLikelyFixRepository.SaveDiagnosticReportResult(_diagnosticReport.DiagnosticReportId);
                 }
 
                 switch (diagnosticReportErrorCodeSystemType)
@@ -1702,7 +1914,7 @@ namespace DataAccessLayers.Service
         {
             if (this.diagnosticReportResult == null)
             {
-                _getMostLikelyFixRepository.SaveDiagnosticReportResult(_diagnosticReport.DiagnosticReportId);
+                _mostLikelyFixRepository.SaveDiagnosticReportResult(_diagnosticReport.DiagnosticReportId);
             }
 
             List<string> allCodes = new List<string>();
@@ -1772,7 +1984,7 @@ namespace DataAccessLayers.Service
                 codeAssignments = this.GetDelmarVehicleCodeAssignments(vehicleTypes, allCodes);
             }
 
-            List<DiagnosticReportResultErrorCode> oldDrrErrorCodes = _getMostLikelyFixRepository.GetOldDiagnosticErrorCode(_diagnosticReport.DiagnosticReportId);
+            List<DiagnosticReportResultErrorCode> oldDrrErrorCodes = _mostLikelyFixRepository.GetOldDiagnosticErrorCode(_diagnosticReport.DiagnosticReportId);
             if (oldDrrErrorCodes != null)
             {
                 foreach (DiagnosticReportResultErrorCode oldDrrErrorCode in oldDrrErrorCodes)
@@ -2024,7 +2236,7 @@ namespace DataAccessLayers.Service
             {
                 make = (_objPolkVehicleYmme != null) ? _objPolkVehicleYmme.Make : _Vehicle.Make;
             }
-            dtcCodeLaymanTerm = _getMostLikelyFixRepository.GetDTCCodeLaymanTermLoadByErrorCodeAndMake(errorCode, make);
+            dtcCodeLaymanTerm = _mostLikelyFixRepository.GetDTCCodeLaymanTermLoadByErrorCodeAndMake(errorCode, make);
             if (dtcCodeLaymanTerm != null)
             {
                 def.LaymansTermTitle = dtcCodeLaymanTerm.Title;
@@ -2078,7 +2290,7 @@ namespace DataAccessLayers.Service
 
         private List<VehicleTypeCodeAssignment> GetDelmarVehicleCodeAssignments(List<VehicleType> vehicleTypes, List<string> errorCodes)
         {
-            return _getMostLikelyFixRepository.GetVehicleTypeCodeAssignment(vehicleTypes, errorCodes);
+            return _mostLikelyFixRepository.GetVehicleTypeCodeAssignment(vehicleTypes, errorCodes);
         }
 
         public List<VehicleType> GetDelmarVehicleTypes()
@@ -2119,7 +2331,7 @@ namespace DataAccessLayers.Service
 
         private List<VehicleType> GetDelmarVehicleTypes(int modelYear, string make, string model, string engineVINCode, string transmissionType, string engineType, string bodyCode)
         {
-          return _getMostLikelyFixRepository.GetVehicleType_LoadByVinData(modelYear, make, model, engineVINCode, transmissionType, engineType, bodyCode);
+          return _mostLikelyFixRepository.GetVehicleType_LoadByVinData(modelYear, make, model, engineVINCode, transmissionType, engineType, bodyCode);
         }
         public string BodyCode
         {
@@ -2139,7 +2351,7 @@ namespace DataAccessLayers.Service
 
         private List<DTCMasterCodeList> GetDtcMasterCodes(List<string> errorCodes)
         {
-             return  _getMostLikelyFixRepository.GetDTCMasterCodeList_LoadByDiagnosticReportAndErrorCodes(_Vehicle.Make, errorCodes);
+             return  _mostLikelyFixRepository.GetDTCMasterCodeList_LoadByDiagnosticReportAndErrorCodes(_Vehicle.Make, errorCodes);
         }
 
         public List<string> AbsAllCodes
@@ -2258,9 +2470,9 @@ namespace DataAccessLayers.Service
         private List<Fix> GetFixesSorted(string primaryErrorCode, List<string> secondaryDtcs, bool logDiscrepancies, bool onlyProcessFixes, DiagnosticReportErrorCodeSystemType diagnosticReportErrorCodeSystemType)
         {
             List<Fix> fixesPolk = new List<Fix>();
-            fixesPolk = _getMostLikelyFixRepository.GetFix_LoadByDiagnosticReportBySymptom(Convert.ToInt32(_objPolkVehicleYmme.Year), _objPolkVehicleYmme.Make, _objPolkVehicleYmme.Model, _objPolkVehicleYmme.Trim, _objPolkVehicleYmme.Transmission, primaryErrorCode, _objPolkVehicleYmme.EngineVinCode, _objPolkVehicleYmme.EngineType, 0, "US");
+            fixesPolk = _mostLikelyFixRepository.GetFix_LoadByDiagnosticReportBySymptom(Convert.ToInt32(_objPolkVehicleYmme.Year), _objPolkVehicleYmme.Make, _objPolkVehicleYmme.Model, _objPolkVehicleYmme.Trim, _objPolkVehicleYmme.Transmission, primaryErrorCode, _objPolkVehicleYmme.EngineVinCode, _objPolkVehicleYmme.EngineType, 0, "US");
             List<Fix> fixesVinPower = new List<Fix>();
-            fixesVinPower = _getMostLikelyFixRepository.GetFix_LoadByDiagnosticReportUsingVinPower(Convert.ToInt32(_Vehicle.VPYear), _Vehicle.VPMake, _Vehicle.VPModel, _Vehicle.VPTrimLevel, _Vehicle.TransmissionControlType, primaryErrorCode, _Vehicle.VPEngineVINCode, _Vehicle.VPEngineType, 0);
+            fixesVinPower = _mostLikelyFixRepository.GetFix_LoadByDiagnosticReportUsingVinPower(Convert.ToInt32(_Vehicle.VPYear), _Vehicle.VPMake, _Vehicle.VPModel, _Vehicle.VPTrimLevel, _Vehicle.TransmissionControlType, primaryErrorCode, _Vehicle.VPEngineVINCode, _Vehicle.VPEngineType, 0);
 
             List<Fix> fixes = new List<Fix>();
             foreach (Fix f in fixesVinPower)
@@ -2442,7 +2654,7 @@ namespace DataAccessLayers.Service
                 List<SymptomDiagnosticReportItem> symptomDiagnosticReportItem = new List<SymptomDiagnosticReportItem>();
                 if (SymptomDiagnosticReportItem == null)
                 {
-                    var symptomReports = _getMostLikelyFixRepository.GetSymptomDiagnosticReportItemByDiagnosticReportId(_diagnosticReport.DiagnosticReportId);
+                    var symptomReports = _mostLikelyFixRepository.GetSymptomDiagnosticReportItemByDiagnosticReportId(_diagnosticReport.DiagnosticReportId);
 
                     if (symptomReports != null && symptomReports.Count > 0)
                     {
@@ -2506,7 +2718,7 @@ namespace DataAccessLayers.Service
 
                 if (!onlyProcessFixes)
                 {
-                    diagnosticReportResultFixes = _getMostLikelyFixRepository.GetDiagnosticReportResultFix("diagnosticReport.DiagnosticReportResultId");
+                    diagnosticReportResultFixes = _mostLikelyFixRepository.GetDiagnosticReportResultFix("diagnosticReport.DiagnosticReportResultId");
                     for (int i = 0; i < fixes.Count; i++)
                     {
                         Fix fix = fixes[i];
@@ -2621,9 +2833,9 @@ namespace DataAccessLayers.Service
         }
         public DiagnosticReportResultFix SetDiagnosticReportResultFix(Fix fix)
         {
-            var FixPart = _getMostLikelyFixRepository.GetFixPartByFixId(fix.FixId);
+            var FixPart = _mostLikelyFixRepository.GetFixPartByFixId(fix.FixId);
             CalculateFixCosts(FixPart, fix);
-            FixName fixName = _getMostLikelyFixRepository.GetByFixNameId(fix.FixNameId);
+            FixName fixName = _mostLikelyFixRepository.GetByFixNameId(fix.FixNameId);
             DiagnosticReportResultFix drrFix = new DiagnosticReportResultFix();
             drrFix.AdditionalCost = fix.AdditionalCost;
             drrFix.AdditionalCostInLocalCurrency = GetLocalCurrencyValueFromUSDollars((decimal)fix.AdditionalCost);
@@ -2737,13 +2949,13 @@ namespace DataAccessLayers.Service
 
         public decimal FindExchangeRatePerUSDByCurrenctISOCode(string CurrenctISOCode)
         {
-            return _getMostLikelyFixRepository.GetCurrencyExchangeRate(CurrenctISOCode);
+            return _mostLikelyFixRepository.GetCurrencyExchangeRate(CurrenctISOCode);
         }
 
         public void CalculateFixCosts(List<FixPart> fixPart, Fix fix)
         {
             decimal rate = 0;
-            var stateLaborRate = _getMostLikelyFixRepository.GetStateLaborByStateCode(StateCode);
+            var stateLaborRate = _mostLikelyFixRepository.GetStateLaborByStateCode(StateCode);
             if (stateLaborRate != null)
             {
                 rate =  (decimal)stateLaborRate.DollarsPerHour;
@@ -2754,7 +2966,7 @@ namespace DataAccessLayers.Service
 
             foreach (FixPart p in fixPart)
             {
-                var part = _getMostLikelyFixRepository.GetPartByPartId(p.PartId);
+                var part = _mostLikelyFixRepository.GetPartByPartId(p.PartId);
                 partsCost += Convert.ToDecimal(p.Quantity) * Convert.ToDecimal(part.Price);
             }
 
@@ -2776,11 +2988,11 @@ namespace DataAccessLayers.Service
 
             if (_objPolkVehicleYmme != null)
             {
-                fixesPolk = _getMostLikelyFixRepository.GetFix_LoadByDiagnosticReportBySymptom(Convert.ToInt32( _objPolkVehicleYmme.Year), _objPolkVehicleYmme.Make, _objPolkVehicleYmme.Model, _objPolkVehicleYmme.Trim, _objPolkVehicleYmme.Transmission, symptomId, _objPolkVehicleYmme.EngineVinCode, _objPolkVehicleYmme.EngineType,0, "US");
+                fixesPolk = _mostLikelyFixRepository.GetFix_LoadByDiagnosticReportBySymptom(Convert.ToInt32( _objPolkVehicleYmme.Year), _objPolkVehicleYmme.Make, _objPolkVehicleYmme.Model, _objPolkVehicleYmme.Trim, _objPolkVehicleYmme.Transmission, symptomId, _objPolkVehicleYmme.EngineVinCode, _objPolkVehicleYmme.EngineType,0, "US");
             }
 
 
-            fixesVinPower = _getMostLikelyFixRepository.GetLoadByDiagnosticReportUsingVinPowerBySymptom(Convert.ToInt32(_Vehicle.VPYear), _Vehicle.VPMake, _Vehicle.VPModel, _Vehicle.VPTrimLevel, _Vehicle.TransmissionControlType, symptomId, _Vehicle.VPEngineVINCode, _Vehicle.VPEngineType);
+            fixesVinPower = _mostLikelyFixRepository.GetLoadByDiagnosticReportUsingVinPowerBySymptom(Convert.ToInt32(_Vehicle.VPYear), _Vehicle.VPMake, _Vehicle.VPModel, _Vehicle.VPTrimLevel, _Vehicle.TransmissionControlType, symptomId, _Vehicle.VPEngineVINCode, _Vehicle.VPEngineType);
             List<Fix> fixes = new List<Fix>();
             foreach (Fix f in fixesVinPower)
             {
@@ -2850,17 +3062,17 @@ namespace DataAccessLayers.Service
             }
 
             fpd.UpdatedDateTimeUTC = DateTime.UtcNow;
-            _getMostLikelyFixRepository.SaveFixPolkVehicleDiscrepancy(fpd);
+            _mostLikelyFixRepository.SaveFixPolkVehicleDiscrepancy(fpd);
         }
 
         public FixPolkVehicleDiscrepancy GetDiscrepancy(Fix fix, PolkVehicleYmme polkVehicleYMME)
         {
-             return _getMostLikelyFixRepository.GetFixPolkVehicleDiscrepancy_LoadByFixAndVehicle(fix.FixId, polkVehicleYMME.PolkVehicleYMMEId);
+             return _mostLikelyFixRepository.GetFixPolkVehicleDiscrepancy_LoadByFixAndVehicle(fix.FixId, polkVehicleYMME.PolkVehicleYMMEId);
         }
 
         private List<DTCCode> GetDtcCodes(List<string> errorCodes)
         {
-            return  _getMostLikelyFixRepository.GetDTCCode_LoadByDiagnosticReportAndErrorCodes(Convert.ToInt32(_Vehicle.Year), _Vehicle.Make, _Vehicle.Model, _Vehicle.TransmissionControlType, _Vehicle.EngineType, _Vehicle.EngineVINCode, _Vehicle.TrimLevel, errorCodes);
+            return  _mostLikelyFixRepository.GetDTCCode_LoadByDiagnosticReportAndErrorCodes(Convert.ToInt32(_Vehicle.Year), _Vehicle.Make, _Vehicle.Model, _Vehicle.TransmissionControlType, _Vehicle.EngineType, _Vehicle.EngineVINCode, _Vehicle.TrimLevel, errorCodes);
         }
 
         private bool ToBoolean(string value)
@@ -2898,14 +3110,14 @@ namespace DataAccessLayers.Service
 
             var result = new DiagReportInfo();
 
-            var report =  _getMostLikelyFixRepository.GetDiagnosticReportByReportId(diagnosticReportId);
+            var report =  _mostLikelyFixRepository.GetDiagnosticReportByReportId(diagnosticReportId);
 
             VehicleInfo vehicleInfo = GetvehicleInfo(report);
             result.Vehicle = vehicleInfo;
             result.ToolLEDStatusDesc = report.ToolLEDStatus.ToString();
             result.FixStatusInfo = GetFixInfo(report, false);
             result.DiagnosticReportId = diagnosticReportId;
-            var geterrorcode = _getMostLikelyFixRepository.GetDiagnosticReportResultErrorCode(report.DiagnosticReportResultId);
+            var geterrorcode = _mostLikelyFixRepository.GetDiagnosticReportResultErrorCode(report.DiagnosticReportResultId);
             result.Errors = geterrorcode.Select(item => new ErrorCodeInfo()
             {
                 Code = item.ErrorCode,
@@ -2952,7 +3164,7 @@ namespace DataAccessLayers.Service
                 result.FreezeFrame = new FreezeFrameInfo[0];
             }
 
-            result.Symptoms = _getMostLikelyFixRepository.GetSymptomRecords(report.DiagnosticReportResultId).Select(x => new SymptomInfo()
+            result.Symptoms = _mostLikelyFixRepository.GetSymptomRecords(report.DiagnosticReportResultId).Select(x => new SymptomInfo()
             {
                 SymptomId = Guid.Parse( x.SymptomId),
                 Type = x.SymptomFragmentIdType,
@@ -2962,7 +3174,7 @@ namespace DataAccessLayers.Service
                 SurveyTechnicalInspection = x.SymptomFragmentIdSurveyTechnicalInspection
             }).ToArray();
 
-            var diagnosticReportResultFixes =  _getMostLikelyFixRepository.GetDiagnosticReportResultFixes(report.DiagnosticReportResultId);
+            var diagnosticReportResultFixes =  _mostLikelyFixRepository.GetDiagnosticReportResultFixes(report.DiagnosticReportResultId);
             result.FixInfo = new FixInfo[diagnosticReportResultFixes.Count];
 
             for (int i = 0; i < diagnosticReportResultFixes.Count; i++)
@@ -2973,7 +3185,7 @@ namespace DataAccessLayers.Service
 
             if (includeRecallsForVehicle)
             {
-                var recalls = _getMostLikelyFixRepository.Search(Convert.ToInt32( report.Vehicle.Year), report.Vehicle.Make, report.Vehicle.Model);
+                var recalls = _mostLikelyFixRepository.Search(Convert.ToInt32( report.Vehicle.Year), report.Vehicle.Make, report.Vehicle.Model);
                 result.Recalls = recalls.Select(e => new RecallInfo
                 {
                     RecordNumber = e.RecordNumber,
@@ -2987,7 +3199,7 @@ namespace DataAccessLayers.Service
 
             if (includeWarrantyInfo)
             {
-                var vehicleWarrantyDetails =  _getMostLikelyFixRepository.GetCurrentlyValidWarranty(report.Vehicle, 0);
+                var vehicleWarrantyDetails =  _mostLikelyFixRepository.GetCurrentlyValidWarranty(report.Vehicle, 0);
                 result.VehicleWarrantyDetails = vehicleWarrantyDetails.Select(e => new VehicleWarrantyDetailInfo
                 {
                     WarrantyTypeDescription = e.VehicleWarrantyDetail.Notes,
@@ -3020,7 +3232,7 @@ namespace DataAccessLayers.Service
         public FixInfo GetWebServiceObject(DiagnosticReportResultFix sdkObject)
         {
 
-            FixName fixName = _getMostLikelyFixRepository.GetByFixNameId(sdkObject.FixNameId);
+            FixName fixName = _mostLikelyFixRepository.GetByFixNameId(sdkObject.FixNameId);
             FixInfo wsObject = new FixInfo();
             wsObject.FixId = sdkObject.FixId;
             wsObject.FixNameId = sdkObject.FixNameId;
@@ -3032,7 +3244,7 @@ namespace DataAccessLayers.Service
             wsObject.SortOrder = (int)sdkObject.SortOrder;
             wsObject = ReCalculateFixInfoCosts(wsObject, sdkObject);
 
-            var fixFeedbacks = _getMostLikelyFixRepository.LoadByFixAndDtc(sdkObject.FixId, sdkObject.PrimaryErrorCode);
+            var fixFeedbacks = _mostLikelyFixRepository.LoadByFixAndDtc(sdkObject.FixId, sdkObject.PrimaryErrorCode);
 
             wsObject.FixFeedbacks = new FixFeedbackInfo[fixFeedbacks.Count];
 
@@ -3052,7 +3264,7 @@ namespace DataAccessLayers.Service
                 TipsAndTricks = x.TipsAndTricks,
             }).ToArray();
 
-            var articles = _getMostLikelyFixRepository.GetRelatedArticles(sdkObject.FixNameId);
+            var articles = _mostLikelyFixRepository.GetRelatedArticles(sdkObject.FixNameId);
             var articleBody = string.Empty;
             articleBody.Replace(GlobalModel.ArticleImageFileVirtualPath, GlobalModel.ResourcesBaseUrl + GlobalModel.ArticleImageFileVirtualPath).
                         Replace(GlobalModel.ArticleDocumentFileVirtualPath, GlobalModel.ResourcesBaseUrl + GlobalModel.ArticleDocumentFileVirtualPath)
@@ -3083,7 +3295,7 @@ namespace DataAccessLayers.Service
             }).ToArray();
 
 
-            var fixPartInfo = _getMostLikelyFixRepository.GetByDiagnosticReportResultFixId(sdkObject.DiagnosticReportResultFixId);
+            var fixPartInfo = _mostLikelyFixRepository.GetByDiagnosticReportResultFixId(sdkObject.DiagnosticReportResultFixId);
             wsObject.FixParts = fixPartInfo.Select(x => new FixPartInfo()
             {
                 //ACESPartTypeID = x.PartId,
@@ -3104,18 +3316,18 @@ namespace DataAccessLayers.Service
         {
             if (includeTSBsForVehicleAndMatchingErrorCodes == true && includeTSBCountForVehicle == true)
             {
-                result.TSBCategories = _getMostLikelyFixRepository.GetTSBCountByVehicleByCategory(Convert.ToInt32(report.Vehicle.AAIA)).Select(x => new TSBCategoryInfo() {
+                result.TSBCategories = _mostLikelyFixRepository.GetTSBCountByVehicleByCategory(Convert.ToInt32(report.Vehicle.AAIA)).Select(x => new TSBCategoryInfo() {
                     Id = x.TSBID,
                     Description = x.Description,
                 }).ToArray();
 
              result.TSBCategories[0].TSBCount = result.TSBCategories.Count();
-             result.TSBCountAll = _getMostLikelyFixRepository.GetTSBCountAll(Convert.ToInt32(report.Vehicle.AAIA));
+             result.TSBCountAll = _mostLikelyFixRepository.GetTSBCountAll(Convert.ToInt32(report.Vehicle.AAIA));
             }
 
             if (includeTSBsForVehicleAndMatchingErrorCodes == true && includeTSBCountForVehicle == false)
             {
-                result.TSBCategories = _getMostLikelyFixRepository.GetTSBCountByVehicleByCategory(Convert.ToInt32(report.Vehicle.AAIA)).Select(x => new TSBCategoryInfo()
+                result.TSBCategories = _mostLikelyFixRepository.GetTSBCountByVehicleByCategory(Convert.ToInt32(report.Vehicle.AAIA)).Select(x => new TSBCategoryInfo()
                 {
                     Id = x.TSBID,
                     Description = x.Description,
@@ -3126,10 +3338,10 @@ namespace DataAccessLayers.Service
 
             if (includeTSBsForVehicleAndMatchingErrorCodes == false && includeTSBCountForVehicle == true)
             {
-                result.TSBCountAll = _getMostLikelyFixRepository.GetTSBCountAll(Convert.ToInt32(report.Vehicle.AAIA));
+                result.TSBCountAll = _mostLikelyFixRepository.GetTSBCountAll(Convert.ToInt32(report.Vehicle.AAIA));
             }
 
-            result.TSBs = _getMostLikelyFixRepository.GetTSBCategory(Convert.ToInt32(report.Vehicle.AAIA)).ToArray();
+            result.TSBs = _mostLikelyFixRepository.GetTSBCategory(Convert.ToInt32(report.Vehicle.AAIA)).ToArray();
         }
 
 
@@ -3141,7 +3353,7 @@ namespace DataAccessLayers.Service
             wsObject.LaborCost = sdkObject.Labor * wsObject.LaborRate;
             wsObject.AdditionalCost = sdkObject.AdditionalCost;
             wsObject.PartsCost = 0;
-            var diagnosticReportResultFixParts = _getMostLikelyFixRepository.GetByDiagnosticReportResultFixId(sdkObject.DiagnosticReportResultFixId);
+            var diagnosticReportResultFixParts = _mostLikelyFixRepository.GetByDiagnosticReportResultFixId(sdkObject.DiagnosticReportResultFixId);
             //foreach (DiagnosticReportResultFixPart resultFixPart in diagnosticReportResultFixParts)
             //{
             //    var part = _partRepository.GetPartByPartId(resultFixPart.PartId);
@@ -3163,7 +3375,7 @@ namespace DataAccessLayers.Service
 
         public decimal findExchangeRatePerUSDByCurrenctISOCode(string CurrenctISOCode)
         {
-            return _getMostLikelyFixRepository.GetCurrenctISOCode(CurrenctISOCode);
+            return _mostLikelyFixRepository.GetCurrenctISOCode(CurrenctISOCode);
         }
 
 
@@ -3172,7 +3384,7 @@ namespace DataAccessLayers.Service
             var toolInformation = new ToolInformation();
             if (!string.IsNullOrEmpty(diagnosticReport.RawUploadString))
             {
-                string partnerId = _getMostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
+                string partnerId = _mostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
 
                 toolInformation = GetToolInformationAsync(diagnosticReport.RawUploadString, diagnosticReport.Market, partnerId);
                 if (diagnosticReport.RawUploadString.StartsWith(FLEET_PAYLOAD_PREFIX))
@@ -3243,7 +3455,7 @@ namespace DataAccessLayers.Service
             vehicleInfo.VehicleId =Guid.Parse( report.VehicleId);
             vehicleInfo.IsValid = true;
             vehicleInfo.VIN = report.Vehicle.Vin;
-            PolkVehicleYmme polkVehicleYmme = _getMostLikelyFixRepository.GetByPolkVehicleYMMEId(report.Vehicle.PolkVehicleYMMEId);
+            PolkVehicleYmme polkVehicleYmme = _mostLikelyFixRepository.GetByPolkVehicleYMMEId(report.Vehicle.PolkVehicleYMMEId);
             if (polkVehicleYmme != null)
             {
                 vehicleInfo.ManufacturerName = polkVehicleYmme.Manufacturer;

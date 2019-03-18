@@ -44,7 +44,7 @@ namespace DataAccessLayers.DataObjects
         public string EngineVinCode { get; set; }
         public string Transmission;
         public string AAIA { get; set; }
-        public int? CurrentMileage { get; set; }
+        public int CurrentMileage { get; set; } = 0;
         public string RawToolPayload { get; set; }
         public string ReportID { get; set; }
     }

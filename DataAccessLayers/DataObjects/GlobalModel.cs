@@ -156,5 +156,46 @@ namespace DataAccessLayers.DataObjects
                 return ConfigurationManager.AppSettings["ArticleFlashFileVirtualPath"];
             }
         }
+
+        public static string InnovaLoggingWebServiceUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["InnovaLoggingWebServiceUrl"];
+            }
+        }
+
+        public static string InnovaLoggingWebServiceUrlTesting
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["InnovaLoggingWebServiceUrlTesting"];
+            }
+        }
+
+
+        public static string InnovaAutozoneBlackboxLoggingWebServiceKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["InnovaAutozoneBlackboxLoggingWebServiceKey"];
+            }
+        }
+
+        public static string InnovaAutozoneBlackboxLoggingWebServiceKeyTesting
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["InnovaAutozoneBlackboxLoggingWebServiceKeyTesting"];
+            }
+        }
+        public static string AutozonePayloadPath
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["AutozonePayloadPath"];
+            }
+        }
+        
     }
 }

@@ -452,3 +452,5 @@ C:\Users\I4\Source\Repos\CarMDWebServices2\CarMDWebServices\obj\Debug\CarMDWebSe
 C:\Users\I4\Source\Repos\CarMDWebServices2\CarMDWebServices\obj\Debug\CarMDWebServices.csproj.CopyComplete
 C:\Users\I4\Source\Repos\CarMDWebServices2\CarMDWebServices\obj\Debug\CarMDWebServices.dll
 C:\Users\I4\Source\Repos\CarMDWebServices2\CarMDWebServices\obj\Debug\CarMDWebServices.pdb
+C:\Users\I4\source\repos\CarMDWebServices2\CarMDWebServices\bin\Innova.Utilities.Shared.dll
+C:\Users\I4\source\repos\CarMDWebServices2\CarMDWebServices\bin\Innova.VehicleDataLib.Firmware.dll
