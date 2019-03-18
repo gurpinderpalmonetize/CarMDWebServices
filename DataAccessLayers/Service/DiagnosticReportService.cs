@@ -47,6 +47,9 @@ namespace DataAccessLayers.Service
             }
             return id;
         }
+
+
+
         public VehicleInfoModel GetVehicleInfoByVin(string vin)
         {
             var VehicleInfo = new VehicleInfoModel();
