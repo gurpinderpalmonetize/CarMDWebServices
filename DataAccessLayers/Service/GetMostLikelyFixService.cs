@@ -27,7 +27,7 @@ namespace DataAccessLayers.Service
     {
         public innovaEntities _innovaEntities;
         public DiagnosticReportService _diagnosticReportService =  new DiagnosticReportService();
-        public GetMostLikelyFixRepository  _mostLikelyFixRepository;
+        public GetMostLikelyFixRepository _mostLikelyFixRepository = new GetMostLikelyFixRepository();
         public ScheduleMaintenanceServiceRepository _scheduleMaintenanceServiceRepository;
         public DiagnosticReport _diagnosticReport;
         public PolkVehicleYmme _objPolkVehicleYmme;
@@ -107,12 +107,9 @@ namespace DataAccessLayers.Service
         }
 
         public GetMostLikelyFixService() { }
-        public GetMostLikelyFixService(innovaEntities innovaEntities,
-            GetMostLikelyFixRepository GetMostLikelyFixRepository, DiagnosticReport diagnosticReport, PolkVehicleYmme polkVehicleYmme,Vehicle vehicle)
+        public GetMostLikelyFixService(innovaEntities innovaEntities, DiagnosticReport diagnosticReport, PolkVehicleYmme polkVehicleYmme,Vehicle vehicle)
         {
             _innovaEntities = innovaEntities;
-
-            _mostLikelyFixRepository = GetMostLikelyFixRepository;
             _diagnosticReport = diagnosticReport;
             _objPolkVehicleYmme = polkVehicleYmme;
             _Vehicle = vehicle;
@@ -1399,7 +1396,8 @@ namespace DataAccessLayers.Service
             Guid userId = Guid.Empty;
             try
             {
-                userId = new Guid(externalSystemUserIdGuidString);
+                  externalSystemUserIdGuidString = "0000BEF6-212C-4C86-909E-1F219CE29AF8";
+                   userId = new Guid(externalSystemUserIdGuidString);
             }
             catch
             {

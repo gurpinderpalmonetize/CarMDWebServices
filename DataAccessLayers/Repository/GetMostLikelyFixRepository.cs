@@ -11,6 +11,10 @@ namespace DataAccessLayers.Repository
     public class GetMostLikelyFixRepository
     {
         private innovaEntities _context;
+
+        public GetMostLikelyFixRepository()
+        {
+        }
         public GetMostLikelyFixRepository(innovaEntities context)
         {
             _context = context;
@@ -26,35 +30,45 @@ namespace DataAccessLayers.Repository
 
         public virtual Task<User> GetUser(Guid userId)
         {
-            var query = _context.Users.Where(e => e.UserId == userId.ToString()).
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var id = userId.ToString();
+                var query = _context.Users.Where(e => e.UserId == id).
                          Join(_context.ExternalSystems, user => user.UserTypeExternalId, external => external.ExternalSystemId, (user, external) => new { user, external }).FirstOrDefault();
 
-            User report = query.user;
-            report.ExternalSystem = query.external;
-            return Task.FromResult(report);
+                User report = query.user;
+                report.ExternalSystem = query.external;
+                return Task.FromResult(report);
+            }
         }
 
         public void Save(User user)
         {
-            var result = _context.Users.Where(x => x.UserId == user.UserId).Distinct().FirstOrDefault();
-            result.FirstName = user.FirstName;
-            result.LastName = user.LastName;
-            result.EmailAddress = user.EmailAddress;
-            result.PhoneNumber = user.PhoneNumber;
-            result.Region = user.Region;
-            _context.Entry(result).State = EntityState.Modified;
-            _context.SaveChanges();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var result = _context.Users.Where(x => x.UserId == user.UserId).Distinct().FirstOrDefault();
+                result.FirstName = user.FirstName;
+                result.LastName = user.LastName;
+                result.EmailAddress = user.EmailAddress;
+                result.PhoneNumber = user.PhoneNumber;
+                result.Region = user.Region;
+                _context.Entry(result).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
         }
 
         public DiagnosticReport GetDiagnosticReportByReportId(long diagnosticReportId)
         {
-            var query = _context.DiagnosticReports
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var query = _context.DiagnosticReports
                 .Where(e => e.DiagnosticReportId == diagnosticReportId)
                 .Join(_context.Vehicles, DiagnosticReport => DiagnosticReport.VehicleId, Vehicle => Vehicle.VehicleId, (DiagnosticReport, Vehicle) => new { DiagnosticReport, Vehicle });
-            var result = query.FirstOrDefault();
-            DiagnosticReport report = result.DiagnosticReport;
-            report.Vehicle = result.Vehicle;
-            return report;
+                var result = query.FirstOrDefault();
+                DiagnosticReport report = result.DiagnosticReport;
+                report.Vehicle = result.Vehicle;
+                return report;
+            }
         }
 
         public void SaveDiagnosticReport(DiagnosticReport diagnosticReport)
