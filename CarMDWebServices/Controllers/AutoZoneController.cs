@@ -93,7 +93,25 @@ namespace CarMDWebServices.Controllers
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
 
-            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicle(apiRequest));
+            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFix(apiRequest));
+        }
+        #endregion
+
+
+        #region GetMostLikelyFix
+        [HttpPost]
+        [Route("api/AutoZone/GetMostLikelyFixForVehicle ")]
+        public HttpResponseMessage GetMostLikelyFixForVehicle(VehicleRequest apiRequest)
+        {
+            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
+
+            var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.Vin);
+            if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
+                return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
+
+            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicleCurrentMileage(apiRequest));
         }
         #endregion
 

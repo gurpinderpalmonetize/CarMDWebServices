@@ -163,6 +163,9 @@ namespace DataAccessLayers.Service
                                     "false",
                                     false);
 
+            ThreadStart threadStarter = () => SavePayload(apiRequest.ReportID, apiRequest.Vin, apiRequest.CurrentMileage, apiRequest.RawToolPayload, apiRequest.Key);
+            Thread newThread = new Thread(threadStarter);
+            newThread.Start();
 
             return new DiagReportInfo();
         }
