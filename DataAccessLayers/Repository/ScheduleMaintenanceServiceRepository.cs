@@ -35,6 +35,43 @@ namespace DataAccessLayers.Repository
             return new List<ScheduleMaintenanceServiceInfo>();
         }
 
+        public virtual List<ScheduleMaintenanceServiceInfo> GetUnScheduledMaintenanceNextService(int[] diagnosticReportId)
+        {
+            Vehicle vehicle = _getMostLikelyFixRepository.GetByDiagnosticReportId(diagnosticReportId[0]);
+            var planInfo = GetUnScheduledMaintenanceNextServiceAsyc(vehicle);
+            if (planInfo != null)
+            {
+                List<ScheduleMaintenanceServiceInfo> scheduleMaintenanceServiceInfos = GetNextServices(vehicle, planInfo, true, DateTime.UtcNow, 0, false);
+                return scheduleMaintenanceServiceInfos;
+            }
+            return new List<ScheduleMaintenanceServiceInfo>();
+        }
+
+        public virtual ScheduleMaintenancePlan GetUnScheduledMaintenanceNextServiceAsyc(Vehicle vehicle)
+        {
+            return _context.ScheduleMaintenancePlans
+                 .GroupJoin(_context.ScheduleMaintenancePlanEngineTypes.DefaultIfEmpty(), ScheduleMaintenancePlan => ScheduleMaintenancePlan.ScheduleMaintenancePlanId, ScheduleMaintenancePlanEngineType => ScheduleMaintenancePlanEngineType.ScheduleMaintenancePlanId, (ScheduleMaintenancePlan, ScheduleMaintenancePlanEngineType) => new { ScheduleMaintenancePlan, ScheduleMaintenancePlanEngineType })
+                 .GroupJoin(_context.ScheduleMaintenancePlanEngineVINCodes.DefaultIfEmpty(), ScheduleMaintenancePlan => ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanId, ScheduleMaintenancePlanEngineVINCode => ScheduleMaintenancePlanEngineVINCode.ScheduleMaintenancePlanId, (ScheduleMaintenancePlan, ScheduleMaintenancePlanEngineVINCode) => new { ScheduleMaintenancePlan, ScheduleMaintenancePlanEngineVINCode })
+                 .GroupJoin(_context.ScheduleMaintenancePlanMakes.DefaultIfEmpty(), ScheduleMaintenancePlan => ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanId, ScheduleMaintenancePlanMake => ScheduleMaintenancePlanMake.ScheduleMaintenancePlanId, (ScheduleMaintenancePlan, ScheduleMaintenancePlanMake) => new { ScheduleMaintenancePlan, ScheduleMaintenancePlanMake })
+                 .GroupJoin(_context.ScheduleMaintenancePlanModels.DefaultIfEmpty(), ScheduleMaintenancePlan => ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanId, ScheduleMaintenancePlanModel => ScheduleMaintenancePlanModel.ScheduleMaintenancePlanId, (ScheduleMaintenancePlan, ScheduleMaintenancePlanModel) => new { ScheduleMaintenancePlan, ScheduleMaintenancePlanModel })
+                 .GroupJoin(_context.ScheduleMaintenancePlanYears.DefaultIfEmpty(), ScheduleMaintenancePlan => ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanId, ScheduleMaintenancePlanYear => ScheduleMaintenancePlanYear.ScheduleMaintenancePlanId, (ScheduleMaintenancePlan, ScheduleMaintenancePlanYear) => new { ScheduleMaintenancePlan, ScheduleMaintenancePlanYear })
+                 .GroupJoin(_context.ScheduleMaintenancePlanTrimLevels.DefaultIfEmpty(), ScheduleMaintenancePlan => ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanId, ScheduleMaintenancePlanTrimLevel => ScheduleMaintenancePlanTrimLevel.ScheduleMaintenancePlanId, (ScheduleMaintenancePlan, ScheduleMaintenancePlanTrimLevel) => new { ScheduleMaintenancePlan, ScheduleMaintenancePlanTrimLevel })
+                 .GroupJoin(_context.ScheduleMaintenancePlanTransmissions.DefaultIfEmpty(), ScheduleMaintenancePlan => ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanId, ScheduleMaintenancePlanTransmission => ScheduleMaintenancePlanTransmission.ScheduleMaintenancePlanId, (ScheduleMaintenancePlan, ScheduleMaintenancePlanTransmission) => new { ScheduleMaintenancePlan, ScheduleMaintenancePlanTransmission })
+                 .Where(e =>
+                    (vehicle.Year == 0 || e.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanYear.Any(x => x.Year == vehicle.Year))                                                                                  //filter by YearsString
+                    && (vehicle.Make == null || vehicle.Make.Length == 0) || e.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanMake.Any(x => x.Make == vehicle.Make)                                           //filter by MakesString 
+                    && (vehicle.Model == null || vehicle.Model.Length == 0) || e.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanModel.Any(x => x.Model == vehicle.Model)                                       //filter by ModelsString 
+                    && (vehicle.EngineType == null || vehicle.EngineType.Length == 0) || e.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanEngineType.Any(x => x.EngineType == vehicle.EngineType)                   //filter by EngineTypesString 
+                    && (vehicle.TrimLevel == null || vehicle.TrimLevel.Length == 0) || e.ScheduleMaintenancePlan.ScheduleMaintenancePlanTrimLevel.Any(x => x.TrimLevel == vehicle.TrimLevel)                   //filter by TrimLevelsString 
+                      && (vehicle.EngineVINCode == null || vehicle.EngineVINCode.Length == 0) || e.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlanEngineVINCode.Any(x => x.EngineVINCode == vehicle.EngineVINCode)
+                    && (vehicle.TransmissionControlType == null || vehicle.TransmissionControlType.Length == 0) || e.ScheduleMaintenancePlanTransmission.Any(x => x.Transmission == vehicle.TransmissionControlType)
+                    && e.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.ScheduleMaintenancePlan.Type == 1)           //filter by TransmissionsString 
+                   .Distinct()
+                 .FirstOrDefault()?.ScheduleMaintenancePlan?.ScheduleMaintenancePlan?.ScheduleMaintenancePlan?.ScheduleMaintenancePlan?.ScheduleMaintenancePlan?.ScheduleMaintenancePlan?.ScheduleMaintenancePlan;
+
+        }
+
+
         public virtual ScheduleMaintenancePlan GetScheduledMaintenanceNextServiceAsyc(Vehicle vehicle)
         {
             return _context.ScheduleMaintenancePlans

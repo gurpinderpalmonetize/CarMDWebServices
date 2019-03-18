@@ -3008,7 +3008,7 @@ namespace DataAccessLayers.Service
                 int[] reportIds = new int[1];
                 reportIds[0] = (diagnosticReportId);
                 result.ScheduleMaintenanceServices = _scheduleMaintenanceServiceRepository.GetScheduledMaintenanceNextService(reportIds).ToArray();
-                // result.UnScheduledMaintenanceServices = _scheduleMaintenanceServiceRepository.GetUnScheduledMaintenanceNextService(reportIds);
+                result.UnScheduledMaintenanceServices = _scheduleMaintenanceServiceRepository.GetUnScheduledMaintenanceNextService(reportIds).ToArray();
                 result.HasScheduledMaintenance = result.ScheduleMaintenanceServices.Any() ? true : false;
                 result.HasUnScheduledMaintenance = result.UnScheduledMaintenanceServices.Any() ? true : false;
             }
