@@ -115,11 +115,11 @@ namespace DataAccessLayers.Service
 
 
 
-        public DiagReportInfo GetMostLikelyFixForVehicleCurrentMileage(VehicleRequest apiRequest)
+        public DiagReportInfo GetMostLikelyFixForVehicleCurrentMileage(VehicleRequest apiRequest,string key)
         {
             DiagReportInfo drInfo = new DiagReportInfo();
             drInfo = this.GetDiagnosticReport(
-                                    apiRequest.Key,
+                                    "apiRequest.Key",
                                     "GetMostLikelyFix",
                                     apiRequest.ReportID,
                                     "",
@@ -160,7 +160,7 @@ namespace DataAccessLayers.Service
                                     "false",
                                     false);
 
-            ThreadStart threadStarter = () => SavePayload(apiRequest.ReportID, apiRequest.Vin, apiRequest.CurrentMileage, apiRequest.RawToolPayload, apiRequest.Key);
+            ThreadStart threadStarter = () => SavePayload(apiRequest.ReportID, apiRequest.Vin, apiRequest.CurrentMileage, apiRequest.RawToolPayload, key);
             Thread newThread = new Thread(threadStarter);
             newThread.Start();
 
@@ -168,11 +168,11 @@ namespace DataAccessLayers.Service
         }
 
 
-        public DiagReportInfo GetMostLikelyFix(VehicleRequest apiRequest)
+        public DiagReportInfo GetMostLikelyFix(VehicleRequest apiRequest,string key)
         {
             DiagReportInfo drInfo = new DiagReportInfo();
             drInfo = this.GetDiagnosticReport(
-                                    apiRequest.Key,
+                                    "apiRequest.Key",
                                     "GetMostLikelyFix",
                                     apiRequest.ReportID,
                                     "",
@@ -214,11 +214,9 @@ namespace DataAccessLayers.Service
                                     false);
 
 
-            ThreadStart threadStarter = () => SavePayload(apiRequest.ReportID, apiRequest.Vin, apiRequest.CurrentMileage, apiRequest.RawToolPayload, apiRequest.Key);
+            ThreadStart threadStarter = () => SavePayload(apiRequest.ReportID, apiRequest.Vin, apiRequest.CurrentMileage, apiRequest.RawToolPayload, key);
             Thread newThread = new Thread(threadStarter);
             newThread.Start();
-
-
 
             return drInfo;
         }
@@ -244,7 +242,7 @@ namespace DataAccessLayers.Service
                 }
                 try
                 {                                                            //"" here newKey
-                    DiagReportInfo newDRInfo = LogDiagnosticReportWithMileage("", "073B9358-6FCD-49E2-AC41-61D43C37DD18", vin, rawToolPayload, reportID, vehicleMileage, "");
+                    DiagReportInfo newDRInfo = LogDiagnosticReportWithMileage(newKey.Key, "073B9358-6FCD-49E2-AC41-61D43C37DD18", vin, rawToolPayload, reportID, vehicleMileage, "");
                 }
                 catch (Exception soapEx)
                 {

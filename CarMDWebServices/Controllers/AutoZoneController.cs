@@ -17,7 +17,8 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetDLCLocation")]
         public HttpResponseMessage GetDLCLocation(VehicleRequest apiRequest)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
@@ -34,7 +35,8 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetRecallsCountForVehicle")]
         public HttpResponseMessage GetRecallsCountForVehicle(Request request)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(request.Key);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
 
@@ -51,7 +53,8 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetTSBCountByVehicle")]
         public HttpResponseMessage GetTSBCountByVehicle(Request request)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(request.Key);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
 
@@ -68,7 +71,8 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetScheduledMaintenanceNextServiceForVehicle")]
         public HttpResponseMessage GetScheduledMaintenanceNextServiceForVehicle(Request apiRequest)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
@@ -85,7 +89,10 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetMostLikelyFix")]
         public HttpResponseMessage GetMostLikelyFix(VehicleRequest apiRequest)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
+
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
@@ -93,7 +100,7 @@ namespace CarMDWebServices.Controllers
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
 
-            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFix(apiRequest));
+            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFix(apiRequest, string.Join("", key)));
         }
         #endregion
 
@@ -103,7 +110,8 @@ namespace CarMDWebServices.Controllers
         [Route("api/AutoZone/GetMostLikelyFixForVehicle")]
         public HttpResponseMessage GetMostLikelyFixForVehicle(VehicleRequest apiRequest)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
@@ -111,7 +119,7 @@ namespace CarMDWebServices.Controllers
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
                 return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
 
-            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicleCurrentMileage(apiRequest));
+            return Request.CreateResponse(HttpStatusCode.OK, _GetMostLikelyFixService.GetMostLikelyFixForVehicleCurrentMileage(apiRequest, string.Join("", key)));
         }
         #endregion
 

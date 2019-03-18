@@ -32,7 +32,6 @@ namespace DataAccessLayers.DataObjects
     }
     public class VehicleRequest 
     {
-        public string Key { get; set; }
         public string Vin { get; set; }
         public string VehicleClass { get; set; }
         public string Manufacturer { get; set; }

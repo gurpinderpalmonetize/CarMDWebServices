@@ -17,9 +17,10 @@ namespace CarMDWebServices.Controllers
         [Route("api/DiagnosticReport/GetTSBCountByVehicle")]
         public HttpResponseMessage GetTSBCountByVehicle(Request request)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(request.Key);
-            if (vaildatekey == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
             var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(request.Vin);
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
@@ -34,9 +35,10 @@ namespace CarMDWebServices.Controllers
         [Route("api/DiagnosticReport/GetRecallsCountForVehicle")]
         public HttpResponseMessage GetRecallsCountForVehicle(Request request)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(request.Key);
-            if (vaildatekey == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
             var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(request.Vin);
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
@@ -51,9 +53,10 @@ namespace CarMDWebServices.Controllers
         [Route("api/DiagnosticReport/LogDiagnosticReport")]
         public HttpResponseMessage LogDiagnosticReport(ApiRequestModel apiRequest)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.key);
-            if (vaildatekey == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
 
             var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.vin);
@@ -71,9 +74,10 @@ namespace CarMDWebServices.Controllers
 
         public HttpResponseMessage DiagnosticWithMileage(ApiRequestModel apiRequest)
         {
-            var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.key);
-            if (vaildatekey == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
             var vehicleInfo = _diagnosticReportService.GetVehicleInfoByVin(apiRequest.vin);
             if (vehicleInfo == null || (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0))
@@ -92,9 +96,10 @@ namespace CarMDWebServices.Controllers
 
         public HttpResponseMessage GetDTCLibraryErrorCodeWithLaymensTerms(RequestModel apiRequest)
         {
-            var vehicleInfo = _diagnosticReportService.vaildatekey(apiRequest.key);
-            if (vehicleInfo.ValidationFailures != null && vehicleInfo.ValidationFailures.Length > 0)
-                return Request.CreateResponse(HttpStatusCode.NotFound, vehicleInfo.ValidationFailures);
+            var key = Request.Headers.GetValues("Token");
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
+            if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
             return Request.CreateResponse(HttpStatusCode.OK, _diagnosticReportService.GetByDtcAndMake(apiRequest));
 
