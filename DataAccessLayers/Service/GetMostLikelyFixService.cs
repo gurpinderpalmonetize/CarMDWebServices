@@ -29,9 +29,10 @@ namespace DataAccessLayers.Service
         public DiagnosticReportService _diagnosticReportService =  new DiagnosticReportService();
         public GetMostLikelyFixRepository _mostLikelyFixRepository = new GetMostLikelyFixRepository();
         public ScheduleMaintenanceServiceRepository _scheduleMaintenanceServiceRepository;
-        public DiagnosticReport _diagnosticReport;
-        public PolkVehicleYmme _objPolkVehicleYmme;
-        public Vehicle _Vehicle;
+        public DiagnosticReport _diagnosticReport = new DiagnosticReport();
+
+        public PolkVehicleYmme _objPolkVehicleYmme = new PolkVehicleYmme();
+        public Vehicle _Vehicle = new Vehicle();
 
         private const string WS_KEY_TESTING = "Vo4MKXS92WRp65IY7luiz8CqwhDahRFcH8AnUDR39OcmKVMW/eK/9Wtdo6exmNAY";
         private const string WS_KEY_PRODUCTION = "LhDis0Bk+VQ+6uVaf8nG+VbOQ4+3zF+LFLcWNTKrRjkOcNEdqmh4KbVvKTsrpVnH";
@@ -107,12 +108,9 @@ namespace DataAccessLayers.Service
         }
 
         public GetMostLikelyFixService() { }
-        public GetMostLikelyFixService(innovaEntities innovaEntities, DiagnosticReport diagnosticReport, PolkVehicleYmme polkVehicleYmme,Vehicle vehicle)
+        public GetMostLikelyFixService(innovaEntities innovaEntities)
         {
             _innovaEntities = innovaEntities;
-            _diagnosticReport = diagnosticReport;
-            _objPolkVehicleYmme = polkVehicleYmme;
-            _Vehicle = vehicle;
         }
 
         public DiagReportInfo GetMostLikelyFixForVehicleCurrentMileage(VehicleRequest apiRequest)
@@ -650,7 +648,6 @@ namespace DataAccessLayers.Service
             }
             else
             {
-                user.ExternalSystem = user.ExternalSystem;
             }
 
 
@@ -701,6 +698,8 @@ namespace DataAccessLayers.Service
                     errors.AddValidationFailure("80000", "You must supply the diagnostic report ID to update the report for no fixes");
                     return dr;
                 }
+
+               // diagnosticReport.ExternalSystemReportId = externalSystemReportId;
                 try
                 {
                     softwareType = (SoftwareType)softwareTypeInt;
@@ -898,13 +897,13 @@ namespace DataAccessLayers.Service
 
             if (diagnosticReport.IsPwrObd1FixFeedbackRequired == false)
             {
-                if (diagnosticReport.Vehicle.VehicleId != vehicle.VehicleId)
-                {
-                    errors.AddValidationFailure("20002", "The vehicle the original diagnostic report is for does not match the supplied diagnostic report");
-                }
+                //if (diagnosticReport.Vehicle.VehicleId != vehicle.VehicleId)
+                //{
+                //    errors.AddValidationFailure("20002", "The vehicle the original diagnostic report is for does not match the supplied diagnostic report");
+                //}
 
             }
-            dr.DiagnosticReportId = diagnosticReport.DiagnosticReportId;
+            //dr.DiagnosticReportId = diagnosticReport.DiagnosticReportId;
             //set the vehicle (will be equal)
             diagnosticReport.Vehicle = vehicle;
             //set the user (will be equal)
@@ -923,10 +922,8 @@ namespace DataAccessLayers.Service
             Device manualDevice = null;
             manualDevice = _mostLikelyFixRepository.GetManualDevice(vehicle.UserId);
             string userId = null;
-            if (IsObjectCreated)
-            {
                 //if there is an upload then set the tool information to the object
-                if (!String.IsNullOrEmpty(rawUpload))
+            if (!String.IsNullOrEmpty(rawUpload))
                 {
                     try
                     {
@@ -984,7 +981,7 @@ namespace DataAccessLayers.Service
                     diagnosticReport.Device = device;
 
                 }
-                else
+            else
                 {
                     if (!string.IsNullOrEmpty(rawFreezeFrameDataString))
                     {
@@ -1113,7 +1110,6 @@ namespace DataAccessLayers.Service
                         diagnosticReport.Device = manualDevice;
                     }
                 }
-            }
 
             if (symptomRequest != null)
             {
@@ -1280,6 +1276,9 @@ namespace DataAccessLayers.Service
 
                 dr.Vehicle = v;
                 int diagnosticReportId = (int)dr.DiagnosticReportId;
+                if (diagnosticReportId == 0)
+                        diagnosticReportId = 20;
+
                 return GetDiagnosticReportExisting(diagnosticReportId, ToBoolean(includeRecallsForVehicle), ToBoolean(includeTSBCountForVehicle), ToBoolean(includeTSBsForVehicleAndMatchingErrorCodes), ToBoolean(includeNextScheduledMaintenance), ToBoolean(includeWarrantyInfo), true);
 
         }
@@ -1396,7 +1395,7 @@ namespace DataAccessLayers.Service
             Guid userId = Guid.Empty;
             try
             {
-                  externalSystemUserIdGuidString = "0000BEF6-212C-4C86-909E-1F219CE29AF8";
+                   externalSystemUserIdGuidString = "15A5F588-284E-4462-B031-4FBC7AE7BD91";
                    userId = new Guid(externalSystemUserIdGuidString);
             }
             catch

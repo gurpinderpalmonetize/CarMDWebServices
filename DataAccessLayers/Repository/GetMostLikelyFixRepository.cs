@@ -101,12 +101,12 @@ namespace DataAccessLayers.Repository
             {
                 var result = _context.Vehicles
                .Join(_context.PolkVehicleYmmes, A => A.PolkVehicleYMMEId, B => B.PolkVehicleYMMEId, (A, B) => new { A, B })
-               .Where(e => (patterns.Contains(e.A.Vin) || patterns.Contains(e.B.VinPatternMask)) //&& e.A.UserId == userId
-               ).FirstOrDefault();
+               .Join(_context.Users, A => A.A.UserId, c => c.UserId, (A, c) => new { A, c })
+               .Where(e => (patterns.Contains(e.A.A.Vin) || patterns.Contains(e.A.B.VinPatternMask)) && e.c.UserId == userId).FirstOrDefault();
 
-                Vehicle report = result.A;
-                report.User = result.A.User;
-                report.PolkVehicleYmme = result.B;
+                Vehicle report = result.A.A;
+                report.User = result.c;
+                report.PolkVehicleYmme = result.A.B;
                 return report;
             }
         }

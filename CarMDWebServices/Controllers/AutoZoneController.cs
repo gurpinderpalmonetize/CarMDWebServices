@@ -100,7 +100,7 @@ namespace CarMDWebServices.Controllers
 
         #region GetMostLikelyFixForVehicle
         [HttpPost]
-        [Route("api/AutoZone/GetMostLikelyFixForVehicle ")]
+        [Route("api/AutoZone/GetMostLikelyFixForVehicle")]
         public HttpResponseMessage GetMostLikelyFixForVehicle(VehicleRequest apiRequest)
         {
             var vaildatekey = _diagnosticReportService.vaildatekey(apiRequest.Key);
