@@ -10,21 +10,16 @@ namespace DataAccessLayers.Repository
 {
     public class GetMostLikelyFixRepository
     {
-        private innovaEntities _context;
 
-        public GetMostLikelyFixRepository()
-        {
-        }
-        public GetMostLikelyFixRepository(innovaEntities context)
-        {
-            _context = context;
-        }
 
         public Vehicle GetByDiagnosticReportId(int diagnosticReportId)
         {
-            return _context.Vehicles
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.Vehicles
                                .Join(_context.DiagnosticReports, Vehicle => Vehicle.VehicleId, B => B.VehicleId, (Vehicle, B) => new { Vehicle, B })
                                .Where(e => diagnosticReportId == e.B.DiagnosticReportId).Select(e => e.Vehicle).FirstOrDefault();
+            }
         }
 
 
@@ -46,13 +41,6 @@ namespace DataAccessLayers.Repository
         {
             using (innovaEntities _context = new innovaEntities())
             {
-                var result = _context.Users.Where(x => x.UserId == user.UserId).Distinct().FirstOrDefault();
-                result.FirstName = user.FirstName;
-                result.LastName = user.LastName;
-                result.EmailAddress = user.EmailAddress;
-                result.PhoneNumber = user.PhoneNumber;
-                result.Region = user.Region;
-                _context.Entry(result).State = EntityState.Modified;
                 _context.SaveChanges();
             }
         }
@@ -75,21 +63,30 @@ namespace DataAccessLayers.Repository
         {
             if (diagnosticReport.DiagnosticReportId > 0)
             {
-                _context.Entry(diagnosticReport).State = EntityState.Modified;
-                _context.SaveChanges();
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    _context.Entry(diagnosticReport).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
             }
             else
             {
-                diagnosticReport.FirmwareVersion = "";
-                diagnosticReport.SoftwareVersion = "";
-                diagnosticReport.RawUploadString = "";
-                diagnosticReport.PwrMilCode = "";
-                _context.Entry(diagnosticReport).State = EntityState.Added;
-                _context.SaveChanges();
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    diagnosticReport.FirmwareVersion = "";
+                    diagnosticReport.SoftwareVersion = "";
+                    diagnosticReport.RawUploadString = "";
+                    diagnosticReport.PwrMilCode = "";
+                    _context.Entry(diagnosticReport).State = EntityState.Added;
+                    _context.SaveChanges();
+                }
             }
             try
             {
-                _context.SaveChanges();
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    _context.SaveChanges();
+                }
             }
             catch (Exception e)
             {
@@ -100,14 +97,18 @@ namespace DataAccessLayers.Repository
         public Vehicle GetVehicleInfoByVinAndUserId(string vin, string userId)
         {
             var patterns = GenerateVinPatternMarks(vin);
-            var result = _context.Vehicles
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var result = _context.Vehicles
                .Join(_context.PolkVehicleYmmes, A => A.PolkVehicleYMMEId, B => B.PolkVehicleYMMEId, (A, B) => new { A, B })
-               .Where(e => (patterns.Contains(e.A.Vin) || patterns.Contains(e.B.VinPatternMask)) && e.A.UserId == userId).FirstOrDefault();
+               .Where(e => (patterns.Contains(e.A.Vin) || patterns.Contains(e.B.VinPatternMask)) //&& e.A.UserId == userId
+               ).FirstOrDefault();
 
-            Vehicle report = result.A;
-            report.User = result.A.User;
-            report.PolkVehicleYmme = result.B;
-            return report;
+                Vehicle report = result.A;
+                report.User = result.A.User;
+                report.PolkVehicleYmme = result.B;
+                return report;
+            }
         }
 
         public virtual List<string> GenerateVinPatternMarks(string vin)
@@ -163,59 +164,73 @@ namespace DataAccessLayers.Repository
 
         public virtual Vehicle GetVehicleInfoForVehicleByYearMakeModelAsync(string make, string model, int year, string enginetype)
         {
-
-            var query = _context.Vehicles
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var query = _context.Vehicles
                 .Join(_context.PolkVehicleYmmes, vehicle => vehicle.PolkVehicleYMMEId, polkVehicleYmme => polkVehicleYmme.PolkVehicleYMMEId, (vehicle, polkVehicleYmme) => new { vehicle, polkVehicleYmme })
                 .Join(_context.Users, A => A.vehicle.UserId, user => user.UserId, (A, user) => new { A, user })
                 .Where(e => (e.A.polkVehicleYmme.Make == make || e.A.polkVehicleYmme.Make == "")
-                && (e.A.polkVehicleYmme.Year == year || e.A.polkVehicleYmme.Year == 0)
-                && (e.A.polkVehicleYmme.Model == model || e.A.polkVehicleYmme.Model == "")
-                && (e.A.polkVehicleYmme.EngineType == enginetype || e.A.polkVehicleYmme.EngineType == ""));
+                 && (e.A.polkVehicleYmme.Year == year || e.A.polkVehicleYmme.Year == 0)
+                 && (e.A.polkVehicleYmme.Model == model || e.A.polkVehicleYmme.Model == "")
+                 && (e.A.polkVehicleYmme.EngineType == enginetype || e.A.polkVehicleYmme.EngineType == ""));
 
-            var result = query.FirstOrDefault();
-            Vehicle report = result.A.vehicle;
-            report.User = result.user;
-            report.PolkVehicleYmme = result.A.polkVehicleYmme;
-            return report;
+                var result = query.FirstOrDefault();
+                Vehicle report = result.A.vehicle;
+                report.User = result.user;
+                report.PolkVehicleYmme = result.A.polkVehicleYmme;
+                return report;
+            }
         }
 
         public void SaveChanges(Vehicle vehicle)
         {
-            var result = _context.Vehicles.Where(e => e.VehicleId == vehicle.VehicleId);
-            _context.Entry(result).State = EntityState.Modified;
-            _context.SaveChanges();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var result = _context.Vehicles.Where(e => e.VehicleId == vehicle.VehicleId);
+                _context.Entry(result).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
         }
 
         public Device GetManualDevice(string userId)
         {
-            Device device = _context.Devices.Where(x => x.UserId == userId && x.IsManualDevice == true).FirstOrDefault();
-            if (device == null)
+            using (innovaEntities _context = new innovaEntities())
             {
-                device = new Device();
-                device.ChipId = Guid.NewGuid().ToString();
-                device.IsActive = true;
-                device.IsManualDevice = true;
-                device.IsPrimaryOwner = true;
-                device.UserId = userId;
-                _context.Entry(device).State = EntityState.Added;
-                _context.SaveChanges();
+                Device device = _context.Devices.Where(x => x.UserId == userId && x.IsManualDevice == true).FirstOrDefault();
+                if (device == null)
+                {
+                    device = new Device();
+                    device.ChipId = Guid.NewGuid().ToString();
+                    device.IsActive = true;
+                    device.IsManualDevice = true;
+                    device.IsPrimaryOwner = true;
+                    device.UserId = userId;
+                    _context.Entry(device).State = EntityState.Added;
+                    _context.SaveChanges();
+                }
+                return device;
             }
-            return device;
         }
 
         public ExternalSystem GetPartnerIdbyUderId(string userId)
         {
-            return _context.Users
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.Users
                  .Join(_context.ExternalSystems, user => user.UserTypeExternalId, externalSystem => externalSystem.ExternalSystemId, (user, externalSystem) => new { user, externalSystem })
                  .Where(e => e.user.UserId == userId).Select(x => x.externalSystem).FirstOrDefault();
+            }
         }
 
         public string GetVin(string userId)
         {
-            return _context.Users
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.Users
                  .Join(_context.Vehicles, user => user.UserId, vehicle => vehicle.UserId, (user, vehicle) => new { user, vehicle })
                  .Join(_context.PolkVehicleYmmes, user => user.vehicle.PolkVehicleYMMEId, polkVehicleYmme => polkVehicleYmme.PolkVehicleYMMEId, (user, polkVehicleYmme) => new { user, polkVehicleYmme })
                  .Where(e => e.user.user.UserId == userId).Select(x => x.polkVehicleYmme.VinPatternMask).FirstOrDefault();
+            }
         }
 
         public Device GetDeviceByChipIdAndUserIdAndActive(string toolId, string userId)
@@ -223,7 +238,10 @@ namespace DataAccessLayers.Repository
             Device device = new Device();
             try
             {
-                device = _context.Devices.Where(e => e.UserId == userId && e.ChipId == toolId && e.IsActive == true).FirstOrDefault();
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    device = _context.Devices.Where(e => e.UserId == userId && e.ChipId == toolId && e.IsActive == true).FirstOrDefault();
+                }
             }
             catch (Exception)
             {
@@ -235,17 +253,26 @@ namespace DataAccessLayers.Repository
         {
             if (!string.IsNullOrEmpty(device.DeviceId))
             {
-                _context.Entry(device).State = EntityState.Modified;
-                _context.SaveChanges();
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    _context.Entry(device).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
             }
             else
             {
-                _context.Entry(device).State = EntityState.Added;
-                _context.SaveChanges();
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    _context.Entry(device).State = EntityState.Added;
+                    _context.SaveChanges();
+                }
             }
             try
             {
-                _context.SaveChanges();
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    _context.SaveChanges();
+                }
             }
             catch (Exception e)
             {
@@ -255,11 +282,17 @@ namespace DataAccessLayers.Repository
 
         public List<DiagnosticReportResultErrorCode> GetDiagnosticReportResultErrorCodeCount(string diagnosticReportResultId)
         {
-            return _context.DiagnosticReportResultErrorCodes.Where(x => x.DiagnosticReportResultId == diagnosticReportResultId).ToList();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DiagnosticReportResultErrorCodes.Where(x => x.DiagnosticReportResultId == diagnosticReportResultId).ToList();
+            }
         }
         public List<SymptomDiagnosticReportItem> GetSymptomDiagnosticReportItemByDiagnosticReportId(long diagnosticReportResultId)
         {
-            return _context.SymptomDiagnosticReportItems.Where(e => e.DiagnosticReportId == ToGuid(diagnosticReportResultId)).Distinct().ToList();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.SymptomDiagnosticReportItems.Where(e => e.DiagnosticReportId == ToGuid(diagnosticReportResultId)).Distinct().ToList();
+            }
         }
         public static Guid ToGuid(long value)
         {
@@ -275,9 +308,11 @@ namespace DataAccessLayers.Repository
             return BitConverter.ToInt64(guid.ToByteArray(), 0);
         }
 
-        public List<Fix> GetFix_LoadByDiagnosticReportBySymptom(int year, string make, string model, string trimLevel, string transmission,string symptomId, string engineVINCode, string engineType, int market, string generation)
+        public List<Fix> GetFix_LoadByDiagnosticReportBySymptom(int year, string make, string model, string trimLevel, string transmission, string symptomId, string engineVINCode, string engineType, int market, string generation)
         {
-            var FixInfo = _context.Fixes
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var FixInfo = _context.Fixes
                     .GroupJoin(_context.FixSymptoms.DefaultIfEmpty(), fix => fix.FixId, fs => fs.FixId, (fix, fs) => new { fix, fs })
                     .GroupJoin(_context.FixEngineTypes.DefaultIfEmpty(), A => A.fix.FixId, fixEngineType => fixEngineType.FixId, (fix, fixEngineType) => new { fix, fixEngineType })
                     .GroupJoin(_context.FixEngineVinCodes.DefaultIfEmpty(), B => B.fix.fix.FixId, fVinCode => fVinCode.FixId, (fix, fVinCode) => new { fix, fVinCode })
@@ -303,15 +338,18 @@ namespace DataAccessLayers.Repository
                         && (I.fix.fix.fix.fix.fix.fix.fix.fix.fix.HasTrimLevelDefined == false || trimLevel.Length == 0 || I.fix.fix.fixTrimLevel.Any(x => x.FixId != null))
                         && (I.fix.fix.fix.fix.fix.fix.fix.fix.fix.HasTransmissionDefined == false || transmission.Length == 0 || I.fix.fixTransmission.Any(x => x.FixId != null))
                         && (I.fix.fix.fix.fix.fix.fix.fix.fix.fix.HasGenerationDefined == false || generation.Length == 0 || I.fixGeneration.Any(x => x.FixId != null))).Distinct();
-           return  FixInfo.Select(x => x.fix.fix.fix.fix.fix.fix.fix.fix.fix).OrderBy(x => x.FrequencyCount).ToList();
+                return FixInfo.Select(x => x.fix.fix.fix.fix.fix.fix.fix.fix.fix).OrderBy(x => x.FrequencyCount).ToList();
+            }
         }
 
-        public List<Fix> GetLoadByDiagnosticReportUsingVinPowerBySymptom(int year, string make, string model, string trimLevel, string transmission,string symptomId, string engineVINCode, string engineType)
+        public List<Fix> GetLoadByDiagnosticReportUsingVinPowerBySymptom(int year, string make, string model, string trimLevel, string transmission, string symptomId, string engineVINCode, string engineType)
         {
-            var FixInfo = _context.Fixes
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var FixInfo = _context.Fixes
                     .GroupJoin(_context.FixSymptoms.DefaultIfEmpty(), fix => fix.FixId, FixSymptom => FixSymptom.FixId, (fix, FixSymptom) => new { fix, FixSymptom })
                     .GroupJoin(_context.FixEngineTypeVinPowers.DefaultIfEmpty(), A => A.fix.FixId, FixEngineTypeVinPower => FixEngineTypeVinPower.FixId, (A, FixEngineTypeVinPower) => new { A, FixEngineTypeVinPower })
-                    .GroupJoin(_context.FixEngineVINCodeVinPowers.DefaultIfEmpty(), B => B.A.fix.FixId, FixEngineVINCodeVinPower =>  FixEngineVINCodeVinPower.FixId.ToString(), (fix, FixEngineVINCodeVinPower) => new { fix, FixEngineVINCodeVinPower })
+                    .GroupJoin(_context.FixEngineVINCodeVinPowers.DefaultIfEmpty(), B => B.A.fix.FixId, FixEngineVINCodeVinPower => FixEngineVINCodeVinPower.FixId.ToString(), (fix, FixEngineVINCodeVinPower) => new { fix, FixEngineVINCodeVinPower })
                     .GroupJoin(_context.FixYearVINPowers.DefaultIfEmpty(), C => C.fix.A.fix.FixId, FixYearVinPower => FixYearVinPower.FixId, (fix, FixYearVinPower) => new { fix, FixYearVinPower })
                     .GroupJoin(_context.FixMakeVinPowers.DefaultIfEmpty(), D => D.fix.fix.A.fix.FixId, FixMakeVinPower => FixMakeVinPower.FixId, (fix, FixMakeVinPower) => new { fix, FixMakeVinPower })
                     .GroupJoin(_context.FixModelVinPowers.DefaultIfEmpty(), E => E.fix.fix.fix.A.fix.FixId, FixModelVinPower => FixModelVinPower.FixId, (fix, FixModelVinPower) => new { fix, FixModelVinPower })
@@ -332,79 +370,121 @@ namespace DataAccessLayers.Repository
                         && (H.fix.fix.fix.fix.fix.fix.A.fix.HasModelDefinedVP == false || model.Length == 0 || H.fix.fix.FixModelVinPower.Any(x => x.FixId != null))
                         && (H.fix.fix.fix.fix.fix.fix.A.fix.HasTrimLevelDefinedVP == false || trimLevel.Length == 0 || H.fix.FixTrimLevelVinPower.Any(x => x.FixId != null))
                         && (H.fix.fix.fix.fix.fix.fix.A.fix.HasTransmissionDefinedVP == false || transmission.Length == 0 || H.FixTransmissionVinPower.Any(x => x.FixId != null)));
-            var result = FixInfo.Select(x => x.fix.fix.fix.fix.fix.fix.A.fix).OrderBy(x => x.FrequencyCount).ToList();
-            return result;
+                var result = FixInfo.Select(x => x.fix.fix.fix.fix.fix.fix.A.fix).OrderBy(x => x.FrequencyCount).ToList();
+                return result;
+            }
         }
 
         public FixPolkVehicleDiscrepancy GetFixPolkVehicleDiscrepancy_LoadByFixAndVehicle(string fixId, string polkVehicleYMMEId)
         {
-            return _context.FixPolkVehicleDiscrepancies.Where(x => x.FixId == fixId && x.PolkVehicleYMMEId == polkVehicleYMMEId).FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.FixPolkVehicleDiscrepancies.Where(x => x.FixId == fixId && x.PolkVehicleYMMEId == polkVehicleYMMEId).FirstOrDefault();
+            }
         }
 
         public void SaveFixPolkVehicleDiscrepancy(FixPolkVehicleDiscrepancy fixPolkVehicleDiscrepancy)
         {
-            var result = _context.FixPolkVehicleDiscrepancies.Where(FixPolkVehicleDiscrepancy => FixPolkVehicleDiscrepancy.FixPolkVehicleDiscrepancyId == fixPolkVehicleDiscrepancy.FixPolkVehicleDiscrepancyId).Distinct().FirstOrDefault();
-            _context.Entry(result).State = EntityState.Modified;
-            _context.SaveChanges();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var result = _context.FixPolkVehicleDiscrepancies.Where(FixPolkVehicleDiscrepancy => FixPolkVehicleDiscrepancy.FixPolkVehicleDiscrepancyId == fixPolkVehicleDiscrepancy.FixPolkVehicleDiscrepancyId).Distinct().FirstOrDefault();
+                _context.Entry(result).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
         }
 
         public virtual List<User> GetOBDFixMasterTechs(string userId, string make)
         {
             if (!string.IsNullOrWhiteSpace(make))
-                return _context.Users.Where(x => x.MasterTechMakesString.ToLower().Contains(make.ToLower()) && x.UserId == userId).Distinct().ToList();
+            {
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    return _context.Users.Where(x => x.MasterTechMakesString.ToLower().Contains(make.ToLower()) && x.UserId == userId).Distinct().ToList();
+                }
+            }
             else
-                return _context.Users.Where(x => x.UserId == userId ).Distinct().ToList();
+            {
+                using (innovaEntities _context = new innovaEntities())
+                {
+                    return _context.Users.Where(x => x.UserId == userId).Distinct().ToList();
+                }
+            }
         }
 
         public void SaveUser(User user)
         {
-            var result = _context.Users.Where(User => User.UserId == user.UserId);
-            _context.Entry(result).State = EntityState.Modified;
-            _context.SaveChanges();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var result = _context.Users.Where(User => User.UserId == user.UserId);
+                _context.Entry(result).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
         }
 
         public List<DiagnosticReportResultFix> GetDiagnosticReportResultFix(string diagnosticReportResultId)
         {
-            return _context.DiagnosticReportResultFixes.Where(x => x.DiagnosticReportResultId == diagnosticReportResultId).ToList();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DiagnosticReportResultFixes.Where(x => x.DiagnosticReportResultId == diagnosticReportResultId).ToList();
+            }
         }
 
         public List<FixPart> GetFixPartByFixId(string fixId)
         {
-            return _context.FixParts.Where(e =>e.PartId == fixId).Distinct().ToList();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.FixParts.Where(e => e.PartId == fixId).Distinct().ToList();
+            }
         }
 
         public FixName GetByFixNameId(string fixNameId)
         {
-            return _context.FixNames.Where(x => x.FixNameId == fixNameId).FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.FixNames.Where(x => x.FixNameId == fixNameId).FirstOrDefault();
+            }
         }
 
         public StateLaborRate GetStateLaborByStateCode(string stateCode)
         {
-            return _context.StateLaborRates.Where(e =>(e.StateCode == stateCode)).Distinct().FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.StateLaborRates.Where(e => (e.StateCode == stateCode)).Distinct().FirstOrDefault();
+            }
         }
 
         public decimal GetCurrencyExchangeRate(string CurrenctISOCode)
         {
-            return _context.CurrencyExchangeRates.Where(e => (e.CurrencyISOCode == CurrenctISOCode)).Distinct().Select(x => x.ExchangeRatePerUSD).FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.CurrencyExchangeRates.Where(e => (e.CurrencyISOCode == CurrenctISOCode)).Distinct().Select(x => x.ExchangeRatePerUSD).FirstOrDefault();
+            }
         }
 
         public Part GetPartByPartId(string PartId)
         {
-            return _context.Parts.Where(x => x.PartId == PartId).FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.Parts.Where(x => x.PartId == PartId).FirstOrDefault();
+            }
         }
 
         public void SaveDiagnosticReportResult(long diagnosticReportId)
         {
-            DiagnosticReportResult objDiagnosticReportResult = new DiagnosticReportResult();
-            objDiagnosticReportResult.DiagnosticReportId = diagnosticReportId;
-            objDiagnosticReportResult.CreatedDateTimeUTC = DateTime.UtcNow;
-            _context.Entry(objDiagnosticReportResult).State = EntityState.Added;
-            _context.SaveChanges();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                DiagnosticReportResult objDiagnosticReportResult = new DiagnosticReportResult();
+                objDiagnosticReportResult.DiagnosticReportId = diagnosticReportId;
+                objDiagnosticReportResult.CreatedDateTimeUTC = DateTime.UtcNow;
+                _context.Entry(objDiagnosticReportResult).State = EntityState.Added;
+                _context.SaveChanges();
+            }
         }
-
         public List<Fix> GetFix_LoadByDiagnosticReportUsingVinPower(int year, string make, string model, string trimLevel, string transmission, string primaryCode, string engineVINCode, string engineType, int market)
         {
-            var FixInfo = _context.Fixes
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var FixInfo = _context.Fixes
                     .GroupJoin(_context.FixDTCs.DefaultIfEmpty(), fix => fix.FixId, fixDTC => fixDTC.FixId, (fix, fixDTC) => new { fix, fixDTC })
                     .GroupJoin(_context.FixEngineTypeVinPowers.DefaultIfEmpty(), A => A.fix.FixId, fixEngineType => fixEngineType.FixId, (fix, fixEngineType) => new { fix, fixEngineType })
                     .GroupJoin(_context.FixEngineVINCodeVinPowers.DefaultIfEmpty(), B => B.fix.fix.FixId, fVinCode => fVinCode.FixId.ToString(), (fix, fVinCode) => new { fix, fVinCode })
@@ -428,13 +508,15 @@ namespace DataAccessLayers.Repository
                         && (I.fix.fix.fix.fix.fix.fix.fix.fix.HasModelDefinedVP == false || model.Length == 0 || I.fix.fix.fixModel.Any(x => x.FixId != null))
                         && (I.fix.fix.fix.fix.fix.fix.fix.fix.HasTrimLevelDefinedVP == false || trimLevel.Length == 0 || I.fix.fixTrimLevel.Any(x => x.FixId != null))
                         && (I.fix.fix.fix.fix.fix.fix.fix.fix.HasTransmissionDefinedVP == false || transmission.Length == 0 || I.fixTransmission.Any(x => x.FixId != null))).Distinct();
-       return FixInfo.Select(x => x.fix.fix.fix.fix.fix.fix.fix.fix).OrderBy(x => x.FrequencyCount).ToList();
-
+                return FixInfo.Select(x => x.fix.fix.fix.fix.fix.fix.fix.fix).OrderBy(x => x.FrequencyCount).ToList();
+            }
         }
 
         public List<DTCCode> GetDTCCode_LoadByDiagnosticReportAndErrorCodes(int year, string make, string model, string transmission, string engineType, string engineVINCode, string trimLevel, List<string> errorCodes)
         {
-            var DTCCodeInfo = _context.DTCCodes
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var DTCCodeInfo = _context.DTCCodes
                     .GroupJoin(_context.DTCMakes.DefaultIfEmpty(), dtcCode => dtcCode.DTCCodeId, dtcMake => dtcMake.DTCCodeId, (dtcCode, dtcMake) => new { dtcCode, dtcMake })
                     .GroupJoin(_context.DTCEngineTypes.DefaultIfEmpty(), A => A.dtcCode.DTCCodeId, dTCEngineType => dTCEngineType.DTCCodeId, (dtcCode, dTCEngineType) => new { dtcCode, dTCEngineType })
                     .GroupJoin(_context.DTCEngineVINCodes.DefaultIfEmpty(), B => B.dtcCode.dtcCode.DTCCodeId, dtcEngineVINCode => dtcEngineVINCode.DTCCodeId.ToString(), (dtcCode, dtcEngineVINCode) => new { dtcCode, dtcEngineVINCode })
@@ -457,30 +539,35 @@ namespace DataAccessLayers.Repository
                         && (G.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.HasModelDefined == false || G.dtcCode.dtcCode.dtcModel.Any(x => x.DTCCodeId != null))
                         && (G.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.HasTransmissionDefined == false || G.dtcCode.dtcTransmission.Any(x => x.DTCCodeId != null))
                         && (G.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.HasTrimLevelDefined == false || G.dtcTrimLevel.Any(x => x.DTCCodeId != null))).Distinct();
-          return DTCCodeInfo.Select(x => x.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode).OrderBy(x => x.FrequencyCount).ToList();
+                return DTCCodeInfo.Select(x => x.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode.dtcCode).OrderBy(x => x.FrequencyCount).ToList();
 
+            }
         }
 
         public List<DTCMasterCodeList> GetDTCMasterCodeList_LoadByDiagnosticReportAndErrorCodes(string make, List<string> errorCodes)
         {
-            var result = _context.DTCMasterCodeLists
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var result = _context.DTCMasterCodeLists
                            .Join(_context.DTCMasterCodeMakes.DefaultIfEmpty(), dtcMasterCodeList => dtcMasterCodeList.DTCMasterCodeId, dtcMasterCodeMake => dtcMasterCodeMake.DTCMasterCodeId.ToString(), (dtcMasterCodeList, dtcMasterCodeMake) => new { dtcMasterCodeList, dtcMasterCodeMake })
                            .Where(x => x.dtcMasterCodeMake.Make == make).Select(x => x.dtcMasterCodeList.DTCMasterCodeId).Distinct().ToList();
 
-            var DTCMasterCodeListData = _context.DTCMasterCodeLists.Where(x => result.Contains(x.DTCMasterCodeId) && errorCodes.Contains(x.ErrorCode))
-                            .Select(x => x.DTCMasterCodeId).Distinct().ToList();
+                var DTCMasterCodeListData = _context.DTCMasterCodeLists.Where(x => result.Contains(x.DTCMasterCodeId) && errorCodes.Contains(x.ErrorCode))
+                                .Select(x => x.DTCMasterCodeId).Distinct().ToList();
 
-            var result2 = _context.DTCMasterCodeLists
-                            .Where(x => DTCMasterCodeListData.Contains(x.DTCMasterCodeId) && x.ManufacturerName == "Generic"
-                             && !errorCodes.Contains(x.ErrorCode)).Select(x => x.DTCMasterCodeId).Distinct().ToList();
+                var result2 = _context.DTCMasterCodeLists
+                                .Where(x => DTCMasterCodeListData.Contains(x.DTCMasterCodeId) && x.ManufacturerName == "Generic"
+                                 && !errorCodes.Contains(x.ErrorCode)).Select(x => x.DTCMasterCodeId).Distinct().ToList();
 
-           return _context.DTCMasterCodeLists.Where(x => result2.Contains(x.DTCMasterCodeId)).Distinct().ToList();
-
+                return _context.DTCMasterCodeLists.Where(x => result2.Contains(x.DTCMasterCodeId)).Distinct().ToList();
+            }
         }
 
         public List<VehicleType> GetVehicleType_LoadByVinData(int year, string make, string model, string engineVINCode, string transmissionType, string engineType, string bodyCode)
         {
-            return _context.VehicleTypes
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.VehicleTypes
                         .Where(x => x.VehicleTypeStatus == 0
                         && x.Year == year && x.Make == make && x.Model != model
                         && (x.TransmissionControlType == transmissionType || x.TransmissionControlType.Length == 0)
@@ -491,80 +578,107 @@ namespace DataAccessLayers.Repository
                         && (x.TransmissionControlType == transmissionType || x.TransmissionControlType.Length == 0)
                         && ((x.EngineType == engineType || x.EngineTypeVINLookup.IndexOf(engineType) > 0 || engineType.IndexOf(x.EngineTypeVINLookup) > 0 || x.EngineType.IndexOf(engineType) > 0 || engineType.IndexOf(x.EngineType) > 0)
                         && x.EngineVINCode == engineVINCode) && x.BodyCode == bodyCode)).Distinct().ToList();
+            }
         }
 
         public List<VehicleTypeCodeAssignment> GetVehicleTypeCodeAssignment(List<VehicleType> vehicleTypes, List<string> ErrorCode)
         {
-            return _context.VehicleTypeCodeAssignments.Where(x => vehicleTypes.Any(y => y.VehicleTypeId == x.VehicleTypeId) && ErrorCode.Contains(x.ErrorCode)).ToList();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.VehicleTypeCodeAssignments.Where(x => vehicleTypes.Any(y => y.VehicleTypeId == x.VehicleTypeId) && ErrorCode.Contains(x.ErrorCode)).ToList();
+            }
         }
 
         public List<DiagnosticReportResultErrorCode> GetOldDiagnosticErrorCode(long diagnosticCodeId)
         {
-           return _context.DiagnosticReportResults
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DiagnosticReportResults
                 .Join(_context.DiagnosticReportResultErrorCodes, diagnosticReportResult => diagnosticReportResult.DiagnosticReportResultId, diagnosticReportResultErrorCode => diagnosticReportResultErrorCode.DiagnosticReportResultId, (diagnosticReportResult, diagnosticReportResultErrorCode) => new { diagnosticReportResult, diagnosticReportResultErrorCode })
                 .Select(x => x.diagnosticReportResultErrorCode).ToList();
+            }
         }
 
         public DTCCodeLaymanTerm GetDTCCodeLaymanTermLoadByErrorCodeAndMake(string ErrorCode, string Make)
         {
-           return  _context.DTCCodeLaymanTerms
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DTCCodeLaymanTerms
                     .Join(_context.DTCCodeLaymanTermSeverityDefinitions, dTCCodeLaymanTerm => dTCCodeLaymanTerm.SeverityLevel, A => A.SeverityLevel, (dTCCodeLaymanTerm, A) => new { dTCCodeLaymanTerm, A })
                     .Where(x => x.dTCCodeLaymanTerm.ErrorCode == ErrorCode && x.dTCCodeLaymanTerm.Make == Make || x.dTCCodeLaymanTerm.Make == null).Select(e => e.dTCCodeLaymanTerm).Distinct().FirstOrDefault();
+            }
         }
 
         public PolkVehicleYmme GetByPolkVehicleYMMEId(string polkVehicleYMMEId)
         {
-            return _context.PolkVehicleYmmes.Where(x => x.PolkVehicleYMMEId == polkVehicleYMMEId).FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.PolkVehicleYmmes.Where(x => x.PolkVehicleYMMEId == polkVehicleYMMEId).FirstOrDefault();
+            }
         }
 
 
         public List<DiagnosticReportResultErrorCode> GetDiagnosticReportResultErrorCode(string diagnosticReportResultId)
         {
-         return _context.DiagnosticReports
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DiagnosticReports
                          .Join(_context.DiagnosticReportResults, diagnosticReport => diagnosticReport.DiagnosticReportId, B => B.DiagnosticReportId, (diagnosticReport, B) => new { diagnosticReport, B })
                          .Join(_context.DiagnosticReportResultErrorCodes, A => A.diagnosticReport.DiagnosticReportResultId, diagnosticReportResultErrorCode => diagnosticReportResultErrorCode.DiagnosticReportResultId, (A, diagnosticReportResultErrorCode) => new { A, diagnosticReportResultErrorCode }).Where(x => x.A.diagnosticReport.DiagnosticReportResultId == diagnosticReportResultId)
                          .Select(e => e.diagnosticReportResultErrorCode).Distinct().ToList();
-  
+            }
         }
         public List<Symptom> GetSymptomRecords(string diagnosticReportResultId)
         {
-          return _context.DiagnosticReports
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DiagnosticReports
                               .Join(_context.Symptoms, diagnosticReport => diagnosticReport.SymptomId, Symptom => Symptom.SymptomId, (diagnosticReport, Symptom) =>
                                new { diagnosticReport, Symptom }).Where(x => x.diagnosticReport.DiagnosticReportResultId == diagnosticReportResultId)
                               .Select(e => e.Symptom).Distinct().ToList();
+            }
         }
 
         public List<DiagnosticReportResultFix> GetDiagnosticReportResultFixes(string diagnosticReportResultId)
         {
-          return _context.DiagnosticReportResultFixes.Where(x => x.DiagnosticReportResultId == diagnosticReportResultId)
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DiagnosticReportResultFixes.Where(x => x.DiagnosticReportResultId == diagnosticReportResultId)
                          .OrderByDescending(x => x.DiagnosticReportErrorCodeSystemType)
                          .Distinct()
                          .ToList();
-
+            }
         }
 
         public virtual decimal GetCurrenctISOCode(string CurrenctISOCode)
         {
-         return _context.CurrencyExchangeRates.Where(e => (e.CurrencyISOCode == CurrenctISOCode)).Distinct().Select(x => x.ExchangeRatePerUSD).FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.CurrencyExchangeRates.Where(e => (e.CurrencyISOCode == CurrenctISOCode)).Distinct().Select(x => x.ExchangeRatePerUSD).FirstOrDefault();
+            }
         }
 
 
         public virtual List<DiagnosticReportFixFeedback> LoadByFixAndDtc(string fixId, string primaryErrorCode)
         {
-            return (from a in _context.DiagnosticReportFixFeedbacks
-                    join b in _context.ObdFixes on a.ObdFixId equals b.ObdFixId
-                    where a.FixId == fixId && a.FixId == fixId && a.PrimaryErrorCode == primaryErrorCode
-                    select a).ToList();
-
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return (from a in _context.DiagnosticReportFixFeedbacks
+                        join b in _context.ObdFixes on a.ObdFixId equals b.ObdFixId
+                        where a.FixId == fixId && a.FixId == fixId && a.PrimaryErrorCode == primaryErrorCode
+                        select a).ToList();
+            }
         }
 
         public virtual List<Article> GetRelatedArticles(string FixNameId)
         {
-        return _context.Articles
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.Articles
                     .Join(_context.FixNameArticleAssignments, Article => Article.ArticleId, fixName => fixName.ArticleId, (Article, fixName) =>
                      new { Article, fixName }).Where(x => x.fixName.FixNameId == FixNameId)
                     .Select(e => e.Article).Distinct().ToList();
-
+            }
         }
 
         public List<string> GetByDiagnosticReportResultFixId(string diagnosticReportResultFixId)
@@ -574,22 +688,25 @@ namespace DataAccessLayers.Repository
 
         public List<Recall> Search(int year, string make, string model)
         {
-            int? years = Convert.ToInt32(year);
-            return _context.Recalls
-                .Join(_context.Recalls, Recall => Recall.RecordNumber, B => B.RecordNumber, (Recall, B) => new { Recall, B })
-                          .Where(e => (((year == 0 || e.Recall.Year == years)))                             //filter by years
-                          && (((make == null || make.Length == 0) || make.Contains(e.Recall.Make)))        //filter by makes 
-                          && (((model == null || model.Length == 0) || model.Contains(e.Recall.Model))))   //filter by models 
-                .Select(e => e.Recall).Distinct().ToList();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                int? years = Convert.ToInt32(year);
+                return _context.Recalls
+                    .Join(_context.Recalls, Recall => Recall.RecordNumber, B => B.RecordNumber, (Recall, B) => new { Recall, B })
+                              .Where(e => (((year == 0 || e.Recall.Year == years)))                             //filter by years
+                              && (((make == null || make.Length == 0) || make.Contains(e.Recall.Make)))        //filter by makes 
+                              && (((model == null || model.Length == 0) || model.Contains(e.Recall.Model))))   //filter by models 
+                    .Select(e => e.Recall).Distinct().ToList();
+            }
         }
 
         public List<VehicleWarrantyInfo> GetCurrentlyValidWarranty(Vehicle vehicle, int averageMilesDrivenPerDay)
         {
             var currentmillage = GetEstimatedMileage(vehicle, new DateTime(), averageMilesDrivenPerDay);
             var VehicleAgeInYears = DateTime.Now.Year - vehicle.Year;
-
-
-            var warrantyInfo = _context.VehicleWarranties
+            using (innovaEntities _context = new innovaEntities())
+            {
+                var warrantyInfo = _context.VehicleWarranties
                    .Join(_context.VehicleWarrantyDetails, VehicleWarranty => VehicleWarranty.VehicleWarrantyId, vehicleWarrantyDetail => vehicleWarrantyDetail.VehicleWarrantyId, (VehicleWarranty, vehicleWarrantyDetail) => new { VehicleWarranty, vehicleWarrantyDetail })
                     .Join(_context.VehicleWarrantyMakes, A => A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
                     .Join(_context.VehicleWarrantyModels, A => A.A.VehicleWarranty.VehicleWarrantyId.DefaultIfEmpty(), B => B.VehicleWarrantyId, (A, B) => new { A, B })
@@ -605,14 +722,15 @@ namespace DataAccessLayers.Repository
                     && (currentmillage == 0 || e.A.A.A.A.A.A.vehicleWarrantyDetail.MaxMileage >= currentmillage)
                     && (VehicleAgeInYears == 0 || e.A.A.A.A.A.A.vehicleWarrantyDetail.MaxYears >= VehicleAgeInYears))))).Distinct();
 
-            var result = warrantyInfo.ToList();
-            var vehicleWarranty = result.Select(x => new VehicleWarrantyInfo
-            {
-                VehicleWarranty = x.A.A.A.A.A.A.VehicleWarranty,
-                VehicleWarrantyDetail = x.A.A.A.A.A.A.vehicleWarrantyDetail
-            }).ToList();
+                var result = warrantyInfo.ToList();
+                var vehicleWarranty = result.Select(x => new VehicleWarrantyInfo
+                {
+                    VehicleWarranty = x.A.A.A.A.A.A.VehicleWarranty,
+                    VehicleWarrantyDetail = x.A.A.A.A.A.A.vehicleWarrantyDetail
+                }).ToList();
 
-            return vehicleWarranty;
+                return vehicleWarranty;
+            }
         }
 
 
@@ -627,12 +745,17 @@ namespace DataAccessLayers.Repository
 
         public int? GetLastVehicleMileage(Vehicle info)
         {
-            return _context.DiagnosticReports.Where(e => info.VehicleId == e.VehicleId && info.UserId == e.UserId).Select(x => x.VehicleMileage).FirstOrDefault();
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.DiagnosticReports.Where(e => info.VehicleId == e.VehicleId && info.UserId == e.UserId).Select(x => x.VehicleMileage).FirstOrDefault();
+            }
         }
 
         public virtual List<TSB> GetTSBCountByVehicleByCategory(int legacyVehicleId)
         {
-             return _context.TSBs
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return _context.TSBs
                 .Join(_context.TSBToVehicles, tsb => tsb.TSBID, tsbtovehicle => tsbtovehicle.TSBID,
                     (tsb, tsbtovehicle) => new { tsb, tsbtovehicle })
                 .Join(_context.TSBAAIAToLegacyVehicleIDs, tsbtovehicle => tsbtovehicle.tsbtovehicle.VehicleId,
@@ -640,25 +763,32 @@ namespace DataAccessLayers.Repository
                 .Where(e => e.tsbtovehicle.tsbtovehicle.VehicleId == legacyVehicleId)
                 .Select(e => e.tsbtovehicle.tsb)
                 .Distinct().GroupBy(x => x.TSBID).Select(x => x.FirstOrDefault()).ToList();
+            }
         }
 
         public int GetTSBCountAll(int AAIA)
         {
-            return GetTSBCountByVehicleByCategory(AAIA).Count;
+            using (innovaEntities _context = new innovaEntities())
+            {
+                return GetTSBCountByVehicleByCategory(AAIA).Count;
+            }
         }
 
         public List<TSBInfo> GetTSBCategory(int AAIA)
         {
             var category = GetTSBCountByVehicleByCategory(AAIA);
-           return category.Select(item => new TSBInfo()
+            using (innovaEntities _context = new innovaEntities())
             {
-                TsbId = item.TSBID,
-                TsbText = item.TSBText,
-                PDFFileUrl = item.FileNamePDF,
-                Description = item.Description,
-                IssueDateString = Convert.ToString( item.IssueDate),
-                ManufacturerNumber = item.ManufacturerNumber,
-            }).ToList();
+                return category.Select(item => new TSBInfo()
+                {
+                    TsbId = item.TSBID,
+                    TsbText = item.TSBText,
+                    PDFFileUrl = item.FileNamePDF,
+                    Description = item.Description,
+                    IssueDateString = Convert.ToString(item.IssueDate),
+                    ManufacturerNumber = item.ManufacturerNumber,
+                }).ToList();
+            }
         }
     }
 }
