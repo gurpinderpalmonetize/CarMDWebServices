@@ -225,24 +225,24 @@ namespace DataAccessLayers.Service
         {
             if (!String.IsNullOrEmpty(vin) && !String.IsNullOrEmpty(rawToolPayload) && !String.IsNullOrEmpty(reportID))
             {
-                DiagnosticReportLogging service = new DiagnosticReportLogging();
-                WebServiceKey newKey = new WebServiceKey();
+                //DiagnosticReportLogging service = new DiagnosticReportLogging();
+                //WebServiceKey newKey = new WebServiceKey();
 
-                switch (wsKey)
-                {
-                    case WS_KEY_TESTING:
-                        service.Url = GlobalModel.InnovaLoggingWebServiceUrlTesting;
-                        newKey.Key = GlobalModel.InnovaAutozoneBlackboxLoggingWebServiceKeyTesting;
-                        break;
+                //switch (wsKey)
+                //{
+                //    case WS_KEY_TESTING:
+                //        service.Url = GlobalModel.InnovaLoggingWebServiceUrlTesting;
+                //        newKey.Key = GlobalModel.InnovaAutozoneBlackboxLoggingWebServiceKeyTesting;
+                //        break;
 
-                    case WS_KEY_PRODUCTION:
-                        service.Url = GlobalModel.InnovaLoggingWebServiceUrl;
-                        newKey.Key = GlobalModel.InnovaAutozoneBlackboxLoggingWebServiceKey;
-                        break;
-                }
+                //    case WS_KEY_PRODUCTION:
+                //        service.Url = GlobalModel.InnovaLoggingWebServiceUrl;
+                //        newKey.Key = GlobalModel.InnovaAutozoneBlackboxLoggingWebServiceKey;
+                //        break;
+                //}
                 try
                 {                                                            //"" here newKey
-                    DiagReportInfo newDRInfo = LogDiagnosticReportWithMileage(newKey.Key, "073B9358-6FCD-49E2-AC41-61D43C37DD18", vin, rawToolPayload, reportID, vehicleMileage, "");
+                    DiagReportInfo newDRInfo = LogDiagnosticReportWithMileage("", "073B9358-6FCD-49E2-AC41-61D43C37DD18", vin, rawToolPayload, reportID, vehicleMileage, "");
                 }
                 catch (Exception soapEx)
                 {

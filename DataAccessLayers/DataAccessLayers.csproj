@@ -579,9 +579,6 @@
     <Compile Include="Repository\ScheduleMaintenanceServiceRepository.cs" />
     <Compile Include="Service\DiagnosticReportService.cs" />
     <Compile Include="Service\GetMostLikelyFixService.cs" />
-    <Compile Include="WebService\DiagnosticReportLogging.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="WebService\DiagnosticReportWebService.cs" />
     <Compile Include="WebService\ExternalSystemWebService.cs" />
     <Compile Include="WebService\RecallWebService.cs" />
