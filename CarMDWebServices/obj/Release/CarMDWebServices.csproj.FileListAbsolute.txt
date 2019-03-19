@@ -1,1 +1,2 @@
 C:\Users\I4\source\repos\CarMDWebServices2\CarMDWebServices\obj\Release\CarMDWebServices.csproj.CoreCompileInputs.cache
+C:\Users\I4\source\repos\CarMDWebServices2\CarMDWebServices\obj\Release\CarMDWebServices.csprojAssemblyReference.cache

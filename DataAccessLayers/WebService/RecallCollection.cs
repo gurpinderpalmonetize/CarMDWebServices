@@ -25,33 +25,5 @@ namespace DataAccessLayers.WebService
         public string DefectCorrectiveAction_fr { get; set; }
         public string DefectCorrectiveAction_zh { get; set; }
 
-
-        public RecallWebService this[int index]
-        {
-            get
-            {
-                return (RecallWebService)this.List[index];
-            }
-        }
-
-        public void Add(RecallWebService value)
-        {
-            this.Add((object)value);
-        }
-
-        public void Remove(RecallWebService value)
-        {
-            this.Remove((object)value);
-        }
-
-        public void Insert(int index, RecallWebService value)
-        {
-            this.Insert(index, (object)value);
-        }
-
-        public override void Clear()
-        {
-            base.Clear();
-        }
     }
 }
