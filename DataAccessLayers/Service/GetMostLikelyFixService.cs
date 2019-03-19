@@ -940,7 +940,7 @@ namespace DataAccessLayers.Service
                     //apply the device to the diagnostic report
                     Device device = new Device();
                     string toolId = null;
-                    string partnerId = _mostLikelyFixRepository.GetPartnerIdbyUderId(diagnosticReport.UserId)?.PartnerID;
+                    string partnerId = _mostLikelyFixRepository.GetPartnerIdbyUderId(vehicle.User.UserId)?.PartnerID;
                     ToolInformation toolInformation = GetToolInformationAsync(diagnosticReport.RawUploadString, diagnosticReport.Market, partnerId);
                     if (user.UserTypeExternalId == "00000000-0000-0000-0000-000000000015")
                     {
