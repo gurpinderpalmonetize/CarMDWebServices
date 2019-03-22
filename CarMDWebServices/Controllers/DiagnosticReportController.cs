@@ -17,7 +17,7 @@ namespace CarMDWebServices.Controllers
         [Route("api/DiagnosticReport/GetTSBCountByVehicle")]
         public HttpResponseMessage GetTSBCountByVehicle(Request request)
         {
-            System.Collections.Generic.IEnumerable<string> key = gettoken();
+            var key = gettoken();
             var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
@@ -35,7 +35,7 @@ namespace CarMDWebServices.Controllers
         [Route("api/DiagnosticReport/GetRecallsCountForVehicle")]
         public HttpResponseMessage GetRecallsCountForVehicle(Request request)
         {
-            System.Collections.Generic.IEnumerable<string> key = gettoken();
+            var key = gettoken();
             var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
@@ -53,7 +53,7 @@ namespace CarMDWebServices.Controllers
         [Route("api/DiagnosticReport/LogDiagnosticReport")]
         public HttpResponseMessage LogDiagnosticReport(ApiRequestModel apiRequest)
         {
-            System.Collections.Generic.IEnumerable<string> key = gettoken();
+            var key = gettoken();
             var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
@@ -74,7 +74,7 @@ namespace CarMDWebServices.Controllers
 
         public HttpResponseMessage DiagnosticWithMileage(ApiRequestModel apiRequest)
         {
-            System.Collections.Generic.IEnumerable<string> key = gettoken();
+            var key = gettoken();
             var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
@@ -96,8 +96,8 @@ namespace CarMDWebServices.Controllers
 
         public HttpResponseMessage GetDTCLibraryErrorCodeWithLaymensTerms(RequestModel apiRequest)
         {
-            System.Collections.Generic.IEnumerable<string> key = gettoken();
-            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", key));
+            var key = gettoken();
+            var vaildatekey = _diagnosticReportService.vaildatekey(string.Join("", gettoken()));
             if (vaildatekey.ValidationFailures != null && vaildatekey.ValidationFailures.Length > 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, vaildatekey.ValidationFailures);
 
